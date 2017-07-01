@@ -7,10 +7,10 @@ import {
 
 @Component({
     moduleId: module.id,
-    selector: 'iplus',
-    templateUrl: '../template/view/iplus.view.html'
+    selector: 'logo',
+    templateUrl: '../template/view/logo.view.html'
 })
-export class IPlusView implements OnInit, OnDestroy {
+export class LogoView implements OnInit, OnDestroy {
     @Input() white: boolean;
     @Input() text: String;
 

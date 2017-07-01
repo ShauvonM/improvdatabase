@@ -9,7 +9,7 @@ module.exports = function () {
                 auth: null
             },
             mongodb: {
-                uri: 'mongodb://localhost/improvplus'
+                uri: 'mongodb://localhost/improvdatabase'
             },
             stripe: {
                 secret: 'sk_test_hGyzBs8AVgTLppbLtZxGoCOx', // these are the test keys, obv
@@ -19,7 +19,6 @@ module.exports = function () {
                 key: process.env.SENDGRID_API_KEY
             },
             s3_buckets: {
-                materials: 'improvplus.dev.materials',
                 backups: 'improvplus.backups'
             },
             pdftkPath: 'C:\\Program Files (x86)\\PDFtk Server\\bin\\pdftk.exe',
@@ -44,8 +43,7 @@ module.exports = function () {
                 key: process.env.SENDGRID_API_KEY
             },
             s3_buckets: {
-                materials: 'improvplus.materials',
-                backups: 'improvplus.backups'
+                backups: 'improvdatabase.backups'
             },
             port: process.env.PORT || 5000,
             saltRounds: 10

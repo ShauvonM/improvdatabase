@@ -52,11 +52,6 @@
         }
     }
 
-    iplus {
-        padding: $std;
-        cursor: pointer;
-    }
-
     .tools {
         button {
             padding: 0 8px;
@@ -73,10 +68,6 @@
         background-color: $color-primary;
         @include md-elevation($toolbar-elevation);
         color: $color-primary-text;
-
-        .iplus {
-            color: $color-primary-text;
-        }
 
         button {
             color: $color-primary-text;

@@ -162,3 +162,12 @@ sup {
 [draggable] {
     user-select: none;
 }
+
+::selection {
+    background: $color-secondary;
+    color: $color-white;
+}
+::-moz-selection {
+    background: $color-secondary;
+    color: $color-white;
+}

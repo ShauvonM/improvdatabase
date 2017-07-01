@@ -1,11 +1,4 @@
-import { 
-    Component,
-    OnInit,
-    ViewChild,
-    ElementRef,
-    ViewChildren,
-    QueryList
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Headers, Http } from '@angular/http';
 import { FormsModule } from '@angular/forms';
@@ -13,30 +6,21 @@ import { Subscription } from 'rxjs/Subscription';
 
 import 'rxjs/add/operator/toPromise';
 
-import { AppService } from '../service/app.service';
-
 // import { MarketingSiteComponent } from './ms.component';
 import { AppComponent } from './app.component';
 
-import { Package } from '../model/package';
-import { PackageConfig } from '../model/config';
-
 import { DialogAnim, ToggleAnim } from '../util/anim.util';
-
-import { BracketCardDirective } from '../directive/bracket-card.directive';
 
 @Component({
     moduleId: module.id,
-    selector: "welcome",
-    templateUrl: "../template/ms.welcome.component.html",
+    selector: "for-improvisers",
+    templateUrl: "../template/improvisers.component.html",
     animations: [
         DialogAnim.dialog,
         ToggleAnim.fade
     ]
 })
 export class WelcomeComponent implements OnInit {
-
-    @ViewChildren('packageCard', {read: BracketCardDirective}) packageCards: QueryList<BracketCardDirective>;
 
     contactDialogVisible: boolean;
 
@@ -57,23 +41,14 @@ export class WelcomeComponent implements OnInit {
     toolbarheight = 48;
     pageStart = window.innerHeight - (this.toolbarheight + 24);
 
-    packages: Package[] = [];
-    private config: PackageConfig;
-
     constructor(
         public _app: AppComponent,
         private router: Router,
-        private http: Http,
-        private _service: AppService
+        private http: Http
     ) { }
 
     ngOnInit(): void {
         this.setupSize();
-
-        this._service.getPackageConfig().then(config => this.config = config)
-        this._service.getPackages('facilitator', false).then(pkgs => {
-            this.packages = pkgs;
-        });
     }
 
     setupSize(): void {
@@ -111,33 +86,6 @@ export class WelcomeComponent implements OnInit {
                     this.sending = false;
                     this.sent = true;
                 });
-        }
-    }
-
-    selectedCard: HTMLElement;
-    selectPackage($event: any, pkg: Package, cardClicked: HTMLElement): void {
-        if (this.selectedCard && this.selectedCard != cardClicked) {
-            this.selectPackage(null, null, this.selectedCard);
-            setTimeout(() => {
-                this.selectPackage($event, pkg, cardClicked);
-            }, 500);
-            return;
-        }
-
-        if (cardClicked.classList.contains('card-open')) {
-            this.packageCards.forEach(card => {
-                card.reset();
-            });
-            this.selectedCard = null;
-        } else {
-            this.selectedCard = cardClicked;
-            this.packageCards.forEach(card => {
-                if (card.card != cardClicked) {
-                    card.close();
-                } else {
-                    card.open();
-                }
-            });
         }
     }
 

@@ -35,7 +35,7 @@
     </div>
     <div class="card full brackets center" bracketCard #dashboardMessage *ngIf="visibleMessage.key == 'invite' && inviteAccepted">
         <h4>Welcome to {{invite.team.name}}!</h4>
-        <p>You are now part of the Company. You now have access to any of the Company's resources, and you can collaborate with other members of your Company. View details about the Company using the app menu (the <iplus></iplus> logo up in the corner).</p>
+        <p>You are now part of the Company. You now have access to any of the Company's resources, and you can collaborate with other members of your Company. View details about the Company using the app menu (the <logo></logo> logo up in the corner).</p>
         <div class="action right">
             <span class="button" (click)="dismissInvite()">Dismiss</span>
         </div>
@@ -53,7 +53,7 @@
         <h4>welcome to <span class="light">improv</span><strong>plus</strong></h4>
 
         <p>This is your dashboard. Check back here for important messages, updates, and other stuff.</p>
-        <p>Click the <iplus></iplus> logo in the top left corner to open the App Menu. From there you can get anywhere you want to be.</p>
+        <p>Click the <logo></logo> logo in the top left corner to open the App Menu. From there you can get anywhere you want to be.</p>
 
         <div class="action right">
             <span class="button" (click)="dismissVisibleMessage()">Dismiss</span>

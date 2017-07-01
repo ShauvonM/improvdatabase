@@ -119,9 +119,6 @@
 
 <div (click)="closeOverlays()" class="backdrop nav-backdrop" [@fade] [class.show]="showBackdrop"></div>
 
-<div class="left-bracket" [class.white]="whiteBrackets"></div>
-<div class="right-bracket" [class.white]="whiteBrackets"></div>
-
 <div class="curtain"
     *ngIf="inApp"
     [style.top]="(scrollpos * 0.75) + 'px'">
@@ -153,12 +150,12 @@
 <login [show]="showLogin" (done)="handleLogin($event)" class="dialog-container" [class.show]="showLogin"></login>
 
 <div class="loader" *ngIf="loaderVisible">
-    <iplus class="white"></iplus>
+    <logo class="white"></logo>
 </div>
 
 <footer (window:scroll)="onScroll()">
 
-    <span>&copy;2017 Kate Bringardner, LLC</span>
+    <span>&copy;2017 Shauvon McGill, LLC</span>
     <a routerLink="/app/legal" *ngIf="user">Legal stuff</a>
     <img src="/images/comodo_secure_seal_76x26_transp.png" />
     <a *ngIf="user" (click)="logout()">Log Out</a>

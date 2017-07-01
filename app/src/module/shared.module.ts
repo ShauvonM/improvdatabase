@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 // import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { IPlusView } from '../view/iplus.view';
+import { LogoView } from '../view/logo.view';
 import { LoginView } from '../view/login.view';
 import { UserFormView } from '../view/user-form.view';
 import { LandingHeroView } from '../view/landing-hero.view';
@@ -30,7 +30,7 @@ import { InfiniteScrollDirective } from '../directive/infinite-scroll.directive'
         RouterModule
     ],
     declarations: [
-        IPlusView,
+        LogoView,
         LoginView,
         UserFormView,
         LandingHeroView,
@@ -43,7 +43,7 @@ import { InfiniteScrollDirective } from '../directive/infinite-scroll.directive'
         InfiniteScrollDirective
     ],
     exports: [
-        IPlusView,
+        LogoView,
         LoginView,
         UserFormView,
         LandingHeroView,

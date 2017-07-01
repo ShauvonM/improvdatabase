@@ -11,7 +11,7 @@ var common_1 = require("@angular/common");
 var router_1 = require("@angular/router");
 // import { BrowserModule } from '@angular/platform-browser';
 var forms_1 = require("@angular/forms");
-var iplus_view_1 = require("../view/iplus.view");
+var logo_view_1 = require("../view/logo.view");
 var login_view_1 = require("../view/login.view");
 var user_form_view_1 = require("../view/user-form.view");
 var landing_hero_view_1 = require("../view/landing-hero.view");
@@ -40,7 +40,7 @@ SharedModule = __decorate([
             router_1.RouterModule
         ],
         declarations: [
-            iplus_view_1.IPlusView,
+            logo_view_1.LogoView,
             login_view_1.LoginView,
             user_form_view_1.UserFormView,
             landing_hero_view_1.LandingHeroView,
@@ -53,7 +53,7 @@ SharedModule = __decorate([
             infinite_scroll_directive_1.InfiniteScrollDirective
         ],
         exports: [
-            iplus_view_1.IPlusView,
+            logo_view_1.LogoView,
             login_view_1.LoginView,
             user_form_view_1.UserFormView,
             landing_hero_view_1.LandingHeroView,
