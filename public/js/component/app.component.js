@@ -322,30 +322,30 @@ var AppComponent = (function () {
         };
         requestAnimationFrame(scrollFunc);
     };
+    AppComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: 'improvplus',
+            templateUrl: '../template/app.component.html',
+            animations: [
+                anim_util_1.DialogAnim.dialog,
+                anim_util_1.ToggleAnim.fade,
+                anim_util_1.ToggleAnim.bubble,
+                anim_util_1.ShrinkAnim.vertical
+            ]
+        }),
+        __param(0, core_1.Inject(constants_1.CONFIG_TOKEN)),
+        __metadata("design:paramtypes", [config_1.Config,
+            core_1.Renderer2,
+            router_1.Router,
+            router_1.ActivatedRoute,
+            app_service_1.AppService,
+            user_service_1.UserService,
+            common_1.PathLocationStrategy,
+            app_http_1.AppHttp])
+    ], AppComponent);
     return AppComponent;
 }());
-AppComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: 'improvplus',
-        templateUrl: '../template/app.component.html',
-        animations: [
-            anim_util_1.DialogAnim.dialog,
-            anim_util_1.ToggleAnim.fade,
-            anim_util_1.ToggleAnim.bubble,
-            anim_util_1.ShrinkAnim.vertical
-        ]
-    }),
-    __param(0, core_1.Inject(constants_1.CONFIG_TOKEN)),
-    __metadata("design:paramtypes", [config_1.Config,
-        core_1.Renderer2,
-        router_1.Router,
-        router_1.ActivatedRoute,
-        app_service_1.AppService,
-        user_service_1.UserService,
-        common_1.PathLocationStrategy,
-        app_http_1.AppHttp])
-], AppComponent);
 exports.AppComponent = AppComponent;
 
 //# sourceMappingURL=app.component.js.map

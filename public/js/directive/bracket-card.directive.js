@@ -225,26 +225,26 @@ var BracketCardDirective = (function () {
             _this.card.classList.remove('card-closed');
         }, delay);
     };
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], BracketCardDirective.prototype, "error", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], BracketCardDirective.prototype, "key", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], BracketCardDirective.prototype, "fixed", void 0);
+    BracketCardDirective = __decorate([
+        core_1.Directive({
+            selector: '[bracketCard]'
+        }),
+        __metadata("design:paramtypes", [core_1.ElementRef])
+    ], BracketCardDirective);
     return BracketCardDirective;
 }());
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], BracketCardDirective.prototype, "error", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], BracketCardDirective.prototype, "key", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Boolean)
-], BracketCardDirective.prototype, "fixed", void 0);
-BracketCardDirective = __decorate([
-    core_1.Directive({
-        selector: '[bracketCard]'
-    }),
-    __metadata("design:paramtypes", [core_1.ElementRef])
-], BracketCardDirective);
 exports.BracketCardDirective = BracketCardDirective;
 
 //# sourceMappingURL=bracket-card.directive.js.map

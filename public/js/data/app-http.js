@@ -115,13 +115,13 @@ var AppHttp = (function () {
             }
         });
     };
+    AppHttp = __decorate([
+        core_1.Injectable(),
+        __metadata("design:paramtypes", [http_1.Http,
+            router_1.Router])
+    ], AppHttp);
     return AppHttp;
 }());
-AppHttp = __decorate([
-    core_1.Injectable(),
-    __metadata("design:paramtypes", [http_1.Http,
-        router_1.Router])
-], AppHttp);
 exports.AppHttp = AppHttp;
 
 //# sourceMappingURL=app-http.js.map

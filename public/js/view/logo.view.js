@@ -23,24 +23,24 @@ var LogoView = (function () {
     LogoView.prototype.out = function () {
         this.hover = false;
     };
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], LogoView.prototype, "white", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], LogoView.prototype, "text", void 0);
+    LogoView = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: 'logo',
+            templateUrl: '../template/view/logo.view.html'
+        }),
+        __metadata("design:paramtypes", [])
+    ], LogoView);
     return LogoView;
 }());
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Boolean)
-], LogoView.prototype, "white", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], LogoView.prototype, "text", void 0);
-LogoView = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: 'logo',
-        templateUrl: '../template/view/logo.view.html'
-    }),
-    __metadata("design:paramtypes", [])
-], LogoView);
 exports.LogoView = LogoView;
 
 //# sourceMappingURL=logo.view.js.map

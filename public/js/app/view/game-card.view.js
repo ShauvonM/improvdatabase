@@ -50,20 +50,20 @@ var GameCardView = (function () {
     };
     GameCardView.prototype.ngOnDestroy = function () {
     };
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", game_1.Game)
+    ], GameCardView.prototype, "game", void 0);
+    GameCardView = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: '.ng-game-card',
+            templateUrl: '../template/view/game-card.view.html'
+        }),
+        __metadata("design:paramtypes", [game_database_service_1.GameDatabaseService])
+    ], GameCardView);
     return GameCardView;
 }());
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", game_1.Game)
-], GameCardView.prototype, "game", void 0);
-GameCardView = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: '.ng-game-card',
-        templateUrl: '../template/view/game-card.view.html'
-    }),
-    __metadata("design:paramtypes", [game_database_service_1.GameDatabaseService])
-], GameCardView);
 exports.GameCardView = GameCardView;
 
 //# sourceMappingURL=game-card.view.js.map

@@ -26,18 +26,18 @@ var UnauthorizedComponent = (function () {
     UnauthorizedComponent.prototype.can = function (permission) {
         return this.userService.can(permission);
     };
+    UnauthorizedComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: "unauthorized",
+            templateUrl: "../template/unauthorized.component.html"
+        }),
+        __metadata("design:paramtypes", [app_component_1.AppComponent,
+            router_1.Router,
+            user_service_1.UserService])
+    ], UnauthorizedComponent);
     return UnauthorizedComponent;
 }());
-UnauthorizedComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: "unauthorized",
-        templateUrl: "../template/unauthorized.component.html"
-    }),
-    __metadata("design:paramtypes", [app_component_1.AppComponent,
-        router_1.Router,
-        user_service_1.UserService])
-], UnauthorizedComponent);
 exports.UnauthorizedComponent = UnauthorizedComponent;
 
 //# sourceMappingURL=unauthorized.component.js.map

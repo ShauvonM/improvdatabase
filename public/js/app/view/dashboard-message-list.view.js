@@ -189,23 +189,23 @@ var DashboardMessageListView = (function () {
             }, 100);
         });
     };
+    __decorate([
+        core_1.ViewChild('dashboardMessage', { read: bracket_card_directive_1.BracketCardDirective }),
+        __metadata("design:type", bracket_card_directive_1.BracketCardDirective)
+    ], DashboardMessageListView.prototype, "messageElement", void 0);
+    DashboardMessageListView = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: 'dashboard-message-list',
+            templateUrl: '../template/view/dashboard-message-list.view.html',
+            animations: [anim_util_1.ShrinkAnim.height]
+        }),
+        __metadata("design:paramtypes", [user_service_1.UserService,
+            router_1.Router,
+            app_component_1.AppComponent])
+    ], DashboardMessageListView);
     return DashboardMessageListView;
 }());
-__decorate([
-    core_1.ViewChild('dashboardMessage', { read: bracket_card_directive_1.BracketCardDirective }),
-    __metadata("design:type", bracket_card_directive_1.BracketCardDirective)
-], DashboardMessageListView.prototype, "messageElement", void 0);
-DashboardMessageListView = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: 'dashboard-message-list',
-        templateUrl: '../template/view/dashboard-message-list.view.html',
-        animations: [anim_util_1.ShrinkAnim.height]
-    }),
-    __metadata("design:paramtypes", [user_service_1.UserService,
-        router_1.Router,
-        app_component_1.AppComponent])
-], DashboardMessageListView);
 exports.DashboardMessageListView = DashboardMessageListView;
 
 //# sourceMappingURL=dashboard-message-list.view.js.map

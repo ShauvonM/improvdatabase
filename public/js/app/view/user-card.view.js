@@ -44,36 +44,36 @@ var UserCardView = (function () {
     UserCardView.prototype._demoteUser = function () {
         this.demoteUser.emit(this.user);
     };
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", user_1.User)
+    ], UserCardView.prototype, "user", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", team_1.Team)
+    ], UserCardView.prototype, "team", void 0);
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", core_1.EventEmitter)
+    ], UserCardView.prototype, "removeUserFromTeam", void 0);
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", core_1.EventEmitter)
+    ], UserCardView.prototype, "promoteUser", void 0);
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", core_1.EventEmitter)
+    ], UserCardView.prototype, "demoteUser", void 0);
+    UserCardView = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: '.improvplus-user-card',
+            templateUrl: '../template/view/user-card.view.html'
+        }),
+        __metadata("design:paramtypes", [user_service_1.UserService])
+    ], UserCardView);
     return UserCardView;
 }());
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", user_1.User)
-], UserCardView.prototype, "user", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", team_1.Team)
-], UserCardView.prototype, "team", void 0);
-__decorate([
-    core_1.Output(),
-    __metadata("design:type", core_1.EventEmitter)
-], UserCardView.prototype, "removeUserFromTeam", void 0);
-__decorate([
-    core_1.Output(),
-    __metadata("design:type", core_1.EventEmitter)
-], UserCardView.prototype, "promoteUser", void 0);
-__decorate([
-    core_1.Output(),
-    __metadata("design:type", core_1.EventEmitter)
-], UserCardView.prototype, "demoteUser", void 0);
-UserCardView = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: '.improvplus-user-card',
-        templateUrl: '../template/view/user-card.view.html'
-    }),
-    __metadata("design:paramtypes", [user_service_1.UserService])
-], UserCardView);
 exports.UserCardView = UserCardView;
 
 //# sourceMappingURL=user-card.view.js.map

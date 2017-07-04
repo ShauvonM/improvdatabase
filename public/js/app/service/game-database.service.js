@@ -520,13 +520,13 @@ var GameDatabaseService = (function () {
             }
         });
     };
+    GameDatabaseService = __decorate([
+        core_1.Injectable(),
+        __metadata("design:paramtypes", [app_http_1.AppHttp,
+            user_service_1.UserService])
+    ], GameDatabaseService);
     return GameDatabaseService;
 }());
-GameDatabaseService = __decorate([
-    core_1.Injectable(),
-    __metadata("design:paramtypes", [app_http_1.AppHttp,
-        user_service_1.UserService])
-], GameDatabaseService);
 exports.GameDatabaseService = GameDatabaseService;
 
 //# sourceMappingURL=game-database.service.js.map

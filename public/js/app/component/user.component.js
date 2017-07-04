@@ -102,20 +102,20 @@ var UserComponent = (function () {
     UserComponent.prototype.cancelSubscription = function () {
         this._app.toast("This button doesn't work yet.");
     };
+    UserComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: "user",
+            templateUrl: "../template/user.component.html"
+        }),
+        __metadata("design:paramtypes", [user_service_1.UserService,
+            router_1.Router,
+            common_1.Location,
+            app_component_1.AppComponent,
+            forms_1.FormBuilder])
+    ], UserComponent);
     return UserComponent;
 }());
-UserComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: "user",
-        templateUrl: "../template/user.component.html"
-    }),
-    __metadata("design:paramtypes", [user_service_1.UserService,
-        router_1.Router,
-        common_1.Location,
-        app_component_1.AppComponent,
-        forms_1.FormBuilder])
-], UserComponent);
 exports.UserComponent = UserComponent;
 
 //# sourceMappingURL=user.component.js.map

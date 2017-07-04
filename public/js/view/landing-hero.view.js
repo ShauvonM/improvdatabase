@@ -45,28 +45,28 @@ var LandingHeroView = (function () {
             this.bgwidth = windowWidth + 'px';
         }
     };
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], LandingHeroView.prototype, "showContent", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], LandingHeroView.prototype, "improv", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], LandingHeroView.prototype, "video", void 0);
+    LandingHeroView = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: 'landing-hero',
+            templateUrl: '../template/view/landing-hero.view.html'
+        }),
+        __metadata("design:paramtypes", [app_component_1.AppComponent])
+    ], LandingHeroView);
     return LandingHeroView;
 }());
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Boolean)
-], LandingHeroView.prototype, "showContent", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Boolean)
-], LandingHeroView.prototype, "improv", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Boolean)
-], LandingHeroView.prototype, "video", void 0);
-LandingHeroView = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: 'landing-hero',
-        templateUrl: '../template/view/landing-hero.view.html'
-    }),
-    __metadata("design:paramtypes", [app_component_1.AppComponent])
-], LandingHeroView);
 exports.LandingHeroView = LandingHeroView;
 
 //# sourceMappingURL=landing-hero.view.js.map

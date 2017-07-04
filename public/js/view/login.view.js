@@ -119,31 +119,31 @@ var LoginView = (function () {
             }
         });
     };
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], LoginView.prototype, "show", void 0);
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", core_1.EventEmitter)
+    ], LoginView.prototype, "done", void 0);
+    LoginView = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: "login",
+            templateUrl: "../template/view/login.view.html",
+            animations: [
+                anim_util_1.DialogAnim.dialog,
+                anim_util_1.DialogAnim.starburst,
+                anim_util_1.ToggleAnim.fade,
+                anim_util_1.ToggleAnim.fadeAbsolute
+            ],
+            styles: ["\n        .password-recover-link {\n            \n        }\n    "]
+        }),
+        __metadata("design:paramtypes", [user_service_1.UserService])
+    ], LoginView);
     return LoginView;
 }());
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Boolean)
-], LoginView.prototype, "show", void 0);
-__decorate([
-    core_1.Output(),
-    __metadata("design:type", core_1.EventEmitter)
-], LoginView.prototype, "done", void 0);
-LoginView = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: "login",
-        templateUrl: "../template/view/login.view.html",
-        animations: [
-            anim_util_1.DialogAnim.dialog,
-            anim_util_1.DialogAnim.starburst,
-            anim_util_1.ToggleAnim.fade,
-            anim_util_1.ToggleAnim.fadeAbsolute
-        ],
-        styles: ["\n        .password-recover-link {\n            \n        }\n    "]
-    }),
-    __metadata("design:paramtypes", [user_service_1.UserService])
-], LoginView);
 exports.LoginView = LoginView;
 
 //# sourceMappingURL=login.view.js.map

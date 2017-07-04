@@ -435,28 +435,28 @@ var AdminComponent = (function () {
             _this._app.toast('Config saved');
         });
     };
+    __decorate([
+        core_1.ViewChild('versionFileInput'),
+        __metadata("design:type", core_1.ElementRef)
+    ], AdminComponent.prototype, "versionFileInput", void 0);
+    AdminComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: "admin",
+            templateUrl: "../template/admin.component.html",
+            animations: [anim_util_1.DialogAnim.dialog]
+        }),
+        __metadata("design:paramtypes", [app_component_1.AppComponent,
+            router_1.Router,
+            app_service_1.AppService,
+            library_service_1.LibraryService,
+            user_service_1.UserService,
+            history_service_1.HistoryService,
+            game_database_service_1.GameDatabaseService,
+            app_http_1.AppHttp])
+    ], AdminComponent);
     return AdminComponent;
 }());
-__decorate([
-    core_1.ViewChild('versionFileInput'),
-    __metadata("design:type", core_1.ElementRef)
-], AdminComponent.prototype, "versionFileInput", void 0);
-AdminComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: "admin",
-        templateUrl: "../template/admin.component.html",
-        animations: [anim_util_1.DialogAnim.dialog]
-    }),
-    __metadata("design:paramtypes", [app_component_1.AppComponent,
-        router_1.Router,
-        app_service_1.AppService,
-        library_service_1.LibraryService,
-        user_service_1.UserService,
-        history_service_1.HistoryService,
-        game_database_service_1.GameDatabaseService,
-        app_http_1.AppHttp])
-], AdminComponent);
 exports.AdminComponent = AdminComponent;
 
 //# sourceMappingURL=admin.component.js.map

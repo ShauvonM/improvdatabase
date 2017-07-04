@@ -214,42 +214,42 @@ var GameNoteView = (function () {
             _this.remove.emit(_this.note);
         });
     };
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", note_1.Note)
+    ], GameNoteView.prototype, "note", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", game_1.Game)
+    ], GameNoteView.prototype, "game", void 0);
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", core_1.EventEmitter)
+    ], GameNoteView.prototype, "create", void 0);
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", core_1.EventEmitter)
+    ], GameNoteView.prototype, "remove", void 0);
+    __decorate([
+        core_1.ViewChild('description'),
+        __metadata("design:type", core_1.ElementRef)
+    ], GameNoteView.prototype, "descriptionElement", void 0);
+    __decorate([
+        core_1.ViewChild('noteinput'),
+        __metadata("design:type", core_1.ElementRef)
+    ], GameNoteView.prototype, "inputElement", void 0);
+    GameNoteView = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: '.improvplus-game-note',
+            templateUrl: '../template/view/game-note.view.html',
+            animations: [anim_util_1.ShrinkAnim.height]
+        }),
+        __metadata("design:paramtypes", [user_service_1.UserService,
+            game_note_service_1.GameNoteService])
+    ], GameNoteView);
     return GameNoteView;
 }());
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", note_1.Note)
-], GameNoteView.prototype, "note", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", game_1.Game)
-], GameNoteView.prototype, "game", void 0);
-__decorate([
-    core_1.Output(),
-    __metadata("design:type", core_1.EventEmitter)
-], GameNoteView.prototype, "create", void 0);
-__decorate([
-    core_1.Output(),
-    __metadata("design:type", core_1.EventEmitter)
-], GameNoteView.prototype, "remove", void 0);
-__decorate([
-    core_1.ViewChild('description'),
-    __metadata("design:type", core_1.ElementRef)
-], GameNoteView.prototype, "descriptionElement", void 0);
-__decorate([
-    core_1.ViewChild('noteinput'),
-    __metadata("design:type", core_1.ElementRef)
-], GameNoteView.prototype, "inputElement", void 0);
-GameNoteView = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: '.improvplus-game-note',
-        templateUrl: '../template/view/game-note.view.html',
-        animations: [anim_util_1.ShrinkAnim.height]
-    }),
-    __metadata("design:paramtypes", [user_service_1.UserService,
-        game_note_service_1.GameNoteService])
-], GameNoteView);
 exports.GameNoteView = GameNoteView;
 
 //# sourceMappingURL=game-note.view.js.map

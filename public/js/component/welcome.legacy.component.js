@@ -105,27 +105,27 @@ var WelcomeComponent = (function () {
             });
         }
     };
+    __decorate([
+        core_1.ViewChildren('packageCard', { read: bracket_card_directive_1.BracketCardDirective }),
+        __metadata("design:type", core_1.QueryList)
+    ], WelcomeComponent.prototype, "packageCards", void 0);
+    WelcomeComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: "welcome",
+            templateUrl: "../template/ms.welcome.component.html",
+            animations: [
+                anim_util_1.DialogAnim.dialog,
+                anim_util_1.ToggleAnim.fade
+            ]
+        }),
+        __metadata("design:paramtypes", [app_component_1.AppComponent,
+            router_1.Router,
+            http_1.Http,
+            app_service_1.AppService])
+    ], WelcomeComponent);
     return WelcomeComponent;
 }());
-__decorate([
-    core_1.ViewChildren('packageCard', { read: bracket_card_directive_1.BracketCardDirective }),
-    __metadata("design:type", core_1.QueryList)
-], WelcomeComponent.prototype, "packageCards", void 0);
-WelcomeComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: "welcome",
-        templateUrl: "../template/ms.welcome.component.html",
-        animations: [
-            anim_util_1.DialogAnim.dialog,
-            anim_util_1.ToggleAnim.fade
-        ]
-    }),
-    __metadata("design:paramtypes", [app_component_1.AppComponent,
-        router_1.Router,
-        http_1.Http,
-        app_service_1.AppService])
-], WelcomeComponent);
 exports.WelcomeComponent = WelcomeComponent;
 
 //# sourceMappingURL=welcome.legacy.component.js.map

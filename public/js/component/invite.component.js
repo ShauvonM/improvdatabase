@@ -61,27 +61,27 @@ var InviteComponent = (function () {
             }
         });
     };
+    __decorate([
+        core_1.HostBinding('class.dialog-container'),
+        core_1.HostBinding('class.show'),
+        __metadata("design:type", String)
+    ], InviteComponent.prototype, "inviteId", void 0);
+    InviteComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: "invite",
+            templateUrl: '../template/invite.component.html',
+            animations: [
+                anim_util_1.DialogAnim.dialog
+            ]
+        }),
+        __metadata("design:paramtypes", [app_component_1.AppComponent,
+            router_1.Router,
+            router_1.ActivatedRoute,
+            user_service_1.UserService])
+    ], InviteComponent);
     return InviteComponent;
 }());
-__decorate([
-    core_1.HostBinding('class.dialog-container'),
-    core_1.HostBinding('class.show'),
-    __metadata("design:type", String)
-], InviteComponent.prototype, "inviteId", void 0);
-InviteComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: "invite",
-        templateUrl: '../template/invite.component.html',
-        animations: [
-            anim_util_1.DialogAnim.dialog
-        ]
-    }),
-    __metadata("design:paramtypes", [app_component_1.AppComponent,
-        router_1.Router,
-        router_1.ActivatedRoute,
-        user_service_1.UserService])
-], InviteComponent);
 exports.InviteComponent = InviteComponent;
 
 //# sourceMappingURL=invite.component.js.map

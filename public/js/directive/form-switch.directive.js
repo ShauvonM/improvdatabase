@@ -57,16 +57,16 @@ var FormSwitchDirective = (function () {
         this.inputElement.dispatchEvent(new Event('change'));
         event.preventDefault();
     };
+    FormSwitchDirective = __decorate([
+        core_1.Directive({
+            selector: '[formSwitch]',
+            host: {}
+        }),
+        __metadata("design:paramtypes", [core_1.ElementRef,
+            core_1.Renderer2])
+    ], FormSwitchDirective);
     return FormSwitchDirective;
 }());
-FormSwitchDirective = __decorate([
-    core_1.Directive({
-        selector: '[formSwitch]',
-        host: {}
-    }),
-    __metadata("design:paramtypes", [core_1.ElementRef,
-        core_1.Renderer2])
-], FormSwitchDirective);
 exports.FormSwitchDirective = FormSwitchDirective;
 
 //# sourceMappingURL=form-switch.directive.js.map

@@ -10,11 +10,11 @@ var core_1 = require("@angular/core");
 var DialogService = (function () {
     function DialogService() {
     }
+    DialogService = __decorate([
+        core_1.Injectable()
+    ], DialogService);
     return DialogService;
 }());
-DialogService = __decorate([
-    core_1.Injectable()
-], DialogService);
 exports.DialogService = DialogService;
 
 //# sourceMappingURL=dialog.service.js.map

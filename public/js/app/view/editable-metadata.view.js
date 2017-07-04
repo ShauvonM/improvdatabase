@@ -171,100 +171,100 @@ var EditableMetadataView = (function () {
         }
         this.closeEdit();
     };
+    __decorate([
+        core_1.ViewChild('metadataInput'),
+        __metadata("design:type", Object)
+    ], EditableMetadataView.prototype, "inputElement", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], EditableMetadataView.prototype, "icon", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], EditableMetadataView.prototype, "text", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Object)
+    ], EditableMetadataView.prototype, "model", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], EditableMetadataView.prototype, "blankText", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], EditableMetadataView.prototype, "allowBlank", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], EditableMetadataView.prototype, "canEdit", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], EditableMetadataView.prototype, "type", void 0);
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", core_1.EventEmitter)
+    ], EditableMetadataView.prototype, "save", void 0);
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", core_1.EventEmitter)
+    ], EditableMetadataView.prototype, "saveAddress", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], EditableMetadataView.prototype, "address", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], EditableMetadataView.prototype, "city", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], EditableMetadataView.prototype, "state", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], EditableMetadataView.prototype, "zip", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], EditableMetadataView.prototype, "country", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Array)
+    ], EditableMetadataView.prototype, "options", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], EditableMetadataView.prototype, "optionId", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], EditableMetadataView.prototype, "optionDescription", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], EditableMetadataView.prototype, "optionText", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], EditableMetadataView.prototype, "optionCreate", void 0);
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", core_1.EventEmitter)
+    ], EditableMetadataView.prototype, "createOption", void 0);
+    EditableMetadataView = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: '.improvplus-editable-metadata',
+            templateUrl: '../template/view/editable-metadata.view.html'
+        }),
+        __metadata("design:paramtypes", [])
+    ], EditableMetadataView);
     return EditableMetadataView;
 }());
-__decorate([
-    core_1.ViewChild('metadataInput'),
-    __metadata("design:type", Object)
-], EditableMetadataView.prototype, "inputElement", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], EditableMetadataView.prototype, "icon", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], EditableMetadataView.prototype, "text", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Object)
-], EditableMetadataView.prototype, "model", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], EditableMetadataView.prototype, "blankText", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Boolean)
-], EditableMetadataView.prototype, "allowBlank", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Boolean)
-], EditableMetadataView.prototype, "canEdit", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], EditableMetadataView.prototype, "type", void 0);
-__decorate([
-    core_1.Output(),
-    __metadata("design:type", core_1.EventEmitter)
-], EditableMetadataView.prototype, "save", void 0);
-__decorate([
-    core_1.Output(),
-    __metadata("design:type", core_1.EventEmitter)
-], EditableMetadataView.prototype, "saveAddress", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], EditableMetadataView.prototype, "address", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], EditableMetadataView.prototype, "city", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], EditableMetadataView.prototype, "state", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], EditableMetadataView.prototype, "zip", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], EditableMetadataView.prototype, "country", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Array)
-], EditableMetadataView.prototype, "options", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], EditableMetadataView.prototype, "optionId", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], EditableMetadataView.prototype, "optionDescription", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], EditableMetadataView.prototype, "optionText", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Boolean)
-], EditableMetadataView.prototype, "optionCreate", void 0);
-__decorate([
-    core_1.Output(),
-    __metadata("design:type", core_1.EventEmitter)
-], EditableMetadataView.prototype, "createOption", void 0);
-EditableMetadataView = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: '.improvplus-editable-metadata',
-        templateUrl: '../template/view/editable-metadata.view.html'
-    }),
-    __metadata("design:paramtypes", [])
-], EditableMetadataView);
 exports.EditableMetadataView = EditableMetadataView;
 
 //# sourceMappingURL=editable-metadata.view.js.map

@@ -161,12 +161,12 @@ var AppService = (function () {
             });
         }
     };
+    AppService = __decorate([
+        core_1.Injectable(),
+        __metadata("design:paramtypes", [app_http_1.AppHttp])
+    ], AppService);
     return AppService;
 }());
-AppService = __decorate([
-    core_1.Injectable(),
-    __metadata("design:paramtypes", [app_http_1.AppHttp])
-], AppService);
 exports.AppService = AppService;
 
 //# sourceMappingURL=app.service.js.map

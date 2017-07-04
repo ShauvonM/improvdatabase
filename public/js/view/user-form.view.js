@@ -73,41 +73,41 @@ var UserFormView = (function () {
             this.passwordMatchError = true;
         }
     };
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", user_1.User)
+    ], UserFormView.prototype, "user", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], UserFormView.prototype, "backText", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], UserFormView.prototype, "isPosting", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], UserFormView.prototype, "saveText", void 0);
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", core_1.EventEmitter)
+    ], UserFormView.prototype, "back", void 0);
+    __decorate([
+        core_1.Output('valid'),
+        __metadata("design:type", core_1.EventEmitter)
+    ], UserFormView.prototype, "onValidated", void 0);
+    UserFormView = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: 'user-form',
+            templateUrl: '../template/view/user-form.view.html'
+        }),
+        __metadata("design:paramtypes", [app_component_1.AppComponent,
+            app_service_1.AppService])
+    ], UserFormView);
     return UserFormView;
 }());
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", user_1.User)
-], UserFormView.prototype, "user", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], UserFormView.prototype, "backText", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Boolean)
-], UserFormView.prototype, "isPosting", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], UserFormView.prototype, "saveText", void 0);
-__decorate([
-    core_1.Output(),
-    __metadata("design:type", core_1.EventEmitter)
-], UserFormView.prototype, "back", void 0);
-__decorate([
-    core_1.Output('valid'),
-    __metadata("design:type", core_1.EventEmitter)
-], UserFormView.prototype, "onValidated", void 0);
-UserFormView = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: 'user-form',
-        templateUrl: '../template/view/user-form.view.html'
-    }),
-    __metadata("design:paramtypes", [app_component_1.AppComponent,
-        app_service_1.AppService])
-], UserFormView);
 exports.UserFormView = UserFormView;
 
 //# sourceMappingURL=user-form.view.js.map

@@ -30,23 +30,23 @@ var NotFoundComponent = (function () {
     NotFoundComponent.prototype.dashboard = function () {
         this.router.navigate(['/app/dashboard']);
     };
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], NotFoundComponent.prototype, "injected", void 0);
+    NotFoundComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: "not-found",
+            templateUrl: '../template/not-found.component.html'
+        }),
+        __metadata("design:paramtypes", [app_component_1.AppComponent,
+            router_1.Router,
+            user_service_1.UserService,
+            common_1.Location])
+    ], NotFoundComponent);
     return NotFoundComponent;
 }());
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Boolean)
-], NotFoundComponent.prototype, "injected", void 0);
-NotFoundComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: "not-found",
-        templateUrl: '../template/not-found.component.html'
-    }),
-    __metadata("design:paramtypes", [app_component_1.AppComponent,
-        router_1.Router,
-        user_service_1.UserService,
-        common_1.Location])
-], NotFoundComponent);
 exports.NotFoundComponent = NotFoundComponent;
 
 //# sourceMappingURL=not-found.component.js.map

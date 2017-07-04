@@ -24,18 +24,18 @@ var DashboardComponent = (function () {
     DashboardComponent.prototype.ngOnInit = function () {
         this._app.showBackground(true);
     };
+    DashboardComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: "dashboard",
+            templateUrl: "../template/dashboard.component.html"
+        }),
+        __metadata("design:paramtypes", [app_component_1.AppComponent,
+            router_1.Router,
+            user_service_1.UserService])
+    ], DashboardComponent);
     return DashboardComponent;
 }());
-DashboardComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: "dashboard",
-        templateUrl: "../template/dashboard.component.html"
-    }),
-    __metadata("design:paramtypes", [app_component_1.AppComponent,
-        router_1.Router,
-        user_service_1.UserService])
-], DashboardComponent);
 exports.DashboardComponent = DashboardComponent;
 
 //# sourceMappingURL=dashboard.component.js.map

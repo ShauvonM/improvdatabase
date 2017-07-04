@@ -357,28 +357,28 @@ var TeamDetailsComponent = (function () {
             });
         });
     };
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", team_1.Team)
+    ], TeamDetailsComponent.prototype, "team", void 0);
+    TeamDetailsComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: "team-details",
+            templateUrl: "../template/team-details.component.html",
+            animations: [anim_util_1.DialogAnim.dialog]
+        }),
+        __metadata("design:paramtypes", [app_component_1.AppComponent,
+            router_1.Router,
+            router_1.ActivatedRoute,
+            app_service_1.AppService,
+            user_service_1.UserService,
+            team_service_1.TeamService,
+            common_1.PathLocationStrategy,
+            common_1.Location])
+    ], TeamDetailsComponent);
     return TeamDetailsComponent;
 }());
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", team_1.Team)
-], TeamDetailsComponent.prototype, "team", void 0);
-TeamDetailsComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: "team-details",
-        templateUrl: "../template/team-details.component.html",
-        animations: [anim_util_1.DialogAnim.dialog]
-    }),
-    __metadata("design:paramtypes", [app_component_1.AppComponent,
-        router_1.Router,
-        router_1.ActivatedRoute,
-        app_service_1.AppService,
-        user_service_1.UserService,
-        team_service_1.TeamService,
-        common_1.PathLocationStrategy,
-        common_1.Location])
-], TeamDetailsComponent);
 exports.TeamDetailsComponent = TeamDetailsComponent;
 
 //# sourceMappingURL=team-details.component.js.map

@@ -28,18 +28,18 @@ var DraggableDirective = (function () {
             el.classList.remove('drag-src');
         });
     };
+    __decorate([
+        core_1.Input('makeDraggable'),
+        __metadata("design:type", String)
+    ], DraggableDirective.prototype, "data", void 0);
+    DraggableDirective = __decorate([
+        core_1.Directive({
+            selector: '[makeDraggable]'
+        }),
+        __metadata("design:paramtypes", [core_1.ElementRef])
+    ], DraggableDirective);
     return DraggableDirective;
 }());
-__decorate([
-    core_1.Input('makeDraggable'),
-    __metadata("design:type", String)
-], DraggableDirective.prototype, "data", void 0);
-DraggableDirective = __decorate([
-    core_1.Directive({
-        selector: '[makeDraggable]'
-    }),
-    __metadata("design:paramtypes", [core_1.ElementRef])
-], DraggableDirective);
 exports.DraggableDirective = DraggableDirective;
 
 //# sourceMappingURL=draggable.directive.js.map

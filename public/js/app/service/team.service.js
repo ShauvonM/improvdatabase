@@ -145,13 +145,13 @@ var TeamService = (function () {
             return response.json();
         });
     };
+    TeamService = __decorate([
+        core_1.Injectable(),
+        __metadata("design:paramtypes", [app_http_1.AppHttp,
+            user_service_1.UserService])
+    ], TeamService);
     return TeamService;
 }());
-TeamService = __decorate([
-    core_1.Injectable(),
-    __metadata("design:paramtypes", [app_http_1.AppHttp,
-        user_service_1.UserService])
-], TeamService);
 exports.TeamService = TeamService;
 
 //# sourceMappingURL=team.service.js.map

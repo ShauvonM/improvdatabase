@@ -46,14 +46,14 @@ var AuthGuard = (function () {
         }
         return false;
     };
+    AuthGuard = __decorate([
+        core_1.Injectable(),
+        __metadata("design:paramtypes", [router_1.Router,
+            app_service_1.AppService,
+            user_service_1.UserService])
+    ], AuthGuard);
     return AuthGuard;
 }());
-AuthGuard = __decorate([
-    core_1.Injectable(),
-    __metadata("design:paramtypes", [router_1.Router,
-        app_service_1.AppService,
-        user_service_1.UserService])
-], AuthGuard);
 exports.AuthGuard = AuthGuard;
 
 //# sourceMappingURL=auth-guard.service.js.map

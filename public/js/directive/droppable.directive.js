@@ -41,18 +41,18 @@ var DroppableDirective = (function () {
             return false;
         });
     };
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", core_1.EventEmitter)
+    ], DroppableDirective.prototype, "dropped", void 0);
+    DroppableDirective = __decorate([
+        core_1.Directive({
+            selector: '[makeDroppable]'
+        }),
+        __metadata("design:paramtypes", [core_1.ElementRef])
+    ], DroppableDirective);
     return DroppableDirective;
 }());
-__decorate([
-    core_1.Output(),
-    __metadata("design:type", core_1.EventEmitter)
-], DroppableDirective.prototype, "dropped", void 0);
-DroppableDirective = __decorate([
-    core_1.Directive({
-        selector: '[makeDroppable]'
-    }),
-    __metadata("design:paramtypes", [core_1.ElementRef])
-], DroppableDirective);
 exports.DroppableDirective = DroppableDirective;
 
 //# sourceMappingURL=droppable.directive.js.map

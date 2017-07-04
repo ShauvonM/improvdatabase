@@ -317,50 +317,50 @@ var SignupComponent = (function () {
         this._app.backdrop(false);
         this.termsDialogVisible = false;
     };
+    __decorate([
+        core_1.ViewChild('page'),
+        __metadata("design:type", core_1.ElementRef)
+    ], SignupComponent.prototype, "pageElement", void 0);
+    __decorate([
+        core_1.ViewChild('facilitatorCard', { read: bracket_card_directive_1.BracketCardDirective }),
+        __metadata("design:type", bracket_card_directive_1.BracketCardDirective)
+    ], SignupComponent.prototype, "facilitatorCard", void 0);
+    __decorate([
+        core_1.ViewChild('improviserCard', { read: bracket_card_directive_1.BracketCardDirective }),
+        __metadata("design:type", bracket_card_directive_1.BracketCardDirective)
+    ], SignupComponent.prototype, "improviserCard", void 0);
+    __decorate([
+        core_1.ViewChild('yourselfCard', { read: bracket_card_directive_1.BracketCardDirective }),
+        __metadata("design:type", bracket_card_directive_1.BracketCardDirective)
+    ], SignupComponent.prototype, "yourselfCard", void 0);
+    __decorate([
+        core_1.ViewChild('yourTeamCard', { read: bracket_card_directive_1.BracketCardDirective }),
+        __metadata("design:type", bracket_card_directive_1.BracketCardDirective)
+    ], SignupComponent.prototype, "yourTeamCard", void 0);
+    __decorate([
+        core_1.ViewChildren('packageCard', { read: bracket_card_directive_1.BracketCardDirective }),
+        __metadata("design:type", core_1.QueryList)
+    ], SignupComponent.prototype, "packageCards", void 0);
+    SignupComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: "signup",
+            templateUrl: '../template/signup.component.html',
+            animations: [
+                anim_util_1.ToggleAnim.fadeAbsolute,
+                anim_util_1.ToggleAnim.bubble,
+                anim_util_1.ToggleAnim.bubbleSlow,
+                anim_util_1.DialogAnim.dialog
+            ]
+        }),
+        __metadata("design:paramtypes", [app_component_1.AppComponent,
+            app_service_1.AppService,
+            router_1.Router,
+            user_service_1.UserService,
+            cart_service_1.CartService])
+    ], SignupComponent);
     return SignupComponent;
 }());
-__decorate([
-    core_1.ViewChild('page'),
-    __metadata("design:type", core_1.ElementRef)
-], SignupComponent.prototype, "pageElement", void 0);
-__decorate([
-    core_1.ViewChild('facilitatorCard', { read: bracket_card_directive_1.BracketCardDirective }),
-    __metadata("design:type", bracket_card_directive_1.BracketCardDirective)
-], SignupComponent.prototype, "facilitatorCard", void 0);
-__decorate([
-    core_1.ViewChild('improviserCard', { read: bracket_card_directive_1.BracketCardDirective }),
-    __metadata("design:type", bracket_card_directive_1.BracketCardDirective)
-], SignupComponent.prototype, "improviserCard", void 0);
-__decorate([
-    core_1.ViewChild('yourselfCard', { read: bracket_card_directive_1.BracketCardDirective }),
-    __metadata("design:type", bracket_card_directive_1.BracketCardDirective)
-], SignupComponent.prototype, "yourselfCard", void 0);
-__decorate([
-    core_1.ViewChild('yourTeamCard', { read: bracket_card_directive_1.BracketCardDirective }),
-    __metadata("design:type", bracket_card_directive_1.BracketCardDirective)
-], SignupComponent.prototype, "yourTeamCard", void 0);
-__decorate([
-    core_1.ViewChildren('packageCard', { read: bracket_card_directive_1.BracketCardDirective }),
-    __metadata("design:type", core_1.QueryList)
-], SignupComponent.prototype, "packageCards", void 0);
-SignupComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: "signup",
-        templateUrl: '../template/signup.component.html',
-        animations: [
-            anim_util_1.ToggleAnim.fadeAbsolute,
-            anim_util_1.ToggleAnim.bubble,
-            anim_util_1.ToggleAnim.bubbleSlow,
-            anim_util_1.DialogAnim.dialog
-        ]
-    }),
-    __metadata("design:paramtypes", [app_component_1.AppComponent,
-        app_service_1.AppService,
-        router_1.Router,
-        user_service_1.UserService,
-        cart_service_1.CartService])
-], SignupComponent);
 exports.SignupComponent = SignupComponent;
 
 //# sourceMappingURL=signup.component.js.map

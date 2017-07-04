@@ -308,14 +308,14 @@ var UserService = (function () {
         }
         return this._subscriptionPromise;
     };
+    UserService = __decorate([
+        core_1.Injectable(),
+        __metadata("design:paramtypes", [app_http_1.AppHttp
+            // private teamService: TeamService
+        ])
+    ], UserService);
     return UserService;
 }());
-UserService = __decorate([
-    core_1.Injectable(),
-    __metadata("design:paramtypes", [app_http_1.AppHttp
-        // private teamService: TeamService
-    ])
-], UserService);
 exports.UserService = UserService;
 
 //# sourceMappingURL=user.service.js.map

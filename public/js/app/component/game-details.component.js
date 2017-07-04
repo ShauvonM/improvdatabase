@@ -240,12 +240,12 @@ var GameDetailsComponent = (function () {
                 this._selectedTagIndex = -1;
                 this.addTagByName();
                 break;
-            case 27:
+            case 27:// escape
                 this._selectedTagIndex = -1;
                 this.addTagShown = false;
                 break;
             case 40: // down
-            case 38:
+            case 38:// up
                 if (key === 40) {
                     if (this._selectedTagIndex < this.tagHints.length - 1) {
                         this._selectedTagIndex++;
@@ -458,44 +458,44 @@ var GameDetailsComponent = (function () {
             _this.userService.setPreference(constants_1.PREFERENCE_KEYS.showPrivateNotes, '' + _this.showPrivateNotes);
         }, 10);
     };
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", game_1.Game)
+    ], GameDetailsComponent.prototype, "game", void 0);
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", core_1.EventEmitter)
+    ], GameDetailsComponent.prototype, "onClose", void 0);
+    GameDetailsComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: 'game-details',
+            templateUrl: '../template/game-details.component.html',
+            animations: [
+                anim_util_1.ShrinkAnim.height,
+                core_1.trigger('expand', [
+                    core_1.state('in', core_1.style({ height: '*' })),
+                    core_1.transition('void => *', [
+                        core_1.style({ height: 0 }),
+                        core_1.animate(100)
+                    ]),
+                    core_1.transition('* => void', [
+                        core_1.style({ height: '*' }),
+                        core_1.animate(100, core_1.style({ height: 0 }))
+                    ])
+                ])
+            ]
+        }),
+        __metadata("design:paramtypes", [app_component_1.AppComponent,
+            game_database_service_1.GameDatabaseService,
+            game_note_service_1.GameNoteService,
+            router_1.Router,
+            router_1.ActivatedRoute,
+            common_1.Location,
+            user_service_1.UserService])
+    ], GameDetailsComponent);
     return GameDetailsComponent;
 }());
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", game_1.Game)
-], GameDetailsComponent.prototype, "game", void 0);
-__decorate([
-    core_1.Output(),
-    __metadata("design:type", core_1.EventEmitter)
-], GameDetailsComponent.prototype, "onClose", void 0);
-GameDetailsComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: 'game-details',
-        templateUrl: '../template/game-details.component.html',
-        animations: [
-            anim_util_1.ShrinkAnim.height,
-            core_1.trigger('expand', [
-                core_1.state('in', core_1.style({ height: '*' })),
-                core_1.transition('void => *', [
-                    core_1.style({ height: 0 }),
-                    core_1.animate(100)
-                ]),
-                core_1.transition('* => void', [
-                    core_1.style({ height: '*' }),
-                    core_1.animate(100, core_1.style({ height: 0 }))
-                ])
-            ])
-        ]
-    }),
-    __metadata("design:paramtypes", [app_component_1.AppComponent,
-        game_database_service_1.GameDatabaseService,
-        game_note_service_1.GameNoteService,
-        router_1.Router,
-        router_1.ActivatedRoute,
-        common_1.Location,
-        user_service_1.UserService])
-], GameDetailsComponent);
 exports.GameDetailsComponent = GameDetailsComponent;
 
 //# sourceMappingURL=game-details.component.js.map

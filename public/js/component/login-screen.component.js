@@ -28,18 +28,18 @@ var LoginScreenComponent = (function () {
             this._app.login();
         }
     };
+    LoginScreenComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: "login-screen",
+            template: "<div class=\"page\"></div>"
+        }),
+        __metadata("design:paramtypes", [app_component_1.AppComponent,
+            router_1.Router,
+            user_service_1.UserService])
+    ], LoginScreenComponent);
     return LoginScreenComponent;
 }());
-LoginScreenComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: "login-screen",
-        template: "<div class=\"page\"></div>"
-    }),
-    __metadata("design:paramtypes", [app_component_1.AppComponent,
-        router_1.Router,
-        user_service_1.UserService])
-], LoginScreenComponent);
 exports.LoginScreenComponent = LoginScreenComponent;
 
 //# sourceMappingURL=login-screen.component.js.map

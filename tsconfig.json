@@ -8,6 +8,7 @@
         "experimentalDecorators": true,
         "removeComments": false,
         "noImplicitAny": true,
+        "noStrictGenericChecks": true,
         "rootDir": "app/src/",
         "outDir": "public/js/",
         "typeRoots": [

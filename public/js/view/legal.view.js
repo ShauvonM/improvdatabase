@@ -17,16 +17,16 @@ var LegalView = (function () {
     };
     LegalView.prototype.ngOnDestroy = function () {
     };
+    LegalView = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: 'legal-view',
+            templateUrl: '../template/view/legal.view.html'
+        }),
+        __metadata("design:paramtypes", [])
+    ], LegalView);
     return LegalView;
 }());
-LegalView = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: 'legal-view',
-        templateUrl: '../template/view/legal.view.html'
-    }),
-    __metadata("design:paramtypes", [])
-], LegalView);
 exports.LegalView = LegalView;
 
 //# sourceMappingURL=legal.view.js.map

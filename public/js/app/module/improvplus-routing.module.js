@@ -161,14 +161,14 @@ var routes = [
 var ImprovPlusRoutingModule = (function () {
     function ImprovPlusRoutingModule() {
     }
+    ImprovPlusRoutingModule = __decorate([
+        core_1.NgModule({
+            imports: [router_1.RouterModule.forChild(routes)],
+            exports: [router_1.RouterModule]
+        })
+    ], ImprovPlusRoutingModule);
     return ImprovPlusRoutingModule;
 }());
-ImprovPlusRoutingModule = __decorate([
-    core_1.NgModule({
-        imports: [router_1.RouterModule.forChild(routes)],
-        exports: [router_1.RouterModule]
-    })
-], ImprovPlusRoutingModule);
 exports.ImprovPlusRoutingModule = ImprovPlusRoutingModule;
 ;
 

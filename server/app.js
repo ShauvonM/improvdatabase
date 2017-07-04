@@ -2,7 +2,6 @@ var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var morgan = require('morgan');
-var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var exphbs = require('express-handlebars');
 var mongoose = require('mongoose');
@@ -57,7 +56,6 @@ app.use(morgan(':remote-addr :remote-user - :method :url :status :response-time 
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, '../public')));
 app.use('/node_modules', express.static(path.join(__dirname, '../node_modules')));

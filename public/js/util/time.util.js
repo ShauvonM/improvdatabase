@@ -74,12 +74,12 @@ var TimeUtil = (function () {
             return this.simpleDate(dateString);
         }
     };
+    TimeUtil.SECOND_MILLIS = 1000;
+    TimeUtil.MINUTE_MILLIS = TimeUtil.SECOND_MILLIS * 60;
+    TimeUtil.HOUR_MILLIS = TimeUtil.MINUTE_MILLIS * 60;
+    TimeUtil.DAY_MILLIS = TimeUtil.HOUR_MILLIS * 24;
     return TimeUtil;
 }());
-TimeUtil.SECOND_MILLIS = 1000;
-TimeUtil.MINUTE_MILLIS = TimeUtil.SECOND_MILLIS * 60;
-TimeUtil.HOUR_MILLIS = TimeUtil.MINUTE_MILLIS * 60;
-TimeUtil.DAY_MILLIS = TimeUtil.HOUR_MILLIS * 24;
 exports.TimeUtil = TimeUtil;
 
 //# sourceMappingURL=time.util.js.map

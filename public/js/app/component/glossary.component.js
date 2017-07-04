@@ -123,19 +123,19 @@ var GlossaryComponent = (function () {
             _this.savingTag = null;
         });
     };
+    GlossaryComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: "glossary",
+            templateUrl: "../template/glossary.component.html"
+        }),
+        __metadata("design:paramtypes", [app_component_1.AppComponent,
+            router_1.Router,
+            game_database_service_1.GameDatabaseService,
+            user_service_1.UserService])
+    ], GlossaryComponent);
     return GlossaryComponent;
 }());
-GlossaryComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: "glossary",
-        templateUrl: "../template/glossary.component.html"
-    }),
-    __metadata("design:paramtypes", [app_component_1.AppComponent,
-        router_1.Router,
-        game_database_service_1.GameDatabaseService,
-        user_service_1.UserService])
-], GlossaryComponent);
 exports.GlossaryComponent = GlossaryComponent;
 
 //# sourceMappingURL=glossary.component.js.map

@@ -29,49 +29,49 @@ var infinite_scroll_directive_1 = require("../directive/infinite-scroll.directiv
 var SharedModule = (function () {
     function SharedModule() {
     }
+    SharedModule = __decorate([
+        core_1.NgModule({
+            imports: [
+                // BrowserModule,
+                common_1.CommonModule,
+                forms_1.FormsModule,
+                router_1.RouterModule
+            ],
+            declarations: [
+                logo_view_1.LogoView,
+                login_view_1.LoginView,
+                user_form_view_1.UserFormView,
+                landing_hero_view_1.LandingHeroView,
+                legal_view_1.LegalView,
+                form_input_directive_1.FormInputDirective,
+                bracket_card_directive_1.BracketCardDirective,
+                draggable_directive_1.DraggableDirective,
+                droppable_directive_1.DroppableDirective,
+                form_switch_directive_1.FormSwitchDirective,
+                infinite_scroll_directive_1.InfiniteScrollDirective
+            ],
+            exports: [
+                logo_view_1.LogoView,
+                login_view_1.LoginView,
+                user_form_view_1.UserFormView,
+                landing_hero_view_1.LandingHeroView,
+                legal_view_1.LegalView,
+                form_input_directive_1.FormInputDirective,
+                bracket_card_directive_1.BracketCardDirective,
+                draggable_directive_1.DraggableDirective,
+                droppable_directive_1.DroppableDirective,
+                form_switch_directive_1.FormSwitchDirective,
+                infinite_scroll_directive_1.InfiniteScrollDirective
+            ],
+            providers: [
+                app_service_1.AppService,
+                user_service_1.UserService,
+                cart_service_1.CartService
+            ]
+        })
+    ], SharedModule);
     return SharedModule;
 }());
-SharedModule = __decorate([
-    core_1.NgModule({
-        imports: [
-            // BrowserModule,
-            common_1.CommonModule,
-            forms_1.FormsModule,
-            router_1.RouterModule
-        ],
-        declarations: [
-            logo_view_1.LogoView,
-            login_view_1.LoginView,
-            user_form_view_1.UserFormView,
-            landing_hero_view_1.LandingHeroView,
-            legal_view_1.LegalView,
-            form_input_directive_1.FormInputDirective,
-            bracket_card_directive_1.BracketCardDirective,
-            draggable_directive_1.DraggableDirective,
-            droppable_directive_1.DroppableDirective,
-            form_switch_directive_1.FormSwitchDirective,
-            infinite_scroll_directive_1.InfiniteScrollDirective
-        ],
-        exports: [
-            logo_view_1.LogoView,
-            login_view_1.LoginView,
-            user_form_view_1.UserFormView,
-            landing_hero_view_1.LandingHeroView,
-            legal_view_1.LegalView,
-            form_input_directive_1.FormInputDirective,
-            bracket_card_directive_1.BracketCardDirective,
-            draggable_directive_1.DraggableDirective,
-            droppable_directive_1.DroppableDirective,
-            form_switch_directive_1.FormSwitchDirective,
-            infinite_scroll_directive_1.InfiniteScrollDirective
-        ],
-        providers: [
-            app_service_1.AppService,
-            user_service_1.UserService,
-            cart_service_1.CartService
-        ]
-    })
-], SharedModule);
 exports.SharedModule = SharedModule;
 
 //# sourceMappingURL=shared.module.js.map

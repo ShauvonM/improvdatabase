@@ -77,25 +77,25 @@ var MaterialsPageView = (function () {
             return "no version published";
         }
     };
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", library_1.Library)
+    ], MaterialsPageView.prototype, "library", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", team_1.Team)
+    ], MaterialsPageView.prototype, "team", void 0);
+    MaterialsPageView = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: '.materials-page',
+            templateUrl: '../template/view/materials-page.view.html'
+        }),
+        __metadata("design:paramtypes", [app_component_1.AppComponent,
+            library_service_1.LibraryService])
+    ], MaterialsPageView);
     return MaterialsPageView;
 }());
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", library_1.Library)
-], MaterialsPageView.prototype, "library", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", team_1.Team)
-], MaterialsPageView.prototype, "team", void 0);
-MaterialsPageView = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: '.materials-page',
-        templateUrl: '../template/view/materials-page.view.html'
-    }),
-    __metadata("design:paramtypes", [app_component_1.AppComponent,
-        library_service_1.LibraryService])
-], MaterialsPageView);
 exports.MaterialsPageView = MaterialsPageView;
 
 //# sourceMappingURL=materials-page.view.js.map

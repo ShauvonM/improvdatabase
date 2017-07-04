@@ -21,17 +21,17 @@ var HelpComponent = (function () {
     }
     HelpComponent.prototype.ngOnInit = function () {
     };
+    HelpComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: "help",
+            templateUrl: "../template/help.component.html"
+        }),
+        __metadata("design:paramtypes", [app_component_1.AppComponent,
+            router_1.Router])
+    ], HelpComponent);
     return HelpComponent;
 }());
-HelpComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: "help",
-        templateUrl: "../template/help.component.html"
-    }),
-    __metadata("design:paramtypes", [app_component_1.AppComponent,
-        router_1.Router])
-], HelpComponent);
 exports.HelpComponent = HelpComponent;
 
 //# sourceMappingURL=help.component.js.map
