@@ -5,78 +5,78 @@
 
 $paper-bg: $color-white;
 
-.left-bracket,
-.right-bracket {
-    @include abs(($toolbar-height / 2), null, ($toolbar-height / 2), null, 5);
-    border: 1px solid $color-text;
-    width: $page-bracket-width;
-    transition: border-color 200ms;
+// .left-bracket,
+// .right-bracket {
+//     @include abs(($toolbar-height / 2), null, ($toolbar-height / 2), null, 5);
+//     border: 1px solid $color-text;
+//     width: $page-bracket-width;
+//     transition: border-color 200ms;
 
-    h1 {
-        font-size: 18px;
-        line-height: $large;
-        padding: 0 $std;
-        background: $paper-bg;
-        transform: translateY(-55%);
+//     h1 {
+//         font-size: 18px;
+//         line-height: $large;
+//         padding: 0 $std;
+//         background: $paper-bg;
+//         transform: translateY(-55%);
 
-        label {
-            font-size: 18px;
-            line-height: $large;
-            color: $color-text;
-            margin: 0;
-        }
-    }
+//         label {
+//             font-size: 18px;
+//             line-height: $large;
+//             color: $color-text;
+//             margin: 0;
+//         }
+//     }
 
-    &.white {
-        border-color: $color-white;
-    }
-}
+//     &.white {
+//         border-color: $color-white;
+//     }
+// }
 
-.left-bracket {
-    left: ($toolbar-height / 2);
-    border-right-width: 0px;
+// .left-bracket {
+//     left: ($toolbar-height / 2);
+//     border-right-width: 0px;
 
-    h1 {
-        @include abs(0, null, null, ($toolbar-height / 2));
-    }
+//     h1 {
+//         @include abs(0, null, null, ($toolbar-height / 2));
+//     }
 
-    @media #{$media-mobile} {
-        left: ($toolbar-height / 4);
+//     @media #{$media-mobile} {
+//         left: ($toolbar-height / 4);
 
-        h1 {
-            display: none;
-        }
-    }
-}
+//         h1 {
+//             display: none;
+//         }
+//     }
+// }
 
-.right-bracket {
-    right: ($toolbar-height / 2);
-    border-left-width: 0px;
+// .right-bracket {
+//     right: ($toolbar-height / 2);
+//     border-left-width: 0px;
 
-    h1 {
-        @include abs(0, ($toolbar-height / 2), null, null);
-        font-style: italic;
-        font-weight: bold;
-        white-space: nowrap;
-        min-width: 50px;
-        text-align: right;
-    }
+//     h1 {
+//         @include abs(0, ($toolbar-height / 2), null, null);
+//         font-style: italic;
+//         font-weight: bold;
+//         white-space: nowrap;
+//         min-width: 50px;
+//         text-align: right;
+//     }
 
-    @media #{$media-mobile} {
-        right: ($toolbar-height / 4);
+//     @media #{$media-mobile} {
+//         right: ($toolbar-height / 4);
 
-        h1 {
-            right: ($toolbar-height / 2);
-        }
-    }
-}
+//         h1 {
+//             right: ($toolbar-height / 2);
+//         }
+//     }
+// }
 
-@media #{$media-mobile} {
-    improvplus > .left-bracket,
-    improvplus > .right-bracket {
-        display: none;
-    }
-}
+// @media #{$media-mobile} {
+//     improvplus > .left-bracket,
+//     improvplus > .right-bracket {
+//         display: none;
+//     }
+// }
 
 .curtain {
     @include abs(0, 0, null, 0, 1);
@@ -99,10 +99,10 @@ $paper-bg: $color-white;
     min-height: 100vh;
     box-sizing: border-box;
     position: relative;
-    padding: $toolbar-height $page-bracket-width $page-bracket-width;
+    padding: $toolbar-height 0 0;
 
     @media #{$media-mobile} {
-        padding: $toolbar-height $std $page-bracket-width;
+        padding: $toolbar-height $std 0;
     }
 
     .curtain {

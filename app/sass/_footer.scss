@@ -3,7 +3,7 @@ footer {
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
-    @include abs(null, $page-bracket-width, 0, $page-bracket-width, 5);
+    @include abs(null, 0, 0, 0, 5);
     height: $toolbar-height;
     padding: 0 ($toolbar-height / 2);
     font-size: 13px;

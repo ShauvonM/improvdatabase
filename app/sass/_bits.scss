@@ -970,7 +970,7 @@ button,
 }
 
 .toast {
-    @include fixed(null, 0, $page-bracket-width, 0, 500);
+    @include fixed(null, 0, $large, 0, 500);
     display: flex;
     justify-content: center;
 

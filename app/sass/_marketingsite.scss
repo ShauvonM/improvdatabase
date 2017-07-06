@@ -390,7 +390,7 @@ welcome .blackbox h2 {
 }
 
 signup .page {
-    padding-top: $page-bracket-width;
+    padding-top: $curtain-height;
 
     @media #{$media-mobile} {
         padding-top: ($large * 2);
