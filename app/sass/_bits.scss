@@ -170,12 +170,24 @@ logo {
     text-align: left;
 }
 
-.scroll {
-    overflow: auto;
+.scroll-wrapper {
+    position: relative;
+    overflow: hidden;
 
-    &:after {
-        @include abs(null, -10px, 0, 10px, 5);
-        box-shadow: 0 -5px 10px rgba(0,0,0,0.4);
+    .scroll {
+        overflow: auto;
+        @include abs(0, 0, 0, 0, 1);
+    }
+
+    .shadow-top {
+        @include abs(null, -5%, 100%, -5%, 2);
+        height: $std;
+        box-shadow: 0 0 ($std * 2) rgba(0,0,0,0.75);
+    }
+    .shadow-bottom {
+        @include abs(100%, -5%, null, -5%, 2);
+        height: $std;
+        box-shadow: 0 0 ($std * 2) rgba(0,0,0,0.5);
     }
 }
 
@@ -355,10 +367,13 @@ logo {
 
 .button-group {
     margin-top: $std;
-    text-align: right;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
 
     .left {
-        float: left;
+        flex: 1;
 
         &:first-child {
             margin-left: (-$std);
@@ -371,6 +386,10 @@ logo {
 
     .button:last-child {
         margin-right: 0;
+
+        @media #{$media-mobile} {
+            margin: $std 0 0 0;
+        }
     }
     label {
         display: inline-block;
@@ -387,7 +406,7 @@ logo {
             margin-right: 0;
         }
     }
-    .improvplus-editable-metadata {
+    .id-editable-metadata {
         display: inline-block;
         vertical-align: middle;
         margin-right: 24px;
@@ -403,6 +422,11 @@ logo {
             margin: 0;
             padding: $small 0;
             width: auto;
+        }
+
+        @media #{$media-mobile} {
+            margin: 0 0 0 $std;
+            line-height: ($std * 2);
         }
     }
 }
@@ -547,7 +571,7 @@ button,
     }
 
     &.fab {
-        @include fixed(null, ($std * 2), $std, null, 500);
+        @include fixed(null, $std, $std, null, 500);
         background: $color-primary;
         color: $color-primary-text;
         width: $fab-width;
@@ -615,6 +639,10 @@ button,
 
             label {
                 margin: 0;
+
+                span {
+                    margin: 0 $std 0 0;
+                }
             }
 
             &.no-margin {
@@ -639,6 +667,14 @@ button,
                 .fill {
                     flex: 1;
                 }
+
+                & > span {
+                    margin: 0 0 0 $std;
+
+                    &:first-child {
+                        margin: 0;
+                    }
+                }
             }
 
             h5 {
@@ -662,7 +698,7 @@ button,
                     display: none;
                 }
             }
-            span {
+            & > span {
                 margin: 0 $std 0 0;
             }
         }

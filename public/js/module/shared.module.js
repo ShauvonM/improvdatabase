@@ -18,7 +18,6 @@ var landing_hero_view_1 = require("../view/landing-hero.view");
 var legal_view_1 = require("../view/legal.view");
 // services
 var user_service_1 = require("../service/user.service");
-var cart_service_1 = require("../service/cart.service");
 var app_service_1 = require("../service/app.service");
 var form_input_directive_1 = require("../directive/form-input.directive");
 var bracket_card_directive_1 = require("../directive/bracket-card.directive");
@@ -26,6 +25,7 @@ var draggable_directive_1 = require("../directive/draggable.directive");
 var droppable_directive_1 = require("../directive/droppable.directive");
 var form_switch_directive_1 = require("../directive/form-switch.directive");
 var infinite_scroll_directive_1 = require("../directive/infinite-scroll.directive");
+var scroll_shadow_directive_1 = require("../directive/scroll-shadow.directive");
 var SharedModule = (function () {
     function SharedModule() {
     }
@@ -48,7 +48,8 @@ var SharedModule = (function () {
                 draggable_directive_1.DraggableDirective,
                 droppable_directive_1.DroppableDirective,
                 form_switch_directive_1.FormSwitchDirective,
-                infinite_scroll_directive_1.InfiniteScrollDirective
+                infinite_scroll_directive_1.InfiniteScrollDirective,
+                scroll_shadow_directive_1.ScrollShadowDirective
             ],
             exports: [
                 logo_view_1.LogoView,
@@ -61,12 +62,12 @@ var SharedModule = (function () {
                 draggable_directive_1.DraggableDirective,
                 droppable_directive_1.DroppableDirective,
                 form_switch_directive_1.FormSwitchDirective,
-                infinite_scroll_directive_1.InfiniteScrollDirective
+                infinite_scroll_directive_1.InfiniteScrollDirective,
+                scroll_shadow_directive_1.ScrollShadowDirective
             ],
             providers: [
                 app_service_1.AppService,
-                user_service_1.UserService,
-                cart_service_1.CartService
+                user_service_1.UserService
             ]
         })
     ], SharedModule);

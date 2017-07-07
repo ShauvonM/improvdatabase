@@ -56,12 +56,7 @@ export class TeamDetailsComponent implements OnInit {
 
     isPosting: boolean;
 
-    purchases: Purchase[];
-    subscription: Subscription;
-
     descriptionHtml: string;
-
-    subscriptionPrice: number;
 
     constructor(
         public _app: AppComponent,
@@ -140,22 +135,6 @@ export class TeamDetailsComponent implements OnInit {
     setTeam(team: Team): void {
         this.team = team;
 
-        if (this.isUserAdmin()) {
-            this.teamService.fetchPurchases(this.team).then(p => {
-                this.purchases = p;
-            });
-        }
-
-        this.teamService.fetchSubscription(this.team).then(s => {
-            this.subscription = s;
-
-            this.calculateSubs();
-
-            this._service.getPackageConfig().then(config => {
-                this.subscriptionPrice = this.subscription.type == 'facilitator' ? config.fac_sub_price : config.improv_sub_price;
-            });
-        });
-
         this.title = team.name;
 
         this.tabs = [
@@ -192,19 +171,6 @@ export class TeamDetailsComponent implements OnInit {
         } else {
             this.descriptionHtml = 'No Description';
         }
-    }
-
-    calculateSubs(): void {
-        this.pendingInvites = this.subscription.subscriptionInvites.length;
-        // if (this.subscription.invites) {
-        //     this.subscription.invites.forEach(invite => {
-        //         if (!invite.inviteUser || this.userService.isExpired(invite.inviteUser)) {
-        //             this.pendingInvites++;
-        //         }
-        //     });
-        // }
-
-        this.remainingSubs = this.subscription.subscriptions - (this.subscription.children.length || 0) - this.pendingInvites;
     }
 
     saveEditName(name: string): void {
@@ -305,12 +271,9 @@ export class TeamDetailsComponent implements OnInit {
                     setTimeout(() => {
                         if (!invite.inviteUser || this.userService.isExpired(invite.inviteUser)) {
                             this.inviteStatus = 'new';
-                            this.subscription.subscriptionInvites.push(invite);
                         } else {
                             this.inviteStatus = 'exists';
-                            this.subscription.invites.push(invite);
                         }
-                        this.calculateSubs();
                     }, 300);
                 }
             }, error => {
@@ -318,14 +281,6 @@ export class TeamDetailsComponent implements OnInit {
                 let response = error.json();
                 if (response.error && response.error == 'invite already exists') {
                     this.inviteError = 'That email address has already been invited to ' + this.team.name + '.';
-                } else if (response.error && response.error == 'user already in team') {
-                    this.inviteError = 'That user is already in your team.';
-                } else if (response.error && response.error == 'user type mismatch') {
-                    if (this.subscription.type == 'improviser') {
-                        this.inviteError = 'At this time, you cannot invite a Facilitator to an Improv Team.'
-                    } else {
-                        this.inviteError = 'At this time, you cannot invite an Improviser to a Facilitator Company.'
-                    }
                 } else if (response.error && response.error == 'out of subscriptions') {
                     this.inviteError = 'Your team is out of subscriptions, so you cannot invite that user until you purchase more (or until they purchase a subscription on their own).'
                 } else {
@@ -348,10 +303,6 @@ export class TeamDetailsComponent implements OnInit {
             () => {
                 this.userService.cancelInvite(invite).then(done => {
                     if (done) {
-                        let index = this.subscription.invites.indexOf(invite);
-                        this.subscription.invites.splice(index, 1);
-
-                        this.calculateSubs();
                     }
                 })
             });
@@ -361,12 +312,6 @@ export class TeamDetailsComponent implements OnInit {
         let body = `
             <p>Are you sure you want to leave this team? You will no longer have access to any of the team's resources.</p>
         `;
-
-        if (this.user.subscription.parent == this.team.subscription._id) {
-            body += `
-                <p class="error"><strong>Warning: Your subscription is inherited from ${this.team.name}. If you leave the team, you will have to purchase a new subscription to keep using ImprovPlus.</strong></p>
-            `
-        }
 
         this._app.dialog('Leave ' + this.team.name + '?', body, 'Yes', () => {
 

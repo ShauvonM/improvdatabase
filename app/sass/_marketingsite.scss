@@ -69,7 +69,7 @@ landing-hero {
         margin-bottom: $large;
 
         @media #{$media-mobile} {
-            font-size: 65px;
+            font-size: 45px;
         }
     }
 
@@ -182,6 +182,7 @@ marketing-toolbar {
             @include abs(0, null, null, 50%, 7);
             margin-left: -23px;
             padding: $std - 5;
+            transition: background-color 300ms;
 
             @media #{$media-mobile} {
                 top: 100%;
@@ -207,6 +208,11 @@ marketing-toolbar {
             // top: -($toolbar-height * 4);
             transform: translateY(-100%);
             transition: transform 300ms;
+
+            &.on logo {
+                background: $color-primary;
+                border-radius: 0 0 50% 50%;
+            }
         }
 
         &.open {
@@ -236,6 +242,10 @@ welcome, signup, for-improvisers {
         
             @media #{$media-mobile} {
                 font-size: 3.5em;
+
+                span {
+                    display: block;
+                }
             }
         }
 

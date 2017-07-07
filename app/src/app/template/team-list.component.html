@@ -6,9 +6,9 @@
 
 <div class="page">
 
-    <div class="paper has-brackets">
+    <div class="paper">
 
-        <div class="content card-list">
+        <div class="card-list">
 
             <div class="card clickable"
                 (click)="selectTeam(team)"
@@ -29,10 +29,6 @@
                     <div class="columns fill data-row">
                         <span>Available Subscriptions</span>
                         <span>{{team.subscription.subscriptions - team.subscription.children.length}}</span>
-                    </div>
-                    <div class="columns fill data-row" *ngIf="team.materials && team.materials.length">
-                        <span>Materials Owned</span>
-                        <span>{{team.materials.length}}</span>
                     </div>
                 </div>
             </div>
@@ -56,17 +52,11 @@
                         <span>Members</span>
                         <span>{{(team.admins.length || 0) + (team.members.length + 0)}}</span>
                     </div>
-                    <div class="columns fill data-row" *ngIf="team.materials && team.materials.length">
-                        <span>Materials Owned</span>
-                        <span>{{team.materials.length}}</span>
-                    </div>
                 </div>
             </div>
 
         </div>
 
-        <div class="left-bracket"><h1><span class="light">improv</span><strong>plus</strong></h1></div>
-        <div class="right-bracket"><h1></h1></div>
     </div>
 
 </div>

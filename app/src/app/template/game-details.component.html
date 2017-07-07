@@ -5,24 +5,9 @@
     (toolClicked)="onToolClicked($event)"
     (goBack)="closePage()"></div>
 
-<!--<div class="curtain" [style.top]="(-(scrollpos * 0.5)) + 'px'">
-    <h2 *ngIf="game && game.names && game.names[0]">{{game.names[0].name}}</h2>
-    <h2 *ngIf="game && (!game.names || !game.names[0])">New Game</h2>
-</div>-->
-
 <div class="page" *ngIf="game">
 
-    <!--<div class="tabs">
-        <span class="tab" 
-            *ngFor="let tab of tabs"
-            [class.active]="tab.id == selectedTab"
-            (click)="selectTab(tab)">
-            <i class="fa fa-{{tab.icon}}"></i>
-            <span>{{tab.name}}</span>
-        </span>
-    </div>-->
-
-    <div class="paper has-brackets" [@shrinkHeight]>
+    <div class="paper" [@shrinkHeight]>
 
         <div class="content">
 
@@ -55,7 +40,7 @@
                     </ol>
                 </div>
 
-                <span class="bullet improvplus-editable-metadata"
+                <span class="bullet id-editable-metadata"
                     [model]="game.playerCount"
                     [blankText]="'No Player Count Specified'"
                     [icon]="'users'"
@@ -65,7 +50,7 @@
                     (save)="savePlayerCount($event)"
                     (createOption)="showCreateMetadataDialog($event, 'playerCount')"></span>
 
-                <span class="improvplus-editable-metadata"
+                <span class="id-editable-metadata"
                     [model]="game.duration"
                     [blankText]="'No Duration Specified'"
                     [icon]="'clock-o'"
@@ -132,67 +117,72 @@
             </div>
 
         </div>
-
-        <div class="left-bracket"><h1><span class="light">improv</span><strong>plus</strong></h1></div>
-        <div class="right-bracket"><h1>game details</h1></div>
     </div>
 
-    <div *ngIf="getPublicNotes().length" class="paper has-brackets" [class.closed]="!showPublicNotes">
+    <div class="paper-label" *ngIf="getPublicNotes().length" [class.closed]="!showPublicNotes">
+        <span>
+            Public Commentary
+        </span>
+
+        <div class="button-group">
+            <input formSwitch name="showPublicNotes" type="checkbox" [(ngModel)]="showPublicNotes" />
+        </div>
+    </div>
+
+    <div *ngIf="getPublicNotes().length" class="paper" [class.closed]="!showPublicNotes">
 
         <div class="content list" *ngIf="showPublicNotes" [@shrinkHeight]>
 
-            <div *ngFor="let note of getPublicNotes()" class="item large improvplus-game-note" [note]="note" [game]="game" (remove)="removeNote($event)"></div>
+            <div *ngFor="let note of getPublicNotes()" class="item large id-game-note" [note]="note" [game]="game" (remove)="removeNote($event)"></div>
 
         </div>
 
-        <div class="left-bracket"><h1><span class="light">improv</span><strong>plus</strong></h1></div>
-        <div class="right-bracket">
-            <h1>
-                <label (click)="togglePublicNotes()">
-                    <span>director's commentary</span>
-                    <input class="paper-toggle" formSwitch name="showPublicNotes" type="checkbox" [(ngModel)]="showPublicNotes" />
-                </label>
-            </h1>
+    </div>
+
+    <div class="paper-label" *ngIf="getTeamNotes().length" [class.closed]="!showTeamNotes">
+        <span>
+            Team Commentary
+        </span>
+
+        <div class="button-group">
+            <input formSwitch name="showTeamNotes" type="checkbox" [(ngModel)]="showTeamNotes" />
         </div>
     </div>
 
-    <div *ngIf="getTeamNotes().length" class="paper has-brackets" [class.closed]="!showTeamNotes">
+
+    <div *ngIf="getTeamNotes().length" class="paper" [class.closed]="!showTeamNotes">
+        
         <div class="content list" *ngIf="showTeamNotes" [@shrinkHeight]>
 
-            <div *ngFor="let note of getTeamNotes()" class="item large improvplus-game-note" [note]="note" [game]="game" (remove)="removeNote($event)"></div>
+            <div *ngFor="let note of getTeamNotes()" class="item large id-game-note" [note]="note" [game]="game" (remove)="removeNote($event)"></div>
 
         </div>
 
-        <div class="left-bracket"><h1><span class="light">improv</span><strong>plus</strong></h1></div><div class="right-bracket">
-            <h1>
-                <label (click)="toggleTeamNotes()">
-                    <span>company commentary</span>
-                    <input class="paper-toggle" formSwitch name="showTeamNotes" type="checkbox" [(ngModel)]="showTeamNotes" />
-                </label>
-            </h1>
+    </div>
+
+    <div class="paper-label" *ngIf="game.names[0]" [class.closed]="!showPrivateNotes">
+        <span>
+            Your Commentary
+        </span>
+
+        <div class="button-group">
+            <input formSwitch name="showPrivateNotes" type="checkbox" [(ngModel)]="showPrivateNotes" />
         </div>
     </div>
 
-    <div *ngIf="game.names[0]" class="paper has-brackets" [class.closed]="!showPrivateNotes">
+
+    <div *ngIf="game.names[0]" class="paper" [class.closed]="!showPrivateNotes">
 
         <div class="content list" *ngIf="showPrivateNotes" [@shrinkHeight]>
 
-            <div *ngFor="let note of getPrivateNotes()" class="item large improvplus-game-note" [note]="note" [game]="game" (remove)="removeNote($event)"></div>
+            <div *ngFor="let note of getPrivateNotes()" class="item large id-game-note" [note]="note" [game]="game" (remove)="removeNote($event)"></div>
 
             <p *ngIf="!getPrivateNotes().length">You haven't saved any notes about this game. Use this area to save anything you want to remember about this game. Only you will see your notes (unless you share them with your team), so feel free to put anything you want.</p>
 
-            <div class="item large improvplus-game-note" (create)="noteCreated($event)" [game]="game"></div>
+            <div class="item large id-game-note" (create)="noteCreated($event)" [game]="game"></div>
 
         </div>
 
-        <div class="left-bracket"><h1><span class="light">improv</span><strong>plus</strong></h1></div><div class="right-bracket">
-            <h1>
-                <label (click)="togglePrivateNotes()">
-                    <span>your commentary</span>
-                    <input class="paper-toggle" formSwitch name="showPrivateNotes" type="checkbox" [(ngModel)]="showPrivateNotes" />
-                </label>
-            </h1>
-        </div>
     </div>
 
 </div>

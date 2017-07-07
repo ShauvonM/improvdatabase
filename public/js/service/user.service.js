@@ -25,7 +25,7 @@ var UserService = (function () {
         // private teamService: TeamService
     ) {
         this.http = http;
-        this.USER_STORAGE_KEY = 'improvplus_user';
+        this.USER_STORAGE_KEY = 'improvdatabase_user';
         this.logginStateSource = new Rx_1.Subject();
         this.loginState$ = this.logginStateSource.asObservable();
         this.loadUserData();

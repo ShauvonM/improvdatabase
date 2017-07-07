@@ -6,8 +6,6 @@
 
     <h2 [innerHTML]="title" (click)="showBack ? back() : toggleNav()"></h2>
 
-    <span class="spacer"></span>
-
     <span *ngIf="showSearch" class="search" [class.active]="(searchOpen || searchTerm) && !searchActive">
         <i class="fa fa-search"></i>
         <input placeholder="Search"

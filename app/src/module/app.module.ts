@@ -16,7 +16,7 @@ import { AppRoutingModule } from './app-routing.module';
 // the shared module is where all of the views and services live
 import { SharedModule } from './shared.module';
 
-import { ImprovPlusModule } from '../app/module/improvplus.module';
+import { ImprovDatabaseModule } from '../app/module/improvdatabase.module';
 
 import { LoginScreenComponent } from '../component/login-screen.component';
 import { SignupComponent } from '../component/signup.component';
@@ -35,7 +35,7 @@ import { MarketingToolbarView } from '../view/marketing-toolbar.view';
         BrowserAnimationsModule,
         SharedModule,
         AppRoutingModule,
-        ImprovPlusModule
+        ImprovDatabaseModule
      ],
     declarations: [
         LoginScreenComponent,

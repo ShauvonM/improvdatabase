@@ -143,18 +143,18 @@ var routes = [
         component: not_found_component_1.NotFoundComponent
     }
 ];
-var ImprovPlusRoutingModule = (function () {
-    function ImprovPlusRoutingModule() {
+var ImprovDatabaseRoutingModule = (function () {
+    function ImprovDatabaseRoutingModule() {
     }
-    ImprovPlusRoutingModule = __decorate([
+    ImprovDatabaseRoutingModule = __decorate([
         core_1.NgModule({
             imports: [router_1.RouterModule.forChild(routes)],
             exports: [router_1.RouterModule]
         })
-    ], ImprovPlusRoutingModule);
-    return ImprovPlusRoutingModule;
+    ], ImprovDatabaseRoutingModule);
+    return ImprovDatabaseRoutingModule;
 }());
-exports.ImprovPlusRoutingModule = ImprovPlusRoutingModule;
+exports.ImprovDatabaseRoutingModule = ImprovDatabaseRoutingModule;
 ;
 
-//# sourceMappingURL=improvplus-routing.module.js.map
+//# sourceMappingURL=improvdatabase-routing.module.js.map

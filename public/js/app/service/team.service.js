@@ -112,21 +112,6 @@ var TeamService = (function () {
             return team;
         });
     };
-    TeamService.prototype.fetchPurchases = function (team) {
-        return this.http.get(constants_1.API.teamPurchases(team._id))
-            .toPromise()
-            .then(function (response) {
-            return response.json();
-        });
-    };
-    TeamService.prototype.fetchSubscription = function (team) {
-        return this.http.get(constants_1.API.teamSubscription(team._id))
-            .toPromise()
-            .then(function (response) {
-            var team = response.json();
-            return team.subscription;
-        });
-    };
     TeamService.prototype.fetchTeams = function (user) {
         var _this = this;
         user = user || this.userService.getLoggedInUser();
@@ -137,12 +122,6 @@ var TeamService = (function () {
             _this.addTeams(user.adminOfTeams);
             _this.addTeams(user.memberOfTeams);
             return user;
-        });
-    };
-    TeamService.prototype.buySubscriptions = function (teamId, count, stripeToken) {
-        return this.http.post(constants_1.API.teamSubscription(teamId), { count: count, stripeToken: stripeToken }).toPromise()
-            .then(function (response) {
-            return response.json();
         });
     };
     TeamService = __decorate([

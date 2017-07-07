@@ -67,7 +67,7 @@ var UserCardView = (function () {
     UserCardView = __decorate([
         core_1.Component({
             moduleId: module.id,
-            selector: '.improvplus-user-card',
+            selector: '.id-user-card',
             templateUrl: '../template/view/user-card.view.html'
         }),
         __metadata("design:paramtypes", [user_service_1.UserService])

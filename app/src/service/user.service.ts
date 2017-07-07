@@ -14,10 +14,6 @@ import { Team } from '../model/team';
 import { Purchase } from '../model/purchase';
 import { Invite } from '../model/invite';
 
-// import { TeamService } from '../app/service/team.service';
-
-import { Library } from '../model/library';
-
 class LoginResponse {
     user: User;
     token: string;
@@ -27,7 +23,7 @@ class LoginResponse {
 @Injectable()
 export class UserService {
 
-    private USER_STORAGE_KEY = 'improvplus_user';
+    private USER_STORAGE_KEY = 'improvdatabase_user';
 
     loggedInUser: User;
 

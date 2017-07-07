@@ -42,11 +42,11 @@
             <input formSwitch name="noteTeam" type="checkbox" [(ngModel)]="notePublic" />
         </label>
 
-        <span class="improvplus-editable-metadata"
+        <div class="id-editable-metadata"
             [canEdit]="true"
             [allowBlank]="false"
             [options]="noteContextOptions"
-            (save)="setNoteContext($event)"></span>
+            (save)="setNoteContext($event)"></div>
 
         <label title="Share this note with your team?" *ngIf="showTeamShare">
             <i class="fa std fa-users"></i>

@@ -17,8 +17,8 @@ var AppHttp = (function () {
     function AppHttp(http, router) {
         this.http = http;
         this.router = router;
-        this.TOKEN_STORAGE_KEY = 'improvplus_token';
-        this.EXPIRATION_STORAGE_KEY = 'improvplus_tokenExpires';
+        this.TOKEN_STORAGE_KEY = 'improvdatabase_token';
+        this.EXPIRATION_STORAGE_KEY = 'improvdatabase_tokenExpires';
         this.loadValues();
     }
     AppHttp.prototype.loadValues = function () {

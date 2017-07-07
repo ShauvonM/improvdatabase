@@ -6,32 +6,32 @@
 
 <div class="page">
 
-    <div class="paper has-brackets">
+    <div class="paper">
 
         <!-- user doesn't have permission -->
-        <div class="content" *ngIf="!userService.isExpired()">
+        <div *ngIf="!userService.isExpired()">
             <h4 class="right">Access Denied</h4>
 
             <p>We are terribly sorry, but you do not have permission to view whatever it was you were trying to view.</p>
 
             <div class="button-group center">
-                <button class="button brackets" routerLink="/app/dashboard" *ngIf="can('dashboard_page_view')">Return to your Dashboard</button>
+                <button class="button raised" routerLink="/app/dashboard" *ngIf="can('dashboard_page_view')">Return to your Dashboard</button>
             </div>
         </div>
 
         <!-- user doesn't have permission -->
-        <div class="content" *ngIf="userService.isExpired()">
+        <div *ngIf="userService.isExpired()">
             <h4 class="right">Subscription Expired</h4>
 
             <p>We are so terrifically sorry, but you cannot access that content with an expired subscription, which you have. That's nothing to be ashamed of, you can renew it right now!</p>
 
             <div class="button-group center">
-                <button class="button brackets" routerLink="/app/dashboard" *ngIf="can('dashboard_page_view')">Return to your Dashboard</button>
+                <button class="button raised" routerLink="/app/dashboard" *ngIf="can('dashboard_page_view')">Return to your Dashboard</button>
             </div>
         </div>
 
         <!-- user is locked -->
-        <div class="content" *ngIf="userService.isLocked()">
+        <div *ngIf="userService.isLocked()">
             <h4 class="right">account locked</h4>
 
             <p>Your account has been locked by an Administrator. If you feel this was in error, please contact us at contact@improvpl.us (be sure to include the Email address associated with your account so we can look it up).</p>
@@ -39,18 +39,16 @@
         </div>
 
         <!-- no subscription at all?! -->
-        <div class="content" *ngIf="!can('subscription_view') && !userService.isLocked()">
+        <div *ngIf="!can('subscription_view') && !userService.isLocked()">
             <h4 class="right">join <span class="light">improv</span><strong>plus</strong></h4>
 
-            <p>Purchase a subscription to the ImprovPlus app and gain access to a wealth of incredible features.</p>
+            <p>I'm not totally sure how you got here. I'm supposed to tell you that you have no subscription, but the app shouldn't be enforcing subscriptions anymore. Huh, feel free to try getting in touch with me to get this figured out.</p>
 
             <div class="button-group center">
-                <button class="button brackets" routerLink="/signup">Sign Up</button>
+                <button class="button raised" routerLink="/signup">Sign Up</button>
             </div>
         </div>
 
-        <div class="left-bracket"><h1><span class="light">improv</span><strong>plus</strong></h1></div>
-        <div class="right-bracket"><h1></h1></div>
     </div>
 
 </div>

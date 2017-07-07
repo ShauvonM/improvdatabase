@@ -16,7 +16,7 @@
         </span>
     </div>
 
-    <div class="paper has-brackets" *ngIf="user && selectedTab == 'user'">
+    <div class="paper" *ngIf="user && selectedTab == 'user'">
 
         <div class="content">
             <user-form 
@@ -27,11 +27,9 @@
                 (valid)="submitEditUser($event)"></user-form>
         </div>
 
-        <div class="left-bracket"><h1><span class="light">improv</span><strong>plus</strong></h1></div>
-        <div class="right-bracket"><h1>your account</h1></div>
     </div>
 
-    <div class="paper has-brackets" *ngIf="subscription && selectedTab == 'subscription'">
+    <div class="paper" *ngIf="subscription && selectedTab == 'subscription'">
 
         <div class="card-list">
 
@@ -59,60 +57,6 @@
 
         </div>
 
-        <div class="left-bracket"><h1><span class="light">improv</span><strong>plus</strong></h1></div>
-        <div class="right-bracket"><h1>your subscription</h1></div>
-    </div>
-
-    <div class="paper has-brackets" *ngIf="purchases && selectedTab == 'purchases'">
-
-        <div class="card-list">
-
-            <div class="card"
-                *ngFor="let purchase of purchases">
-
-                <div class="top">
-                    <i class="fa fa-users" *ngIf="purchase.team" title="This purchase was made for your team."></i>
-                    <div class="content">
-                        <h4 *ngIf="purchase.team">{{purchase.team.name}}</h4>
-                        <h3>{{getDate(purchase.date)}}</h3>
-                        <h4>{{getTime(purchase.date)}}</h4>
-                    </div>
-                </div>
-                <div class="body">
-                    <div class="columns fill" *ngFor="let package of purchase.packages">
-                        <span>{{package.package.name}}</span>
-                        <span>${{package.price}}</span>
-                    </div>
-                    <div class="columns fill" *ngFor="let o of purchase.other">
-                        <span>{{o.description}}</span>
-                        <span>${{o.price}}</span>
-                    </div>
-
-                    <!--<div class="columns fill" *ngIf="purchase.packages">
-                        <div>
-                            <p><strong>{{purchase.package.name}}</strong></p>
-                            <p *ngIf="purchase.package.subscriptions == 1"><em>One-year App Subscription</em></p>
-                            <p *ngIf="purchase.package.subscriptions > 1"><em>{{purchase.package.subscriptions}} App Subscriptions</em></p>
-                            <p *ngIf="purchase.package.materials.length > 1"><em>{{purchase.package.materials.length}} Materials</em></p>
-                        </div>
-                        <p>${{purchase.package.price}}</p>
-                    </div>-->
-
-                    <div class="columns fill">
-                        <div>---</div>
-                    </div>
-
-                    <div class="columns fill">
-                        <span>Total:</span>
-                        <strong>${{purchase.total}}</strong>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="left-bracket"><h1><span class="light">improv</span><strong>plus</strong></h1></div>
-        <div class="right-bracket"><h1>your purchase history</h1></div>
     </div>
 
 </div>

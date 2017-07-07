@@ -89,14 +89,11 @@ export class GameDatabaseComponent implements OnInit, OnDestroy {
 
         this.setTitle();
 
-        this._app.showLoader();
+        // this._app.showLoader();
         this._app.showBackground(true);
         this.getGames();
 
-        this.pathLocationStrategy.onPopState(() => {
-            this.selectedGame = null;
-            this._app.showBackground(true);
-        });
+        this.pathLocationStrategy.onPopState(() => this._reset());
 
     }
 
@@ -183,6 +180,12 @@ export class GameDatabaseComponent implements OnInit, OnDestroy {
         return game._id;
     }
 
+    private _reset(): void {
+        this.selectedGame = null;
+        this._app.setCurtainText('');
+        this._app.showBackground(true);
+    }
+
     onSelect(game: Game): void {
         // remember the scroll position so we can return there when the user comes back
         if (!this.selectedGame) {
@@ -192,9 +195,10 @@ export class GameDatabaseComponent implements OnInit, OnDestroy {
         this._app.showBackground(false);
 
         if (!game) {
-            this.selectedGame = null;
+            this._reset();
         } else {
             this.selectedGame = game;
+            this._app.setCurtainText(game.names.length ? game.names[0].name : 'New Game');
         }
     
         let newPath = "/app/game/" + this.selectedGame._id;

@@ -90,6 +90,10 @@
     &.small {
         max-width: 300px;
         width: 29%;
+
+        @media #{$media-mobile} {
+            width: 100%;
+        }
     }
 
     &.disabled {
@@ -139,7 +143,7 @@
         }
 
         .content {
-            @include abs(null, null, 0, 0);
+            @include abs(null, 0, 0, 0);
             padding: $large;
 
             h3 {

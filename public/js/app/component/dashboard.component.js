@@ -18,7 +18,7 @@ var DashboardComponent = (function () {
         this._app = _app;
         this.router = router;
         this.userService = userService;
-        this.title = '<span class="light">improv</span><strong>plus</strong>';
+        this.title = '<span class="light">improv</span><strong>database</strong>';
         this._tools = [];
     }
     DashboardComponent.prototype.ngOnInit = function () {

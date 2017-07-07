@@ -42,7 +42,7 @@ var DashboardMessageListView = (function () {
             {
                 key: 'no-subscription',
                 title: 'No Subscription',
-                body: "\n                <p>Your subscription is expired or otherwise invalid. If you own any materials or other content, you can still access them, but other areas of the app will be off-limits until you renew your subscription.</p>\n            ",
+                body: "\n                <p>Your subscription is expired or otherwise invalid. The app will be off-limits until you renew your subscription.</p>\n            ",
                 button: 'Purchase Subscription',
                 notDismissable: true,
                 action: function () {
@@ -58,7 +58,7 @@ var DashboardMessageListView = (function () {
             {
                 key: 'birthday-' + (new Date()).getFullYear(),
                 title: '<div class="columns"><i class="fa fa-birthday-cake"></i> <span>Happy Birthday!</span> <i class="fa fa-birthday-cake"></i></div>',
-                body: "\n                <p>It's your Special Day (or at least the day you told us was your Special Day). We here at ImprovPlus hope it's a great one!</p>\n            ",
+                body: "\n                <p>It's your Special Day (or at least the day you told us was your Special Day). We here at the Improv Database hope it's a great one!</p>\n            ",
                 trigger: function () {
                     var birthday = _this.userService.getLoggedInUser().birthday;
                     if (birthday) {

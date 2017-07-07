@@ -19,7 +19,7 @@ var ms_welcome_component_1 = require("../component/ms.welcome.component");
 var app_routing_module_1 = require("./app-routing.module");
 // the shared module is where all of the views and services live
 var shared_module_1 = require("./shared.module");
-var improvplus_module_1 = require("../app/module/improvplus.module");
+var improvdatabase_module_1 = require("../app/module/improvdatabase.module");
 var login_screen_component_1 = require("../component/login-screen.component");
 var signup_component_1 = require("../component/signup.component");
 var change_password_component_1 = require("../component/change-password.component");
@@ -38,7 +38,7 @@ var AppModule = (function () {
                 animations_1.BrowserAnimationsModule,
                 shared_module_1.SharedModule,
                 app_routing_module_1.AppRoutingModule,
-                improvplus_module_1.ImprovPlusModule
+                improvdatabase_module_1.ImprovDatabaseModule
             ],
             declarations: [
                 login_screen_component_1.LoginScreenComponent,

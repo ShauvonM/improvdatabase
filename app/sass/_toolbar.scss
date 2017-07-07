@@ -12,7 +12,7 @@
     font-weight: $toolbar-font-weight;
     font-family: $font-family;
 
-    padding: 0 ($toolbar-height / 2);
+    // padding: 0 ($toolbar-height / 2);
 
     flex-direction: column;
     align-items: center;
@@ -34,6 +34,7 @@
 
     button {
         height: $toolbar-height;
+        width: $toolbar-height;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -47,6 +48,10 @@
         min-width: 0;
         color: $color-text;
 
+        .fa {
+            margin: 0;
+        }
+
         &.active {
             color: $color-active;
         }
@@ -54,11 +59,14 @@
 
     .tools {
         button {
-            padding: 0 8px;
             margin: 0;
 
             &:last-child {
                 margin-right: 8px;
+
+                @media #{$media-mobile} {
+                    margin-right: 0;
+                }
             }
         }
     }
@@ -145,9 +153,17 @@
             width: 100%;
         }
 
-        h2 {
-            margin: 0;
+        $logo-padding: ($toolbar-height - $icon-size) / 2;
+        logo {
             cursor: pointer;
+            margin: 0;
+            padding: $logo-padding ($logo-padding + $std);
+        }
+
+        h2 {
+            margin: 0 $std 0 0;
+            cursor: pointer;
+            flex: 1;
         }
 
         .spacer {
@@ -155,19 +171,23 @@
         }
 
         @media #{$media-mobile} {
-            h2, .spacer {
-                transition: max-width 300ms;
+            logo {
+                padding: $logo-padding;
+            }
+            h2 {
+                transition: max-width 300ms, opacity 300ms, margin 300ms;
                 max-width: 500px;
             }
+            .spacer {
+                display: none;
+            }
             &.search-open {
-                h2, .spacer {
+                h2 {
                     max-width: 0;
+                    opacity: 0;
+                    margin: 0;
                 }
             }
-        }
-
-        .logo {
-            padding: $small;
         }
     }
 
@@ -200,17 +220,17 @@
         transition: $search-transition;
         background-color: rgba(255, 255, 255, 0.35);
         border-radius: $border-radius;
-        flex: 2;
+        flex: 1.5;
         color: $search-inactive-color;
         align-self: flex-start;
         margin-top: $small;
 
         .fa-search {
-            @include abs(6px, null, null, $std, 2);
+            @include abs(7px, null, null, $std, 2);
         }
 
         .fa-close {
-            @include abs(6px, $std, null, null, 2);
+            @include abs(7px, $std, null, null, 2);
         }
 
         @media #{$media-mobile} {
@@ -255,18 +275,20 @@
             overflow: hidden;
 
             ul {
+                padding: 0;
                 li {
                     line-height: $search-height;
                     cursor: pointer;
                     display: flex;
                     align-items: center;
+                    padding: 0 $std;
 
                     &:hover {
                         background-color: $color-active; 
                     }
 
                     i {
-                        margin: 0 $small;
+                        margin: 0 $std 0 0;
                     }
 
                     &:first-child {
@@ -324,7 +346,8 @@ nav {
     width: 20%;
 
     box-sizing: border-box;
-    display: block;
+    display: flex;
+    flex-direction: column;
 
     overflow: hidden;
     padding: 0;
@@ -342,61 +365,32 @@ nav {
         transform: translate3d(0, 0, 0);
     }
 
-    .content {
-        // border: 2px solid $color-text;
-        @include abs($std, 0, $std, 0, 1);
-        display: flex;
-        flex-direction: column;
-
-        // @media #{$media-mobile} {
-        //     top: 3vw;
-        //     bottom: 3vw;
-        // }
-    }
-
-    h1 {
-        @include abs(-1vw, null, null, 0, 2);
-        background: $nav-bg;
-        font-size: 1.8vw;
-        width: 100%;
-        text-align: center;
-
-        @media #{$media-mobile} {
-            // width: 36vw;
-            // margin-left: -18vw;
-            // top: -3.2vw;
-            font-size: 6vw;
-        }
+    .scroll-wrapper {
+        flex: 1;
     }
 
     footer {
-      @include abs(null, null, -4px, 50%, 2);
       background: $nav-bg;
       font-size: 10px;
-      width: 10.5vw;
-      margin-left: -5.25vw;
       text-align: center;
       font-weight: 300;
       display: block;
       padding: 0;
       height: auto;
+      line-height: $std;
 
       a {
           text-decoration: none;
       }
-
-        @media #{$media-mobile} {
-            width: 20vw;
-            margin-left: -10vw;
-        }
     }
 
     .nav-top {
         width: 100%;
         position: relative;
-        background-color: $nav-bg;
+        background-color: $color-primary;
         cursor: default;
         border-bottom: 1px solid $color-text;
+        overflow: hidden;
 
         &:before {
             /* makes it square! */
@@ -405,8 +399,23 @@ nav {
             padding-top: 85%;
         }
 
+        & > img {
+            @include abs(0, 0, null, 0, 1);
+            opacity: 0.8;
+            filter: saturate(0.6);
+
+            transition: opacity 300ms, filter 300ms;
+        }
+
+        &:hover {
+            img {
+                opacity: 1;
+                filter: saturate(1);
+            }
+        }
+
         .content {
-            @include abs(1.25vw, 0, 0, 0);
+            @include abs(0, 0, 0, 0, 2);
             display: flex;
             flex-direction: column;
             justify-content: space-around;
@@ -415,31 +424,46 @@ nav {
             overflow: hidden;
             margin: 0;
             cursor: pointer;
+            color: $color-white;
+
+            @include md-elevation(14, inset);
+
+            h1 {
+                font-size: 1.8vw;
+                width: 100%;
+                text-align: center;
+            }
 
             .user-picture {
-                max-width: 96px;
-                max-height: 96px;
-                width: 8vw;
-                height: 8vw;
+                max-width: 150px;
+                max-height: 150px;
+                width: 10vw;
+                height: 10vw;
                 border-radius: 50%;
                 background: $color-text;
                 overflow: hidden;
                 text-align: center;
+                border: 1px solid $color-primary;
+                transition: border-color 300ms;
 
-                box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.2) inset,
-                            0px 8px 10px 1px rgba(0,0,0,0.14) inset,
-                            0px 3px 14px 2px rgba(0,0,0,0.12) inset;
+                @include md-elevation(0);
+                @include md-elevation-transition();
 
                 i {
-                    font-size: 90px;
+                    font-size: 9vw;
                     position: relative;
-                    top: 16px;
-                    color: $color-secondary;
+                    top: 2vw;
+                    color: $color-primary;
+                    transition: color 300ms;
                 }
 
                 @media #{$media-mobile} {
                     width: 30vw;
                     height: 30vw;
+
+                    i {
+                        font-size: 30vw;
+                    }
                 }
             }
 
@@ -449,28 +473,16 @@ nav {
                 transition: color 300ms;
             }
 
-            .link {
-                height: 0;
-                overflow: hidden;
-                margin-bottom: -$std;
-                transition: height 250ms, color 250ms;
-            }
-
-            &.active {
-                background-color: $color-active-bg;
-                color: $color-active;
-                box-shadow: 0px 2px 10px rgba(0,0,0,0.1) inset;
-
-                .link {
-                    color: $color-active;
-                    height: $std * 2;
+            &.active, &:hover {
+                .user-picture {
+                    @include md-elevation(8);
+                    border-color: $color-active;
+                    i {
+                        color: $color-active;
+                    }
                 }
-            }
-
-            &:hover {
-                .link {
-                    color: $color-primary;
-                    height: $std * 2;
+                .user-name {
+                    color: $color-active;
                 }
             }
         }

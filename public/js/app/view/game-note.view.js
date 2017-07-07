@@ -241,7 +241,7 @@ var GameNoteView = (function () {
     GameNoteView = __decorate([
         core_1.Component({
             moduleId: module.id,
-            selector: '.improvplus-game-note',
+            selector: '.id-game-note',
             templateUrl: '../template/view/game-note.view.html',
             animations: [anim_util_1.ShrinkAnim.height]
         }),

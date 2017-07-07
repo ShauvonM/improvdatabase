@@ -14,35 +14,26 @@ var router_1 = require("@angular/router");
 var app_component_1 = require("./app.component");
 var app_service_1 = require("../service/app.service");
 var user_service_1 = require("../service/user.service");
-var cart_service_1 = require("../service/cart.service");
 var user_1 = require("../model/user");
 var team_1 = require("../model/team");
 var anim_util_1 = require("../util/anim.util");
 var bracket_card_directive_1 = require("../directive/bracket-card.directive");
-var config_1 = require("../model/config");
 var SignupComponent = (function () {
-    function SignupComponent(_app, _service, router, userService, cartService) {
+    function SignupComponent(_app, _service, router, userService) {
         this._app = _app;
         this._service = _service;
         this.router = router;
         this.userService = userService;
-        this.cartService = cartService;
-        this.config = new config_1.PackageConfig();
-        this.userType = 'facilitator';
+        this.userType = 'improviser';
         this.isLoadingPackages = false;
         this.isPosting = false;
         this.cardComplete = false;
     }
     SignupComponent.prototype.ngOnInit = function () {
-        var _this = this;
         if (this.userService.isLoggedIn()) {
             this.router.navigate(['/app/dashboard'], { replaceUrl: true });
         }
-        this._app.showLoader();
-        this._service.getPackageConfig().then(function (config) {
-            _this.config = config;
-            _this.setup();
-        });
+        this.setup();
     };
     SignupComponent.prototype.setup = function () {
         var _this = this;
@@ -154,7 +145,6 @@ var SignupComponent = (function () {
     SignupComponent.prototype.reset = function () {
         var _this = this;
         this._app.scrollTo(0);
-        this.cartService.reset();
         setTimeout(function () {
             _this.userType = '';
             _this.teamOption = '';
@@ -163,12 +153,8 @@ var SignupComponent = (function () {
             _this.userName = '';
             _this.teamName = '';
             _this.selectedPackage = null;
-            _this.facilitatorCard.reset(500);
             _this.improviserCard.reset(500);
         }, 400);
-    };
-    SignupComponent.prototype.selectFacilitator = function () {
-        this.selectCard('userType', 'facilitator', this.facilitatorCard, this.improviserCard);
     };
     SignupComponent.prototype.selectImproviser = function () {
         this.selectCard('userType', 'improviser', this.improviserCard, this.facilitatorCard);
@@ -180,59 +166,8 @@ var SignupComponent = (function () {
         this.selectCard('teamOption', 'team', this.yourTeamCard, this.yourselfCard);
     };
     SignupComponent.prototype.setupPackages = function (team) {
-        var _this = this;
         this.selectedPackage = null;
         this.options = [];
-        this._service.getPackages(this.userType, team).then(function (pkgs) {
-            _this.options = pkgs;
-        });
-    };
-    SignupComponent.prototype.selectPackage = function ($event, pack, cardClicked) {
-        var _this = this;
-        if (pack == this.selectedPackage) {
-            return;
-        }
-        this.cartService.reset();
-        this.setPageHeight();
-        this.packageCards.forEach(function (card) {
-            if (card.card != cardClicked) {
-                card.close();
-            }
-            else {
-                card.open();
-            }
-        });
-        this.creditCard.unmount();
-        setTimeout(function () {
-            _this.selectedPackage = pack;
-            if (_this.selectedPackage._id == 'sub') {
-                var role = void 0;
-                if (_this.userType == 'facilitator') {
-                    if (_this.teamOption == 'team') {
-                        role = _this.config.role_facilitator_team;
-                    }
-                    else {
-                        role = _this.config.role_facilitator;
-                    }
-                }
-                else if (_this.userType == 'improviser') {
-                    if (_this.teamOption == 'team') {
-                        role = _this.config.role_improviser_team;
-                    }
-                    else {
-                        role = _this.config.role_improviser;
-                    }
-                }
-                _this.cartService.addSubscription(role);
-            }
-            else {
-                _this.cartService.addPackage(_this.selectedPackage);
-            }
-            // setup the stripe credit card input
-            setTimeout(function () {
-                _this.creditCard.mount('#card-element');
-            }, 100);
-        }, 100);
     };
     SignupComponent.prototype.isFormValid = function () {
         if (!this.email) {
@@ -282,30 +217,6 @@ var SignupComponent = (function () {
                 _this.cardError = result.error.message;
             }
             else {
-                _this.cartService.setUser(user);
-                _this.cartService.signup(result.token, _this.email, _this.password, _this.userName, _this.teamName)
-                    .catch(function (response) {
-                    _this._app.hideLoader();
-                    _this.isPosting = false;
-                    var msg = response.json();
-                    if (msg.error && msg.error == 'email already exists') {
-                        _this.emailError = "That email address is already registered.";
-                        // let card: HTMLElement = this.facilitatorCard.nativeElement;
-                        // this._app.scrollTo(card.offsetTop);
-                    }
-                    else if (msg.error) {
-                        _this._app.dialog('An error has occurred.', 'We are so sorry. Something happened, and we can\'t be sure what. Please try again, and if this keeps happening, reach out to us by emailing contact@improvpl.us. Have a nice day, dude.', 'Okay bye', null, true);
-                    }
-                })
-                    .then(function (u) {
-                    if (u && u.email) {
-                        return _this.userService.login(user.email, user.password);
-                    }
-                    else {
-                        // uh oh?
-                        _this._app.hideLoader();
-                    }
-                });
             }
         });
     };
@@ -321,10 +232,6 @@ var SignupComponent = (function () {
         core_1.ViewChild('page'),
         __metadata("design:type", core_1.ElementRef)
     ], SignupComponent.prototype, "pageElement", void 0);
-    __decorate([
-        core_1.ViewChild('facilitatorCard', { read: bracket_card_directive_1.BracketCardDirective }),
-        __metadata("design:type", bracket_card_directive_1.BracketCardDirective)
-    ], SignupComponent.prototype, "facilitatorCard", void 0);
     __decorate([
         core_1.ViewChild('improviserCard', { read: bracket_card_directive_1.BracketCardDirective }),
         __metadata("design:type", bracket_card_directive_1.BracketCardDirective)
@@ -356,8 +263,7 @@ var SignupComponent = (function () {
         __metadata("design:paramtypes", [app_component_1.AppComponent,
             app_service_1.AppService,
             router_1.Router,
-            user_service_1.UserService,
-            cart_service_1.CartService])
+            user_service_1.UserService])
     ], SignupComponent);
     return SignupComponent;
 }());

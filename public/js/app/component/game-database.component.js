@@ -47,13 +47,10 @@ var GameDatabaseComponent = (function () {
     GameDatabaseComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.setTitle();
-        this._app.showLoader();
+        // this._app.showLoader();
         this._app.showBackground(true);
         this.getGames();
-        this.pathLocationStrategy.onPopState(function () {
-            _this.selectedGame = null;
-            _this._app.showBackground(true);
-        });
+        this.pathLocationStrategy.onPopState(function () { return _this._reset(); });
     };
     GameDatabaseComponent.prototype.setTitle = function () {
         if (this.filter) {
@@ -139,6 +136,11 @@ var GameDatabaseComponent = (function () {
     GameDatabaseComponent.prototype.trackByGames = function (index, game) {
         return game._id;
     };
+    GameDatabaseComponent.prototype._reset = function () {
+        this.selectedGame = null;
+        this._app.setCurtainText('');
+        this._app.showBackground(true);
+    };
     GameDatabaseComponent.prototype.onSelect = function (game) {
         // remember the scroll position so we can return there when the user comes back
         if (!this.selectedGame) {
@@ -146,10 +148,11 @@ var GameDatabaseComponent = (function () {
         }
         this._app.showBackground(false);
         if (!game) {
-            this.selectedGame = null;
+            this._reset();
         }
         else {
             this.selectedGame = game;
+            this._app.setCurtainText(game.names.length ? game.names[0].name : 'New Game');
         }
         var newPath = "/app/game/" + this.selectedGame._id;
         this._app.setPath(newPath);

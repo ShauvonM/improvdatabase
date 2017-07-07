@@ -3,7 +3,6 @@ import { RouterModule, Routes }     from "@angular/router";
 
 import { AuthGuard } from '../service/auth-guard.service';
 import { DashboardComponent } from "../component/dashboard.component";
-import { MaterialsLibraryComponent } from "../component/materials-library.component";
 import { HelpComponent } from "../component/help.component";
 import { UnauthorizedComponent } from "../component/unauthorized.component";
 import { GameDatabaseComponent } from "../component/game-database.component";
@@ -42,20 +41,6 @@ const routes: Routes = [
                         component: DashboardComponent,
                         data: {
                             action: 'dashboard_page_view'
-                        }
-                    },
-                    {
-                        path: 'materials',
-                        component: MaterialsLibraryComponent,
-                        data: {
-                            action: 'material_page_view'
-                        }
-                    },
-                    {
-                        path: 'materials/:packageSlug',
-                        component: MaterialsLibraryComponent,
-                        data: {
-                            action: 'material_page_view'
                         }
                     },
                     {
@@ -159,4 +144,4 @@ const routes: Routes = [
     exports: [ RouterModule ]
 })
 
-export class ImprovPlusRoutingModule {};
+export class ImprovDatabaseRoutingModule {};

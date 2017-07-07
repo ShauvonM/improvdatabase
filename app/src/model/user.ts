@@ -1,7 +1,6 @@
 import {Purchase} from './purchase';
 import {Subscription} from './subscription';
 import {Team} from './team';
-import {Library} from './library';
 import {Invite} from './invite';
 
 export class Preference {
@@ -47,8 +46,6 @@ export class User {
     preferences?: Preference[];
 
     invites?: Invite[];
-
-    library?: Library;
 
     dateLoggedIn?: string;
 }

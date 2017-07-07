@@ -10,10 +10,10 @@ import {
     state,
     style,
     transition,
-    animate
+    animate,
+    SimpleChanges
 } from '@angular/core';
 import { Router, ActivatedRoute, Params }   from '@angular/router';
-import { Location }   from '@angular/common';
 
 import { PREFERENCE_KEYS } from '../../constants';
 
@@ -136,12 +136,10 @@ export class GameDetailsComponent implements OnInit, OnChanges {
         private gameNoteService: GameNoteService,
         private router: Router,
         private route: ActivatedRoute,
-        private location: Location,
         public userService: UserService
     ) { }
 
     ngOnInit(): void {
-
         if (!this.game) {
             this.route.params.forEach((params: Params) => {
                 let id = params['id']
@@ -173,9 +171,9 @@ export class GameDetailsComponent implements OnInit, OnChanges {
 
     }
 
-    ngOnChanges(changes:any): void {
+    ngOnChanges(changes:SimpleChanges): void {
         // make sure that things get set up if the game changes
-        if (changes.game && (!this._gameId || this._gameId != changes.game.currentValue._id)) {
+        if (changes.game && changes.game.previousValue && (!this._gameId || this._gameId != changes.game.currentValue._id)) {
             this.setGame(changes.game.currentValue);
         }
     }
@@ -478,6 +476,10 @@ export class GameDetailsComponent implements OnInit, OnChanges {
         if (!game) {
             this.gameNotFound = true;
         } else {
+            if (!this.dialog) {
+                this._app.setCurtainText(game.names.length ? game.names[0].name : 'New Game');
+            }
+
             this._gameId = game._id;
 
             this.game = game;

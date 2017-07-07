@@ -258,7 +258,7 @@ var EditableMetadataView = (function () {
     EditableMetadataView = __decorate([
         core_1.Component({
             moduleId: module.id,
-            selector: '.improvplus-editable-metadata',
+            selector: '.id-editable-metadata',
             templateUrl: '../template/view/editable-metadata.view.html'
         }),
         __metadata("design:paramtypes", [])

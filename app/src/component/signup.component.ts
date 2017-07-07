@@ -12,17 +12,12 @@ import { AppComponent } from './app.component';
 import { AppService } from '../service/app.service';
 import { UserService } from '../service/user.service';
 
-import { CartService } from '../service/cart.service';
-
 import { User } from '../model/user';
 import { Team } from '../model/team';
-import { Package } from '../model/package';
 
 import { ToggleAnim, DialogAnim } from '../util/anim.util';
 
 import { BracketCardDirective } from '../directive/bracket-card.directive';
-
-import { PackageConfig } from '../model/config';
 
 declare var Stripe: any;
 
@@ -42,15 +37,12 @@ export class SignupComponent implements OnInit {
 
     @ViewChild('page') pageElement: ElementRef;
 
-    @ViewChild('facilitatorCard', {read: BracketCardDirective}) facilitatorCard: BracketCardDirective;
     @ViewChild('improviserCard', {read: BracketCardDirective}) improviserCard: BracketCardDirective;
     @ViewChild('yourselfCard', {read: BracketCardDirective}) yourselfCard: BracketCardDirective;
     @ViewChild('yourTeamCard', {read: BracketCardDirective}) yourTeamCard: BracketCardDirective;
     @ViewChildren('packageCard', {read: BracketCardDirective}) packageCards: QueryList<BracketCardDirective>;
 
-    private config: PackageConfig = new PackageConfig();
-
-    userType: string = 'facilitator';
+    userType: string = 'improviser';
     teamOption: string;
 
     email: string;
@@ -58,9 +50,6 @@ export class SignupComponent implements OnInit {
     teamName: string;
     userName: string;
 
-    packages: Package[];
-    options: Package[];
-    selectedPackage: Package;
     isLoadingPackages: boolean = false;
 
     isPosting: boolean = false;
@@ -81,8 +70,7 @@ export class SignupComponent implements OnInit {
         public _app: AppComponent,
         private _service: AppService,
         private router: Router,
-        private userService: UserService,
-        private cartService: CartService
+        private userService: UserService
     ) { }
 
     ngOnInit(): void {
@@ -91,12 +79,7 @@ export class SignupComponent implements OnInit {
             this.router.navigate(['/app/dashboard'], {replaceUrl: true});
         }
 
-        this._app.showLoader();
-
-        this._service.getPackageConfig().then(config => {
-            this.config = config;
-            this.setup();
-        });
+        this.setup();
 
     }
 
@@ -230,7 +213,6 @@ export class SignupComponent implements OnInit {
 
     reset(): void {
         this._app.scrollTo(0);
-        this.cartService.reset();
 
         setTimeout(() => {
             this.userType = '';
@@ -242,14 +224,8 @@ export class SignupComponent implements OnInit {
             this.teamName = '';
             this.selectedPackage = null;
 
-            this.facilitatorCard.reset(500);
             this.improviserCard.reset(500)
         }, 400);
-    }
-
-    selectFacilitator(): void {
-        this.selectCard('userType', 'facilitator', 
-            this.facilitatorCard, this.improviserCard);
     }
 
     selectImproviser(): void {
@@ -271,61 +247,6 @@ export class SignupComponent implements OnInit {
         this.selectedPackage = null;
         
         this.options = [];
-
-        this._service.getPackages(this.userType, team).then(pkgs => {
-            this.options = pkgs;
-        })
-    }
-
-    selectPackage($event: any, pack: Package, cardClicked: HTMLElement): void {
-        if (pack == this.selectedPackage) {
-            return;
-        }
-
-        this.cartService.reset();
-
-        this.setPageHeight();
-
-        this.packageCards.forEach(card => {
-            if (card.card != cardClicked) {
-                card.close();
-            } else {
-                card.open();
-            }
-        });
-        
-        this.creditCard.unmount();
-
-        setTimeout(() => {
-
-            this.selectedPackage = pack;
-
-            if (this.selectedPackage._id == 'sub') {
-                let role;
-                if (this.userType == 'facilitator') {
-                    if (this.teamOption == 'team') {
-                        role = this.config.role_facilitator_team;
-                    } else {
-                        role = this.config.role_facilitator;
-                    }
-                } else if (this.userType == 'improviser') {
-                    if (this.teamOption == 'team') {
-                        role = this.config.role_improviser_team;
-                    } else {
-                        role = this.config.role_improviser;
-                    }
-                }
-                this.cartService.addSubscription(role);
-            } else {
-                this.cartService.addPackage(this.selectedPackage);
-            }
-
-            // setup the stripe credit card input
-            setTimeout(() => {
-                this.creditCard.mount('#card-element');
-            }, 100)
-
-        }, 100);
     }
 
     isFormValid(): boolean {
@@ -378,29 +299,7 @@ export class SignupComponent implements OnInit {
             if (result.error) {
                 this.cardError = result.error.message;
             } else {
-                this.cartService.setUser(user);
-
-                this.cartService.signup(result.token, this.email, this.password, this.userName, this.teamName)
-                    .catch(response => {
-                        this._app.hideLoader();
-                        this.isPosting = false;
-                        let msg = response.json();
-                        if (msg.error && msg.error == 'email already exists') {
-                            this.emailError = "That email address is already registered.";
-                            // let card: HTMLElement = this.facilitatorCard.nativeElement;
-                            // this._app.scrollTo(card.offsetTop);
-                        } else if (msg.error) {
-                            this._app.dialog('An error has occurred.', 'We are so sorry. Something happened, and we can\'t be sure what. Please try again, and if this keeps happening, reach out to us by emailing contact@improvpl.us. Have a nice day, dude.', 'Okay bye', null, true);
-                        }
-                    })
-                    .then(u => {
-                        if (u && u.email) {
-                            return this.userService.login(user.email, user.password);
-                        } else {
-                            // uh oh?
-                            this._app.hideLoader();
-                        }
-                    });
+                
             }
         });
     }

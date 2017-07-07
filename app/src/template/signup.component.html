@@ -19,7 +19,7 @@
 
         <div class="card-list">
 
-            <div class="card red brackets clickable" bracketCard #facilitatorCard>
+            <div class="card red clickable" bracketCard #facilitatorCard>
 
                 <i class="fa fa-book"></i>
 
@@ -68,7 +68,7 @@
 
         <div class="card-list">
 
-            <div class="card brackets clickable" bracketCard 
+            <div class="card clickable" bracketCard 
                     [class.red]="userType == 'facilitator'" 
                     [class.blue]="userType == 'improviser'"
                     #yourselfCard
@@ -100,7 +100,7 @@
 
             </div>
 
-            <div class="card brackets clickable" bracketCard 
+            <div class="card clickable" bracketCard 
                     [class.red]="userType == 'facilitator'" 
                     [class.blue]="userType == 'improviser'"
                     #yourTeamCard
@@ -112,7 +112,7 @@
                     <h4>Your Company</h4>
 
                     <ul *ngIf="userType == 'facilitator'">
-                        <li>You want to share your ImprovPlus resources.</li>
+                        <li>You want to share your resources.</li>
                         <li>You want to set up multiple user accounts.</li>
                         <li>You want to collaborate with other members of your team.</li>
                     </ul>
@@ -163,7 +163,7 @@
 
         <div class="card-list">
 
-            <div class="card brackets clickable {{package.color}}" bracketCard
+            <div class="card clickable {{package.color}}" bracketCard
                 *ngFor="let package of options"
                 (click)="selectPackage($event, package, packageCard)"
                 #packageCard>
@@ -240,7 +240,7 @@
 
         <div class="card-list">
 
-            <div class="card brackets clickable" bracketCard
+            <div class="card clickable" bracketCard
                 [class.red]="userType == 'facilitator'" 
                 [class.blue]="userType == 'improviser'">
 
@@ -258,7 +258,7 @@
                     </label>
                 </p>
 
-                <button class="button brackets" (click)="submitPayment()" [class.disabled]="!isFormValid()">Join</button>
+                <button class="button raised" (click)="submitPayment()" [class.disabled]="!isFormValid()">Join</button>
             </div>
 
         </div>

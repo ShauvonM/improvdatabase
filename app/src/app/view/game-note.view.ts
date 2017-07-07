@@ -30,7 +30,7 @@ import { TextUtil } from '../../util/text.util';
 
 @Component({
     moduleId: module.id,
-    selector: '.improvplus-game-note',
+    selector: '.id-game-note',
     templateUrl: '../template/view/game-note.view.html',
     animations: [ShrinkAnim.height]
 })

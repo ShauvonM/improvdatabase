@@ -13,7 +13,7 @@ var common_1 = require("@angular/common");
 var forms_1 = require("@angular/forms");
 // import { PathLocationStrategy } from '@angular/common';
 var shared_module_1 = require("../../module/shared.module");
-var improvplus_routing_module_1 = require("./improvplus-routing.module");
+var improvdatabase_routing_module_1 = require("./improvdatabase-routing.module");
 // services
 var game_database_service_1 = require("../service/game-database.service");
 var auth_guard_service_1 = require("../service/auth-guard.service");
@@ -46,10 +46,10 @@ var editable_metadata_view_1 = require("../view/editable-metadata.view");
 var dashboard_message_list_view_1 = require("../view/dashboard-message-list.view");
 var game_note_view_1 = require("../view/game-note.view");
 // utils
-var ImprovPlusModule = (function () {
-    function ImprovPlusModule() {
+var ImprovDatabaseModule = (function () {
+    function ImprovDatabaseModule() {
     }
-    ImprovPlusModule = __decorate([
+    ImprovDatabaseModule = __decorate([
         core_1.NgModule({
             imports: [
                 // BrowserModule,
@@ -58,7 +58,7 @@ var ImprovPlusModule = (function () {
                 // HttpModule,
                 common_1.CommonModule,
                 shared_module_1.SharedModule,
-                improvplus_routing_module_1.ImprovPlusRoutingModule
+                improvdatabase_routing_module_1.ImprovDatabaseRoutingModule
             ],
             declarations: [
                 unauthorized_component_1.UnauthorizedComponent,
@@ -93,9 +93,9 @@ var ImprovPlusModule = (function () {
                 game_note_service_1.GameNoteService
             ]
         })
-    ], ImprovPlusModule);
-    return ImprovPlusModule;
+    ], ImprovDatabaseModule);
+    return ImprovDatabaseModule;
 }());
-exports.ImprovPlusModule = ImprovPlusModule;
+exports.ImprovDatabaseModule = ImprovDatabaseModule;
 
-//# sourceMappingURL=improvplus.module.js.map
+//# sourceMappingURL=improvdatabase.module.js.map

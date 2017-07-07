@@ -7,11 +7,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // import { PathLocationStrategy } from '@angular/common';
 
 import { SharedModule } from '../../module/shared.module';
-import { ImprovPlusRoutingModule } from './improvplus-routing.module';
+import { ImprovDatabaseRoutingModule } from './improvdatabase-routing.module';
 
 // services
 import { GameDatabaseService } from "../service/game-database.service";
-import { LibraryService } from "../service/library.service";
 import { AuthGuard } from "../service/auth-guard.service";
 import { TeamService } from '../service/team.service';
 import { HistoryService } from '../service/history.service';
@@ -21,7 +20,6 @@ import { GameNoteService } from '../service/game-note.service';
 // import { AppComponent } from '../component/app.component';
 import { UnauthorizedComponent } from "../component/unauthorized.component";
 import { DashboardComponent } from '../component/dashboard.component';
-import { MaterialsLibraryComponent } from "../component/materials-library.component";
 import { GameDatabaseComponent } from '../component/game-database.component';
 import { AboutComponent } from '../component/about.component';
 import { ContactComponent } from '../component/contact.component';
@@ -41,7 +39,6 @@ import { NotFoundComponent } from '../component/not-found.component';
 import { ToolbarView } from '../view/toolbar.view';
 import { GameCardView } from '../view/game-card.view';
 import { CreateMetadataView } from '../view/create-metadata.view';
-import { MaterialsPageView } from '../view/materials-page.view';
 import { UserCardView } from '../view/user-card.view';
 import { EditableMetadataView } from '../view/editable-metadata.view';
 import { DashboardMessageListView } from '../view/dashboard-message-list.view';
@@ -57,12 +54,11 @@ import { GameNoteView } from '../view/game-note.view';
         // HttpModule,
         CommonModule,
         SharedModule,
-        ImprovPlusRoutingModule
+        ImprovDatabaseRoutingModule
      ],
     declarations: [
         UnauthorizedComponent,
         DashboardComponent,
-        MaterialsLibraryComponent,
         GameDatabaseComponent,
         AboutComponent,
         ContactComponent,
@@ -81,7 +77,6 @@ import { GameNoteView } from '../view/game-note.view';
         ToolbarView,
         GameCardView,
         CreateMetadataView,
-        MaterialsPageView,
         UserCardView,
         EditableMetadataView,
         DashboardMessageListView,
@@ -90,7 +85,6 @@ import { GameNoteView } from '../view/game-note.view';
     // bootstrap: [ AppComponent ],
     providers: [
         GameDatabaseService,
-        LibraryService,
         AuthGuard,
         TeamService,
         HistoryService,
@@ -98,4 +92,4 @@ import { GameNoteView } from '../view/game-note.view';
     ]
 })
 
-export class ImprovPlusModule { }
+export class ImprovDatabaseModule { }

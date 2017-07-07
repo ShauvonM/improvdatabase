@@ -9,14 +9,10 @@ import { API } from '../../constants';
 import { TabData } from '../../model/tab-data';
 
 import { AppService } from '../../service/app.service';
-import { LibraryService } from '../service/library.service';
 import { HistoryService } from '../service/history.service';
 import { GameDatabaseService } from '../service/game-database.service';
 
-import { PackageConfig } from '../../model/config';
 import { Subscription } from '../../model/subscription';
-import { Package } from '../../model/package';
-import { MaterialItem, MaterialItemVersion } from '../../model/material-item';
 import { HistoryModel } from '../../model/history';
 import { Tag } from '../../model/tag';
 
@@ -43,40 +39,14 @@ export class AdminComponent implements OnInit {
 
     tabs: TabData[] = [
         {
-            name: 'Material Items',
-            id: 'materials',
-            icon: 'file'
-        },
-        {
-            name: 'Packages',
-            id: 'packages',
-            icon: 'book'
-        },
-        {
-            name: 'Package Config',
-            id: 'packageconfig',
-            icon: 'wrench'
-        },
-        {
             name: 'History',
             id: 'history',
             icon: 'history'
         }
     ];
-    selectedTab: string = 'materials';
+    selectedTab: string = 'history';
 
-    materialItems: MaterialItem[];
-    selectedMaterial: MaterialItem;
-
-    newVersion: MaterialItemVersion;
     newVersionFile: File;
-
-    packages: Package[];
-    selectedPackage: Package;
-    selectedPackageDescription: string;
-
-    selectPackageDialogVisible: boolean;
-    selectMaterialDialogVisible: boolean;
 
     histories: HistoryModel[];
     historyDisplayCount: number = 0;
@@ -85,15 +55,12 @@ export class AdminComponent implements OnInit {
     historyShowLogin: boolean;
     historyShowStuff: boolean = true;
 
-    packageConfig: PackageConfig;
-
     isPosting: boolean;
 
     constructor(
         public _app: AppComponent,
         private router: Router,
         private _service: AppService,
-        private libraryService: LibraryService,
         private userService: UserService,
         private historyService: HistoryService,
         private gameService: GameDatabaseService,
@@ -125,13 +92,7 @@ export class AdminComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.showMaterials();
-        this.showPackages();
         this.getHistory();
-
-        this._service.getPackageConfig().then(c => {
-            this.packageConfig = c;
-        });
     }
 
     selectTab(tab: TabData): void {
@@ -139,8 +100,6 @@ export class AdminComponent implements OnInit {
     }
 
     back(): void {
-        this.selectedMaterial = null;
-        this.selectedPackage = null;
     }
 
     simpleDate(date: string): string {
@@ -149,21 +108,6 @@ export class AdminComponent implements OnInit {
 
     simpleDateTime(date: string): string {
         return TimeUtil.simpleDate(date) + ' ' + TimeUtil.simpleTime(date);
-    }
-
-    showMaterials(): void {
-        this.libraryService.getAllMaterials()
-            .then(materials => {
-                this._app.hideLoader();
-                this.materialItems = materials;
-            });
-    }
-
-    showPackages(): void {
-        this.libraryService.getAllPackages()
-            .then(packages => {
-                this.packages = packages;
-            })
     }
 
     getHistory(): void {
@@ -177,8 +121,6 @@ export class AdminComponent implements OnInit {
         switch(history.action) {
             case 'game_edit':
                 return 'fa-rocket';
-            case 'material_view':
-                return 'fa-file-pdf-o';
             case 'change_password':
                 return 'fa-key';
             case 'note_edit':
@@ -308,71 +250,6 @@ export class AdminComponent implements OnInit {
         this.filterHistory();
     }
 
-    selectMaterial(material: MaterialItem): void {
-        this.newVersion = new MaterialItemVersion();
-        this.selectedMaterial = material;
-    }
-
-    selectPackage(p: Package): void {
-        this.selectedPackage = p;
-
-        this.selectedPackageDescription = p.description.join('\n');
-    }
-
-    createMaterial(): void {
-        this.libraryService.createMaterial().then(m => {
-            this.materialItems.push(m);
-            this.selectMaterial(m);
-        });
-    }
-
-    createPackage(): void {
-        this.libraryService.createPackage().then(p => {
-            this.packages.push(p);
-            this.selectPackage(p);
-        })
-    }
-
-    saveMaterial(): void {
-        if (typeof(this.selectedMaterial.tags) == 'string') {
-            let tags:string = this.selectedMaterial.tags;
-            let tagArray:string[] = [];
-            tags.split(',').forEach(t => {
-                tagArray.push(t.trim());
-            });
-            this.selectedMaterial.tags = tagArray;
-        }
-        this.libraryService.saveMaterial(this.selectedMaterial).then(() => {
-            this._app.toast('It is done.');
-        });
-    }
-
-    savePackage(): void {
-        let descArray = this.selectedPackageDescription.split('\n');
-
-        this.selectedPackage.description = descArray;
-        this.libraryService.savePackage(this.selectedPackage).then(() => {
-            this._app.toast('It is done.');
-        });
-    }
-
-    fileChange(): void {
-        let fileInput = this.versionFileInput.nativeElement;
-        this.newVersionFile = fileInput.files[0];
-    }
-
-    saveVersion(): void {
-        this.libraryService.postNewVersion(this.selectedMaterial._id, this.newVersion, this.newVersionFile).then(m => {
-            this.selectedMaterial.versions = m.versions;
-        });
-    }
-
-    deleteVersion(version: MaterialItemVersion): void {
-        this.libraryService.deleteVersion(this.selectedMaterial._id, version).then(m => {
-            this.selectedMaterial.versions = m.versions;
-        })
-    }
-
     doBackup(): void {
         this.http.get('/api/backup').toPromise().then(response => {
             let data = response.json();
@@ -391,122 +268,6 @@ export class AdminComponent implements OnInit {
                 });
             }, 10);
         }, false, 'Timestamp');
-    }
-
-    deleteMaterial(): void {
-        this._app.showLoader();
-        this.libraryService.deleteMaterial(this.selectedMaterial).then(() => {
-            let index = Util.indexOfId(this.materialItems, this.selectedMaterial);
-            if (index > -1) {
-                this.materialItems.splice(index, 1);
-            }
-            this.selectedMaterial = null;
-            this._app.hideLoader();
-        });
-    }
-
-    deletePackage(): void {
-        this._app.showLoader();
-        this.libraryService.deletePackage(this.selectedPackage).then(() => {
-            let index = Util.indexOfId(this.packages, this.selectedPackage);
-            if (index > -1) {
-                this.packages.splice(index, 1);
-            }
-            this.selectedPackage = null;
-            this._app.hideLoader();
-        });
-    }
-
-    removePackageFromPackage(pkg: Package): void {
-        let index = Util.indexOfId(this.selectedPackage.packages, pkg);
-        this.selectedPackage.packages.splice(index, 1);
-        this.libraryService.savePackagePackages(this.selectedPackage)
-            .then(() => {
-                this._app.toast('Package Packages saved');
-            });
-    }
-
-    removeMaterialFromPackage(material: MaterialItem): void {
-        let index = Util.indexOfId(this.selectedPackage.materials, material);
-        this.selectedPackage.materials.splice(index, 1);
-        this.libraryService.savePackageMaterials(this.selectedPackage)
-            .then(() => {
-                this._app.toast('Package Materials saved');
-            });
-    }
-
-    packagePackagesDropped(droppedId: string, ontoId: string): void {
-        let indexFrom, indexTo;
-        indexFrom = Util.indexOfId(this.selectedPackage.packages, droppedId);
-        indexTo = Util.indexOfId(this.selectedPackage.packages, ontoId);
-
-        let packageToMove = this.selectedPackage.packages[indexFrom];
-        this.selectedPackage.packages.splice(indexFrom, 1);
-        this.selectedPackage.packages.splice(indexTo, 0, packageToMove);
-
-        this.libraryService.savePackagePackages(this.selectedPackage)
-            .then(() => {
-                this._app.toast('Package Packages saved');
-            });
-    }
-
-    packageMaterialsDropped(droppedId: string, ontoId: string): void {
-        let indexFrom, indexTo;
-        indexFrom = Util.indexOfId(this.selectedPackage.materials, droppedId);
-        indexTo = Util.indexOfId(this.selectedPackage.materials, ontoId);
-
-        let materialToMove = this.selectedPackage.materials[indexFrom];
-        this.selectedPackage.materials.splice(indexFrom, 1);
-        this.selectedPackage.materials.splice(indexTo, 0, materialToMove);
-
-        this.libraryService.savePackageMaterials(this.selectedPackage)
-            .then(() => {
-                this._app.toast('Package Materials saved');
-            });
-    }
-
-    cancelSelectMaterialDialog(): void {
-        this.selectMaterialDialogVisible = false;
-        this.selectPackageDialogVisible = false;
-        this._app.backdrop(false);
-    }
-
-    showSelectMaterialDialog(): void {
-        this.selectMaterialDialogVisible = true;
-        this.selectPackageDialogVisible = false;
-        this._app.backdrop(true);
-    }
-
-    showSelectPackageDialog(): void {
-        this.selectPackageDialogVisible = true;
-        this.selectMaterialDialogVisible = false;
-        this._app.backdrop(true);
-    }
-
-    selectPackageForPackage(pkg: Package): void {
-        this.selectedPackage.packages.push(pkg);
-
-        this.libraryService.savePackagePackages(this.selectedPackage)
-            .then(() => {
-                this._app.toast('Package Packages saved');
-            });
-    }
-
-    selectMaterialForPackage(material: MaterialItem): void {
-        this.selectedPackage.materials.push(material);
-
-        this.libraryService.savePackageMaterials(this.selectedPackage)
-            .then(() => {
-                this._app.toast('Package Materials saved');
-            });
-    }
-
-    savePackageConfig(): void {
-        this.http.put(API.packageConfig, this.packageConfig)
-            .toPromise()
-            .then(response => {
-                this._app.toast('Config saved');
-            })
     }
 
 }
