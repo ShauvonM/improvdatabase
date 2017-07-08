@@ -53,6 +53,18 @@ var AppService = (function () {
             }
         });
     };
+    AppService.prototype.signup = function (email, password, name, pledge, token) {
+        return this.http.post(constants_1.API.signup, {
+            stripeToken: token,
+            pledge: pledge,
+            email: email,
+            password: password,
+            name: name
+        }).toPromise()
+            .then(function (result) {
+            return result.json();
+        });
+    };
     AppService = __decorate([
         core_1.Injectable(),
         __metadata("design:paramtypes", [app_http_1.AppHttp])

@@ -38,10 +38,10 @@ const UserSchema = new mongoose.Schema({
     dateLoggedIn: Date
 });
 
-UserSchema.methods.addSubscription = function(role, stripeCustomerId, expires) {
+UserSchema.methods.addSubscription = function(role, pledge, stripeCustomerId, stripeSubscriptionId, expires) {
     if (!expires) {
         expires = new Date();
-        expires.setFullYear(expires.getFullYear() + 100);
+        expires.setFullYear(2233);
     }
     let expiration = Date.now();
     if (typeof(expires) == 'object' && expires.getTime) {
@@ -51,7 +51,9 @@ UserSchema.methods.addSubscription = function(role, stripeCustomerId, expires) {
         user: this._id,
         role: role,
         expiration: expiration,
-        stripeCustomerId: stripeCustomerId
+        pledge: pledge,
+        stripeCustomerId: stripeCustomerId,
+        stripeSubscriptionId: stripeSubscriptionId
     }).then(sub => {
         this.subscription = sub;
 

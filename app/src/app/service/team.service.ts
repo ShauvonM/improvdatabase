@@ -85,9 +85,9 @@ export class TeamService {
             .then(response => {
                 let invite = response.json() as Invite;
                 let teamToUpdate = this.findTeamById(team._id);
-                if (teamToUpdate) {
-                    teamToUpdate.subscription.invites.push(invite);
-                }
+                // if (teamToUpdate) {
+                //     teamToUpdate.subscription.invites.push(invite);
+                // }
                 
                 return invite;
             });

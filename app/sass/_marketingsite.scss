@@ -362,37 +362,6 @@ welcome, signup, for-improvisers {
             }
         }
     }
-
-    .payment-info {
-        max-width: 500px;
-        text-align: left;
-        margin: 0 auto;
-
-        .StripeElement {
-            background-color: white;
-            padding: $small $small $small;
-            margin: $small (-$small) $large;
-            border: 1px solid transparent;
-            border-bottom: 1px solid $color-primary;
-            border-radius: $border-radius;
-        }
-
-        .StripeCardErrors {
-            margin: -$large 0 $large 0;
-            color: darkred;
-        }
-
-        .StripeElement--focus {
-        }
-
-        .StripeElement--invalid {
-            border-color: darkred;
-        }
-
-        .StripeElement--webkit-autofill {
-            background-color: #fefde5 !important;
-        }
-    }
 }
 
 welcome .blackbox h2 {
@@ -400,10 +369,5 @@ welcome .blackbox h2 {
 }
 
 signup .page {
-    padding-top: $curtain-height;
-
-    @media #{$media-mobile} {
-        padding-top: ($large * 2);
-        padding-bottom: ($large * 4);
-    }
+    padding-top: ($toolbar-height + $std);
 }

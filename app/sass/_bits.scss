@@ -1111,3 +1111,37 @@ label.icon-choice {
         width: 100%;
     }
 }
+
+.payment-info {
+    max-width: 500px;
+    text-align: left;
+    margin: $small auto 0;
+    padding: $small $std;
+    border: 1px solid $color-hr;
+    border-radius: $small;
+
+    .StripeElement {
+        background-color: white;
+        padding: $small $small $small;
+        margin: $small 0 $large;
+        border: 1px solid transparent;
+        border-bottom: 1px solid $color-primary;
+        border-radius: $border-radius;
+    }
+
+    .StripeCardErrors {
+        margin: -$large 0 $large 0;
+        color: darkred;
+    }
+
+    .StripeElement--focus {
+    }
+
+    .StripeElement--invalid {
+        border-color: darkred;
+    }
+
+    .StripeElement--webkit-autofill {
+        background-color: #fefde5 !important;
+    }
+}

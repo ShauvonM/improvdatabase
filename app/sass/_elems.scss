@@ -9,6 +9,7 @@ body {
 
 a {
     color: $color-primary;
+    cursor: pointer;
 
     &:visited {
         color: $color-primary;

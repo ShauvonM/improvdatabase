@@ -15,7 +15,9 @@ var common_1 = require("@angular/common");
 var forms_1 = require("@angular/forms");
 var app_component_1 = require("../../component/app.component");
 var user_service_1 = require("../../service/user.service");
+var util_1 = require("../../util/util");
 var time_util_1 = require("../../util/time.util");
+var anim_util_1 = require("../../util/anim.util");
 var MAX_ATTEMPTS = 5;
 var UserComponent = (function () {
     function UserComponent(userService, router, location, _app, fb) {
@@ -27,19 +29,14 @@ var UserComponent = (function () {
         this.title = "Account";
         this.tabs = [
             {
-                name: 'Your Account',
+                name: 'Details',
                 id: 'user',
                 icon: 'user'
             },
             {
-                name: 'Your Subscription',
+                name: 'Your Account',
                 id: 'subscription',
                 icon: 'id-card-o'
-            },
-            {
-                name: 'Purchase History',
-                id: 'purchases',
-                icon: 'money'
             }
         ];
         this.selectedTab = 'user';
@@ -68,6 +65,7 @@ var UserComponent = (function () {
     };
     UserComponent.prototype.selectTab = function (tab) {
         this.selectedTab = tab.id;
+        this.changePledgeShown = false;
     };
     UserComponent.prototype.logout = function () {
         this._app.logout();
@@ -102,11 +100,65 @@ var UserComponent = (function () {
     UserComponent.prototype.cancelSubscription = function () {
         this._app.toast("This button doesn't work yet.");
     };
+    UserComponent.prototype.showChangePledge = function () {
+        var _this = this;
+        this.pledge = this.subscription.pledge.toFixed(2);
+        this.changePledgeShown = true;
+        this.creditCard = util_1.Util.setupStripe(this._app.config.stripe, function (e) {
+            _this.cardComplete = e.complete;
+            if (e.error) {
+                _this.cardError = e.error.message;
+            }
+            else {
+                _this.cardError = '';
+            }
+        });
+        setTimeout(function () {
+            _this.creditCard.mount('#card-element');
+        });
+    };
+    UserComponent.prototype.pledgeFormValid = function () {
+        return parseFloat(this.pledge) != this.subscription.pledge &&
+            (parseFloat(this.pledge) == 0 || this.cardComplete);
+    };
+    UserComponent.prototype.savePledge = function () {
+        var _this = this;
+        if (parseFloat(this.pledge) != this.subscription.pledge) {
+            this.isPosting = true;
+            if (this.pledge && this.cardComplete) {
+                util_1.Util.getStripeToken(this._app.config.stripe, this.creditCard).then(function (result) {
+                    if (result.error) {
+                        _this.cardError = result.error.message;
+                    }
+                    else {
+                        _this._savePledge(result.token);
+                    }
+                });
+            }
+            else {
+                this._savePledge();
+            }
+        }
+        else {
+            this.changePledgeShown = false;
+        }
+    };
+    UserComponent.prototype._savePledge = function (token) {
+        var _this = this;
+        this.userService.updatePledge(this.pledge, token).then(function (sub) {
+            _this.subscription = sub;
+            _this.changePledgeShown = false;
+            _this.isPosting = false;
+        });
+    };
     UserComponent = __decorate([
         core_1.Component({
             moduleId: module.id,
             selector: "user",
-            templateUrl: "../template/user.component.html"
+            templateUrl: "../template/user.component.html",
+            animations: [
+                anim_util_1.ShrinkAnim.height
+            ]
         }),
         __metadata("design:paramtypes", [user_service_1.UserService,
             router_1.Router,

@@ -35,8 +35,14 @@ var ScrollShadowDirective = (function () {
     };
     ScrollShadowDirective.prototype.calculateShadows = function () {
         var scrollHeight = this.element.scrollHeight, height = this.element.offsetHeight, scrollPos = this.element.scrollTop, std = 16, factor = scrollPos / (scrollHeight - height);
-        this.topShadow.style.height = (std * factor) + 'px';
-        this.bottomShadow.style.height = (std - (std * factor)) + 'px';
+        if (scrollHeight == height) {
+            this.topShadow.style.height = '0px';
+            this.bottomShadow.style.height = '0px';
+        }
+        else {
+            this.topShadow.style.height = (std * factor) + 'px';
+            this.bottomShadow.style.height = (std - (std * factor)) + 'px';
+        }
     };
     ScrollShadowDirective = __decorate([
         core_1.Directive({

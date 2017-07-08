@@ -67,8 +67,13 @@ export class ScrollShadowDirective implements OnInit, OnDestroy {
             std = 16,
             factor = scrollPos / (scrollHeight - height);
 
-        this.topShadow.style.height = (std * factor) + 'px';
-        this.bottomShadow.style.height = (std - (std * factor)) + 'px';
+        if (scrollHeight == height) {
+            this.topShadow.style.height = '0px';
+            this.bottomShadow.style.height = '0px';
+        } else {
+            this.topShadow.style.height = (std * factor) + 'px';
+            this.bottomShadow.style.height = (std - (std * factor)) + 'px';
+        }
 
     }
 }

@@ -1,5 +1,7 @@
 declare var Stripe: any;
 
+let stripe: any;
+
 export class Util {
 
     static indexOfId (array: any[], object: any): number {
@@ -14,8 +16,9 @@ export class Util {
         return index;
     }
 
-    static setupStripe(stripeConfig: string): any {
-        let stripe = Stripe(stripeConfig);
+    static setupStripe(stripeConfig: string, changeCallback?: (e?:any)=>void ): any {
+        stripe = stripe || Stripe(stripeConfig);
+
         let elements = stripe.elements();
         let creditCard = elements.create('card', {
             // value: {postalCode: this.user.zip},
@@ -38,7 +41,17 @@ export class Util {
             }
         });
 
+        if (changeCallback) {
+            creditCard.addEventListener('change', changeCallback);
+        }
+        
         return creditCard;
+    }
+
+    static getStripeToken(stripeConfig: string, creditCard: any): Promise<any> {
+        stripe = stripe || Stripe(stripeConfig);
+
+        return stripe.createToken(creditCard); //.then(callback);
     }
 
 }

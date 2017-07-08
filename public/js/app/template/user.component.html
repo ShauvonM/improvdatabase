@@ -19,7 +19,7 @@
     <div class="paper" *ngIf="user && selectedTab == 'user'">
 
         <div class="content">
-            <user-form 
+            <user-form
                 [user]="user"
                 [isPosting]="isPosting"
                 [backText]="'Log Out'"
@@ -46,12 +46,40 @@
                 <div class="body">
                     <p>Activated {{getDate(subscription.start)}}</p>
 
-                    <p *ngIf="subscription.parent">Inherited from <strong>{{subscription.parent.team.name}}</strong></p>
-                    <p *ngIf="subscription.parent">When {{subscription.parent.team.name}}'s Subscription is renewed, yours will be too.</p>
+                    <p *ngIf="!changePledgeShown">${{subscription.pledge.toFixed(2)}} / Month (<a (click)="showChangePledge()">change</a>)</p>
+                    
+                    <div *ngIf="changePledgeShown" class="payment-info" [@shrinkHeight]>
+                        <form id="payment-form" #paymentForm="ngForm">
+                            <div class="form-row">
+                                <input name="pledge" 
+                                    [(ngModel)]="pledge"
+                                    placeholder="Monthly Pledge"
+                                    formInput
+                                    autocomplete="off"
+                                    type="text" />
+
+                                <label for="card-element">
+                                    Credit or debit card number (leave it blank if you're setting your pledge to 0)
+                                </label>
+                                <div id="card-element">
+                                <!-- a Stripe Element will be inserted here. -->
+                                </div>
+
+                                <!-- Used to display form errors -->
+                                <div class="StripeCardErrors" *ngIf="cardError">{{cardError}}</div>
+
+                                <label><em>Payment processing is all handled securely by Stripe, so your information is safe.</em></label>
+                                
+                            </div>
+                            <div class="button-group">
+                                <button *ngIf="!isPosting" class="button raised" [class.disabled]="!pledgeFormValid()" (click)="savePledge()">Save</button>
+                                <div *ngIf="isPosting" class="button"><i class="loading"></i></div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
                 <div class="action">
-                    <a (click)="cancelSubscription()" class="button" *ngIf="!userService.isExpired()">Cancel Your Subscription</a>
-                    <a (click)="cancelSubscription()" class="button" *ngIf="userService.isExpired()">Renew Your Subscription</a>
+                    <a (click)="cancelSubscription()" class="button">Delete Your Account</a>
                 </div>
             </div>
 

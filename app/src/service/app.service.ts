@@ -65,4 +65,17 @@ export class AppService {
             });
     }
 
+    signup (email: string, password: string, name: string, pledge: string, token: string): Promise<User> {
+        return this.http.post(API.signup, {
+            stripeToken: token,
+            pledge: pledge,
+            email: email,
+            password: password,
+            name: name
+        }).toPromise()
+            .then(result => {
+                return result.json() as User;
+            });
+    }
+
 }

@@ -48,6 +48,9 @@ exports.API = {
     userSubscription: function (userId) {
         return this.user + "/" + userId + "/subscription";
     },
+    userPledge: function (userId) {
+        return this.user + "/" + userId + "/pledge";
+    },
     games: '/api/game',
     names: '/api/name',
     metadata: '/api/metadata',

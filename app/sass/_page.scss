@@ -79,7 +79,7 @@ $paper-bg: rgba(255,255,255,0.9);
         &.big {
             padding: ($large * 2) $std;
             font-size: 32px;
-            text-align: center;
+            justify-content: center;
         }
 
         &.closed {
@@ -111,7 +111,7 @@ $paper-bg: rgba(255,255,255,0.9);
     }
 
     .tabs {
-        margin: 0 ($toolbar-height / 2)+2 0;
+        margin: 0 $paper-margin-horizontal;
         // position: relative;
         // z-index: 3;
         padding: 0 $border-radius;

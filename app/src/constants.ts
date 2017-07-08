@@ -51,6 +51,9 @@ export const API = {
     userSubscription: function(userId: string) {
         return `${this.user}/${userId}/subscription`;
     },
+    userPledge: function(userId: string) {
+        return `${this.user}/${userId}/pledge`;
+    },
 
     games: '/api/game',
     names: '/api/name',

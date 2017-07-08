@@ -76,9 +76,9 @@ var TeamService = (function () {
             .then(function (response) {
             var invite = response.json();
             var teamToUpdate = _this.findTeamById(team._id);
-            if (teamToUpdate) {
-                teamToUpdate.subscription.invites.push(invite);
-            }
+            // if (teamToUpdate) {
+            //     teamToUpdate.subscription.invites.push(invite);
+            // }
             return invite;
         });
     };
