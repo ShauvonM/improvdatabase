@@ -24,12 +24,12 @@ var HistoryService = (function () {
             return response.json();
         });
     };
+    HistoryService = __decorate([
+        core_1.Injectable(),
+        __metadata("design:paramtypes", [app_http_1.AppHttp])
+    ], HistoryService);
     return HistoryService;
 }());
-HistoryService = __decorate([
-    core_1.Injectable(),
-    __metadata("design:paramtypes", [app_http_1.AppHttp])
-], HistoryService);
 exports.HistoryService = HistoryService;
 
 //# sourceMappingURL=history.service.js.map

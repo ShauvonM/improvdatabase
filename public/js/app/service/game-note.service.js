@@ -85,14 +85,14 @@ var GameNoteService = (function () {
         // console.error('An error has occurred', error);
         return Promise.reject(error.message || error);
     };
+    GameNoteService = __decorate([
+        core_1.Injectable(),
+        __metadata("design:paramtypes", [app_http_1.AppHttp,
+            user_service_1.UserService,
+            game_database_service_1.GameDatabaseService])
+    ], GameNoteService);
     return GameNoteService;
 }());
-GameNoteService = __decorate([
-    core_1.Injectable(),
-    __metadata("design:paramtypes", [app_http_1.AppHttp,
-        user_service_1.UserService,
-        game_database_service_1.GameDatabaseService])
-], GameNoteService);
 exports.GameNoteService = GameNoteService;
 
 //# sourceMappingURL=game-note.service.js.map

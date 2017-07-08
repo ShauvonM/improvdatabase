@@ -62,21 +62,21 @@ var MaterialsLibraryComponent = (function () {
     };
     MaterialsLibraryComponent.prototype.clearFilter = function () {
     };
+    MaterialsLibraryComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: "packages",
+            templateUrl: "../template/materials-library.component.html"
+        }),
+        __metadata("design:paramtypes", [app_component_1.AppComponent,
+            router_1.Router,
+            router_1.ActivatedRoute,
+            library_service_1.LibraryService,
+            team_service_1.TeamService,
+            common_1.PathLocationStrategy])
+    ], MaterialsLibraryComponent);
     return MaterialsLibraryComponent;
 }());
-MaterialsLibraryComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: "packages",
-        templateUrl: "../template/materials-library.component.html"
-    }),
-    __metadata("design:paramtypes", [app_component_1.AppComponent,
-        router_1.Router,
-        router_1.ActivatedRoute,
-        library_service_1.LibraryService,
-        team_service_1.TeamService,
-        common_1.PathLocationStrategy])
-], MaterialsLibraryComponent);
 exports.MaterialsLibraryComponent = MaterialsLibraryComponent;
 
 //# sourceMappingURL=materials-library.component.js.map

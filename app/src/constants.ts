@@ -13,12 +13,7 @@ export const API = {
     validateUser: '/api/user/validate',
     invite: '/api/invite',
 
-    charge: '/charge',
     signup: '/signup',
-    packageConfig: '/packageConfig',
-
-    package: '/api/package',
-    materials: '/api/material',
     validateTeam: '/api/team/validate',
 
     updateUser: function(id:string) {
@@ -40,12 +35,6 @@ export const API = {
     demoteUser: function(teamId: string, userId: string): string {
         return `${this.getTeam(teamId)}/demote/${userId}`;
     },
-    teamPurchases: function(teamId: string): string {
-        return `${this.getTeam(teamId)}/purchases`;
-    },
-    teamSubscription: function(teamId: string): string {
-        return `${this.getTeam(teamId)}/subscription`;
-    },
 
     cancelInvite: function(inviteId: string) {
         return this.invite + '/' + inviteId;
@@ -61,6 +50,9 @@ export const API = {
     },
     userSubscription: function(userId: string) {
         return `${this.user}/${userId}/subscription`;
+    },
+    userPledge: function(userId: string) {
+        return `${this.user}/${userId}/pledge`;
     },
 
     games: '/api/game',
@@ -100,38 +92,9 @@ export const API = {
 
     history: '/api/history',
 
-    userMaterials: function(userId: string): string {
-        return `${this.updateUser(userId)}/materials`;
-    },
-    teamMaterials: function(teamId: string): string {
-        return `${this.getTeam(teamId)}/materials`;
-    },
-
     team: '/api/team',
     getTeam: function(teamId: string): string {
         return `${this.team}/${teamId}`;
-    },
-
-    getMaterial: function(id: string): string {
-        return `${this.materials}/${id}`;
-    },
-
-    getPackage: function(id: string): string {
-        return `${this.package}/${id}`;
-    },
-
-    materialVersion: function(id: string): string {
-        return `${this.getMaterial(id)}/version`
-    },
-    getMaterialVersion: function(materialId: string, versionId: string): string {
-        return `${this.getMaterial(materialId)}/version/${versionId}`;
-    },
-
-    savePackagePackages: function(packageId: string): string {
-        return `${this.getPackage(packageId)}/packages`;
-    },
-    savePackageMaterials: function(packageId: string): string {
-        return `${this.getPackage(packageId)}/materials`;
     }
 
 }

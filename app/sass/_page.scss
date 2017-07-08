@@ -3,89 +3,37 @@
 
 @import "vars";
 
-$paper-bg: $color-white;
-
-.left-bracket,
-.right-bracket {
-    @include abs(($toolbar-height / 2), null, ($toolbar-height / 2), null, 5);
-    border: 1px solid $color-text;
-    width: $page-bracket-width;
-    transition: border-color 200ms;
-
-    h1 {
-        font-size: 18px;
-        line-height: $large;
-        padding: 0 $std;
-        background: $paper-bg;
-        transform: translateY(-55%);
-
-        label {
-            font-size: 18px;
-            line-height: $large;
-            color: $color-text;
-            margin: 0;
-        }
-    }
-
-    &.white {
-        border-color: $color-white;
-    }
-}
-
-.left-bracket {
-    left: ($toolbar-height / 2);
-    border-right-width: 0px;
-
-    h1 {
-        @include abs(0, null, null, ($toolbar-height / 2));
-    }
-
-    @media #{$media-mobile} {
-        left: ($toolbar-height / 4);
-
-        h1 {
-            display: none;
-        }
-    }
-}
-
-.right-bracket {
-    right: ($toolbar-height / 2);
-    border-left-width: 0px;
-
-    h1 {
-        @include abs(0, ($toolbar-height / 2), null, null);
-        font-style: italic;
-        font-weight: bold;
-        white-space: nowrap;
-        min-width: 50px;
-        text-align: right;
-    }
-
-    @media #{$media-mobile} {
-        right: ($toolbar-height / 4);
-
-        h1 {
-            right: ($toolbar-height / 2);
-        }
-    }
-}
-
-@media #{$media-mobile} {
-    improvplus > .left-bracket,
-    improvplus > .right-bracket {
-        display: none;
-    }
-}
+$paper-bg: rgba(255,255,255,0.9);
 
 .curtain {
     @include abs(0, 0, null, 0, 1);
     height: $curtain-height;
+    overflow: hidden;
 
     @include background-linear-gradient-down($color-curtain-fade, 12px, $color-curtain, ($toolbar-height * 1.8), $color-curtain);
 
     img {
         width: 100%;
+    }
+
+    .parallax {
+        position: relative;
+    }
+
+    h2 {
+        font-weight:bold;
+        font-size: $curtain-height;
+        color: $color-secondary;
+        transform: rotateZ(-20deg);
+        transform-origin: 0 0;
+        @include abs(0, null, null, ($curtain-height * 0.6));
+        text-indent: -$curtain-height;
+        line-height: 0.8;
+        text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);
+
+        @media #{$media-mobile} {
+            top: -5%;
+        }
     }
 }
 
@@ -99,10 +47,12 @@ $paper-bg: $color-white;
     min-height: 100vh;
     box-sizing: border-box;
     position: relative;
-    padding: $toolbar-height $page-bracket-width $page-bracket-width;
+    padding: ($toolbar-height + $std) 0;
+    margin-bottom: -($toolbar-height);
 
     @media #{$media-mobile} {
-        padding: $toolbar-height $std $page-bracket-width;
+        padding-left: $std;
+        padding-right: $std;
     }
 
     .curtain {
@@ -115,29 +65,35 @@ $paper-bg: $color-white;
 
     .paper-label {
         font-size: 16px;
-        padding: $std;
-        margin: 0 ($toolbar-height / 2)+2;
+        padding: $std 0;
+        margin: 0 $paper-margin-horizontal;
         position: relative;
         z-index: 2;
+        transition: color 200ms;
+        display: flex;
 
         @media #{$media-mobile} {
-            margin: 0 ($toolbar-height / 4) + 2;
+            margin: 0;
         }
 
         &.big {
             padding: ($large * 2) $std;
             font-size: 32px;
-            text-align: center;
+            justify-content: center;
+        }
+
+        &.closed {
+            color: $color-hr;
         }
 
         .button-group {
-            float: right;
-            margin-top: -($std - ($small / 2));
+            flex: 1;
+            margin-top: 0;
 
-            @media #{$media-mobile} {
-                float: none;
-                margin: 0;
-                text-align: left;
+            label {
+                margin-top: 0;
+                line-height: $std;
+                height: auto;
             }
         }
     }
@@ -155,7 +111,7 @@ $paper-bg: $color-white;
     }
 
     .tabs {
-        margin: 0 ($toolbar-height / 2)+2 0;
+        margin: 0 $paper-margin-horizontal;
         // position: relative;
         // z-index: 3;
         padding: 0 $border-radius;
@@ -178,14 +134,23 @@ $paper-bg: $color-white;
         border-radius: $border-radius;
         @include md-elevation($card-elevation-default);
         background: $paper-bg;
-        padding: $std;
+        padding: $std $large;
         position: relative;
         z-index:  2;
-        margin: 0 ($toolbar-height / 2)+2 $std;
+        margin: 0 $paper-margin-horizontal $std;
         @include md-elevation-transition('padding 200ms');
 
         @media #{$media-mobile} {
             margin: 0 0 $std;
+            // padding: $toolbar-height (($toolbar-height * 0.75) + $std);
+
+            & > .list .item {
+                padding: $std 0;
+
+                .no-margin {
+                    margin: -8px 0;
+                }
+            }
         }
 
         &:first-child {
@@ -194,14 +159,6 @@ $paper-bg: $color-white;
 
         &.list {
             padding: 0;
-        }
-
-        &.has-brackets {
-            padding: $toolbar-height ($toolbar-height + $std);
-
-            @media #{$media-mobile} {
-                padding: $toolbar-height (($toolbar-height * 0.75) + $std);
-            }
         }
 
         & > .content {
@@ -225,31 +182,12 @@ $paper-bg: $color-white;
         }
 
         .paper-toggle {
-            margin-left: $std;
-        }
-
-        .left-bracket, .right-bracket {
-            transition: opacity 200ms, border-color 200ms;
-
-            h1 {
-                transition: right 200ms, left 200ms;
-            }
+            @include abs($small, $std, null, null, 2);
         }
 
         &.closed {
             @include md-elevation(1);
             padding-bottom: 0;
-
-            .left-bracket {
-                opacity: 0;
-            }
-            .right-bracket {
-                border-color: $color-white;
-
-                h1 {
-                    right: (-$std);
-                }
-            }
         }
     }
 

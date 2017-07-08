@@ -25,7 +25,7 @@ var UserService = (function () {
         // private teamService: TeamService
     ) {
         this.http = http;
-        this.USER_STORAGE_KEY = 'improvplus_user';
+        this.USER_STORAGE_KEY = 'improvdatabase_user';
         this.logginStateSource = new Rx_1.Subject();
         this.loginState$ = this.logginStateSource.asObservable();
         this.loadUserData();
@@ -308,14 +308,28 @@ var UserService = (function () {
         }
         return this._subscriptionPromise;
     };
+    /**
+     * Update the user's pledge level
+     */
+    UserService.prototype.updatePledge = function (pledge, token) {
+        var _this = this;
+        return this.http.put(constants_1.API.userPledge(this.loggedInUser._id), { pledge: pledge, stripeToken: token })
+            .toPromise()
+            .then(function (response) {
+            var sub = response.json();
+            _this.loggedInUser.subscription = sub;
+            _this.saveUserData(_this.loggedInUser);
+            return sub;
+        });
+    };
+    UserService = __decorate([
+        core_1.Injectable(),
+        __metadata("design:paramtypes", [app_http_1.AppHttp
+            // private teamService: TeamService
+        ])
+    ], UserService);
     return UserService;
 }());
-UserService = __decorate([
-    core_1.Injectable(),
-    __metadata("design:paramtypes", [app_http_1.AppHttp
-        // private teamService: TeamService
-    ])
-], UserService);
 exports.UserService = UserService;
 
 //# sourceMappingURL=user.service.js.map

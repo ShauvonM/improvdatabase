@@ -4,7 +4,7 @@ import { AppModule } from './module/app.module';
 
 import { CONFIG_TOKEN } from './constants';
 
-import Promise from 'promise-polyfill';
+import { Promise } from 'es6-promise';
 import 'whatwg-fetch';
 
 if (!(<any> window).Promise) {

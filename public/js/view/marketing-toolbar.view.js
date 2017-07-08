@@ -29,28 +29,28 @@ var MarketingToolbarView = (function () {
     MarketingToolbarView.prototype.login = function () {
         this._app.login();
     };
+    __decorate([
+        core_1.ViewChild('toolbar'),
+        __metadata("design:type", core_1.ElementRef)
+    ], MarketingToolbarView.prototype, "toolbarRef", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], MarketingToolbarView.prototype, "on", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], MarketingToolbarView.prototype, "onWhenOpen", void 0);
+    MarketingToolbarView = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: 'marketing-toolbar',
+            templateUrl: '../template/view/marketing-toolbar.view.html'
+        }),
+        __metadata("design:paramtypes", [app_component_1.AppComponent])
+    ], MarketingToolbarView);
     return MarketingToolbarView;
 }());
-__decorate([
-    core_1.ViewChild('toolbar'),
-    __metadata("design:type", core_1.ElementRef)
-], MarketingToolbarView.prototype, "toolbarRef", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Boolean)
-], MarketingToolbarView.prototype, "on", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Boolean)
-], MarketingToolbarView.prototype, "onWhenOpen", void 0);
-MarketingToolbarView = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: 'marketing-toolbar',
-        templateUrl: '../template/view/marketing-toolbar.view.html'
-    }),
-    __metadata("design:paramtypes", [app_component_1.AppComponent])
-], MarketingToolbarView);
 exports.MarketingToolbarView = MarketingToolbarView;
 
 //# sourceMappingURL=marketing-toolbar.view.js.map

@@ -76,9 +76,9 @@ var TeamService = (function () {
             .then(function (response) {
             var invite = response.json();
             var teamToUpdate = _this.findTeamById(team._id);
-            if (teamToUpdate) {
-                teamToUpdate.subscription.invites.push(invite);
-            }
+            // if (teamToUpdate) {
+            //     teamToUpdate.subscription.invites.push(invite);
+            // }
             return invite;
         });
     };
@@ -112,21 +112,6 @@ var TeamService = (function () {
             return team;
         });
     };
-    TeamService.prototype.fetchPurchases = function (team) {
-        return this.http.get(constants_1.API.teamPurchases(team._id))
-            .toPromise()
-            .then(function (response) {
-            return response.json();
-        });
-    };
-    TeamService.prototype.fetchSubscription = function (team) {
-        return this.http.get(constants_1.API.teamSubscription(team._id))
-            .toPromise()
-            .then(function (response) {
-            var team = response.json();
-            return team.subscription;
-        });
-    };
     TeamService.prototype.fetchTeams = function (user) {
         var _this = this;
         user = user || this.userService.getLoggedInUser();
@@ -139,19 +124,13 @@ var TeamService = (function () {
             return user;
         });
     };
-    TeamService.prototype.buySubscriptions = function (teamId, count, stripeToken) {
-        return this.http.post(constants_1.API.teamSubscription(teamId), { count: count, stripeToken: stripeToken }).toPromise()
-            .then(function (response) {
-            return response.json();
-        });
-    };
+    TeamService = __decorate([
+        core_1.Injectable(),
+        __metadata("design:paramtypes", [app_http_1.AppHttp,
+            user_service_1.UserService])
+    ], TeamService);
     return TeamService;
 }());
-TeamService = __decorate([
-    core_1.Injectable(),
-    __metadata("design:paramtypes", [app_http_1.AppHttp,
-        user_service_1.UserService])
-], TeamService);
 exports.TeamService = TeamService;
 
 //# sourceMappingURL=team.service.js.map

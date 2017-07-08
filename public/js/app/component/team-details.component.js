@@ -93,20 +93,7 @@ var TeamDetailsComponent = (function () {
         return this.userService.isAdminOfTeam(this.team);
     };
     TeamDetailsComponent.prototype.setTeam = function (team) {
-        var _this = this;
         this.team = team;
-        if (this.isUserAdmin()) {
-            this.teamService.fetchPurchases(this.team).then(function (p) {
-                _this.purchases = p;
-            });
-        }
-        this.teamService.fetchSubscription(this.team).then(function (s) {
-            _this.subscription = s;
-            _this.calculateSubs();
-            _this._service.getPackageConfig().then(function (config) {
-                _this.subscriptionPrice = _this.subscription.type == 'facilitator' ? config.fac_sub_price : config.improv_sub_price;
-            });
-        });
         this.title = team.name;
         this.tabs = [
             {
@@ -141,17 +128,6 @@ var TeamDetailsComponent = (function () {
         else {
             this.descriptionHtml = 'No Description';
         }
-    };
-    TeamDetailsComponent.prototype.calculateSubs = function () {
-        this.pendingInvites = this.subscription.subscriptionInvites.length;
-        // if (this.subscription.invites) {
-        //     this.subscription.invites.forEach(invite => {
-        //         if (!invite.inviteUser || this.userService.isExpired(invite.inviteUser)) {
-        //             this.pendingInvites++;
-        //         }
-        //     });
-        // }
-        this.remainingSubs = this.subscription.subscriptions - (this.subscription.children.length || 0) - this.pendingInvites;
     };
     TeamDetailsComponent.prototype.saveEditName = function (name) {
         this.team.name = name;
@@ -227,13 +203,10 @@ var TeamDetailsComponent = (function () {
                 setTimeout(function () {
                     if (!invite.inviteUser || _this.userService.isExpired(invite.inviteUser)) {
                         _this.inviteStatus = 'new';
-                        _this.subscription.subscriptionInvites.push(invite);
                     }
                     else {
                         _this.inviteStatus = 'exists';
-                        _this.subscription.invites.push(invite);
                     }
-                    _this.calculateSubs();
                 }, 300);
             }
         }, function (error) {
@@ -241,17 +214,6 @@ var TeamDetailsComponent = (function () {
             var response = error.json();
             if (response.error && response.error == 'invite already exists') {
                 _this.inviteError = 'That email address has already been invited to ' + _this.team.name + '.';
-            }
-            else if (response.error && response.error == 'user already in team') {
-                _this.inviteError = 'That user is already in your team.';
-            }
-            else if (response.error && response.error == 'user type mismatch') {
-                if (_this.subscription.type == 'improviser') {
-                    _this.inviteError = 'At this time, you cannot invite a Facilitator to an Improv Team.';
-                }
-                else {
-                    _this.inviteError = 'At this time, you cannot invite an Improviser to a Facilitator Company.';
-                }
             }
             else if (response.error && response.error == 'out of subscriptions') {
                 _this.inviteError = 'Your team is out of subscriptions, so you cannot invite that user until you purchase more (or until they purchase a subscription on their own).';
@@ -275,9 +237,6 @@ var TeamDetailsComponent = (function () {
         this._app.dialog('Cancel an Invitation', 'Are you sure you want to revoke your invitation to ' + invite.email + '? We already sent them the invite, but the link inside will no longer work. We will not notify them that it was cancelled.', 'Yes', function () {
             _this.userService.cancelInvite(invite).then(function (done) {
                 if (done) {
-                    var index = _this.subscription.invites.indexOf(invite);
-                    _this.subscription.invites.splice(index, 1);
-                    _this.calculateSubs();
                 }
             });
         });
@@ -285,9 +244,6 @@ var TeamDetailsComponent = (function () {
     TeamDetailsComponent.prototype.leave = function () {
         var _this = this;
         var body = "\n            <p>Are you sure you want to leave this team? You will no longer have access to any of the team's resources.</p>\n        ";
-        if (this.user.subscription.parent == this.team.subscription._id) {
-            body += "\n                <p class=\"error\"><strong>Warning: Your subscription is inherited from " + this.team.name + ". If you leave the team, you will have to purchase a new subscription to keep using ImprovPlus.</strong></p>\n            ";
-        }
         this._app.dialog('Leave ' + this.team.name + '?', body, 'Yes', function () {
             _this.userService.leaveTeam(_this.team).then(function (user) {
                 _this.router.navigate(['/app/dashboard']);
@@ -357,28 +313,28 @@ var TeamDetailsComponent = (function () {
             });
         });
     };
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", team_1.Team)
+    ], TeamDetailsComponent.prototype, "team", void 0);
+    TeamDetailsComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: "team-details",
+            templateUrl: "../template/team-details.component.html",
+            animations: [anim_util_1.DialogAnim.dialog]
+        }),
+        __metadata("design:paramtypes", [app_component_1.AppComponent,
+            router_1.Router,
+            router_1.ActivatedRoute,
+            app_service_1.AppService,
+            user_service_1.UserService,
+            team_service_1.TeamService,
+            common_1.PathLocationStrategy,
+            common_1.Location])
+    ], TeamDetailsComponent);
     return TeamDetailsComponent;
 }());
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", team_1.Team)
-], TeamDetailsComponent.prototype, "team", void 0);
-TeamDetailsComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: "team-details",
-        templateUrl: "../template/team-details.component.html",
-        animations: [anim_util_1.DialogAnim.dialog]
-    }),
-    __metadata("design:paramtypes", [app_component_1.AppComponent,
-        router_1.Router,
-        router_1.ActivatedRoute,
-        app_service_1.AppService,
-        user_service_1.UserService,
-        team_service_1.TeamService,
-        common_1.PathLocationStrategy,
-        common_1.Location])
-], TeamDetailsComponent);
 exports.TeamDetailsComponent = TeamDetailsComponent;
 
 //# sourceMappingURL=team-details.component.js.map

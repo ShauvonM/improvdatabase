@@ -18,12 +18,12 @@ var AppLoadGuard = (function () {
     AppLoadGuard.prototype.canLoad = function (route) {
         return this.userService.getLoggedInUser() != null;
     };
+    AppLoadGuard = __decorate([
+        core_1.Injectable(),
+        __metadata("design:paramtypes", [user_service_1.UserService])
+    ], AppLoadGuard);
     return AppLoadGuard;
 }());
-AppLoadGuard = __decorate([
-    core_1.Injectable(),
-    __metadata("design:paramtypes", [user_service_1.UserService])
-], AppLoadGuard);
 exports.AppLoadGuard = AppLoadGuard;
 
 //# sourceMappingURL=app-load-guard.service.js.map

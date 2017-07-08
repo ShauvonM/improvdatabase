@@ -21,17 +21,17 @@ var LegalComponent = (function () {
     }
     LegalComponent.prototype.ngOnInit = function () {
     };
+    LegalComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: "legal",
+            templateUrl: "../template/legal.component.html"
+        }),
+        __metadata("design:paramtypes", [app_component_1.AppComponent,
+            router_1.Router])
+    ], LegalComponent);
     return LegalComponent;
 }());
-LegalComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: "legal",
-        templateUrl: "../template/legal.component.html"
-    }),
-    __metadata("design:paramtypes", [app_component_1.AppComponent,
-        router_1.Router])
-], LegalComponent);
 exports.LegalComponent = LegalComponent;
 
 //# sourceMappingURL=legal.component.js.map

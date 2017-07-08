@@ -30,144 +30,28 @@
     }
 }
 
-iplus {
-    display: inline-flex;
+logo {
     cursor: default;
     vertical-align: middle;
-    justify-content: center;
-    align-content: center;
-    align-items: center;
 
-    &.white .iplus {
+    &.white {
         color: $color-white;
-    }
-
-    &.large, &.huge {
-        margin: 0 $std;
     }
 }
 
-.iplus {
+.logo {
     display: inline-block;
     min-width: 24px;
     height: 24px;
     line-height: 24px;
     text-align: center;
     position: relative;
-    font-size: 20px;
+    font-size: $std;
     white-space: nowrap;
-
-    .large & {
-        transform: scale(1.5);
-
-        .i {
-            top: 12px;
-        }
-        .plus {
-            top: 9px;
-        }
-    }
-
-    .huge & {
-        transform: scale(3);
-        font-weight: bold;
-
-        .i {
-            top: 12px;
-        }
-        .plus {
-            top: 9px;
-        }
-    }
+    transform-origin: 50%;
 
     &.white {
-        // background-position: -24px 0;
         color: $color-white;
-    }
-
-    & > * {
-        position: absolute;
-        line-height: 0px;
-    }
-
-    .bracket {
-        font-size: 100%;
-        top: 10px;
-        left: 2px;
-
-        &:last-child {
-            left: auto;
-            right: 2px;
-        }
-    }
-    .i {
-        font-size: 83%;
-        font-weight: bold;
-        left: 6px;
-        top: 12.5px;
-        transition: color 300ms;
-        text-transform: lowercase;
-    }
-    .plus {
-        font-size: 70%;
-        font-weight: bold;
-        top: 9px;
-        left: 10px;
-        opacity: 1;
-        transition: color 300ms, opacity 300ms;
-    }
-
-    .text {
-        width: auto;
-        max-width: 0px;
-        overflow: hidden;
-        transition: max-width 500ms, margin 300ms;
-        font-size: 70%;
-        line-height: 24px;
-        position: static;
-        display: block;
-        margin: 0 4px 0 19px;
-
-        &.noplus {
-            font-size: 83%;
-        }
-    }
-
-    &:hover {
-        .plus {
-            color: $color-primary;
-        }
-        .plus.hideonopen {
-            opacity: 0;
-        }
-        .text {
-            max-width: 100px;
-            margin: 0 7px 0 19px;
-
-            &.noplus {
-                margin-left: 11px;
-            }
-        }
-    }
-
-    @media only screen and 
-    (min-device-pixel-ratio: 4),
-    (-webkit-min-device-pixel-ratio: 4) {
-        .i {
-            top: 11px;
-        }
-        .plus {
-            top: 8px;
-        }
-
-        .huge & {
-            .i {
-                top: 11px;
-            }
-            .plus {
-                top: 8px;
-            }
-        }
     }
 }
 
@@ -208,11 +92,11 @@ iplus {
 .loader {
     @include fixed(0, 0, 0, 0, 5000);
 
-    .iplus {
+    .logo {
         @include abs(($toolbar-height / 2)-1, null, null, 50%, 5);
         margin-top: -12px;
         margin-left: -12px;
-        animation: spin 1000ms 1000ms infinite;
+        animation: spin 1s 1s infinite;
     }
 }
 
@@ -286,12 +170,24 @@ iplus {
     text-align: left;
 }
 
-.scroll {
-    overflow: auto;
+.scroll-wrapper {
+    position: relative;
+    overflow: hidden;
 
-    &:after {
-        @include abs(null, -10px, 0, 10px, 5);
-        box-shadow: 0 -5px 10px rgba(0,0,0,0.4);
+    .scroll {
+        overflow: auto;
+        @include abs(0, 0, 0, 0, 1);
+    }
+
+    .shadow-top {
+        @include abs(null, -5%, 100%, -5%, 2);
+        height: $std;
+        box-shadow: 0 0 ($std * 2) rgba(0,0,0,0.75);
+    }
+    .shadow-bottom {
+        @include abs(100%, -5%, null, -5%, 2);
+        height: $std;
+        box-shadow: 0 0 ($std * 2) rgba(0,0,0,0.5);
     }
 }
 
@@ -471,10 +367,13 @@ iplus {
 
 .button-group {
     margin-top: $std;
-    text-align: right;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
 
     .left {
-        float: left;
+        flex: 1;
 
         &:first-child {
             margin-left: (-$std);
@@ -487,6 +386,10 @@ iplus {
 
     .button:last-child {
         margin-right: 0;
+
+        @media #{$media-mobile} {
+            margin: $std 0 0 0;
+        }
     }
     label {
         display: inline-block;
@@ -503,7 +406,7 @@ iplus {
             margin-right: 0;
         }
     }
-    .improvplus-editable-metadata {
+    .id-editable-metadata {
         display: inline-block;
         vertical-align: middle;
         margin-right: 24px;
@@ -519,6 +422,11 @@ iplus {
             margin: 0;
             padding: $small 0;
             width: auto;
+        }
+
+        @media #{$media-mobile} {
+            margin: 0 0 0 $std;
+            line-height: ($std * 2);
         }
     }
 }
@@ -589,19 +497,6 @@ button,
 
     @include md-elevation-transition("opacity #{$anim-duration}");
 
-    iplus {
-        margin-left: $small;
-        cursor: pointer;
-        .i {
-            top: 2px;
-        }
-        &:hover {
-            .plus {
-                color: $color-white;
-            }
-        }
-    }
-
     .fa {
         font-size: $std;
         margin-right: $small;
@@ -613,10 +508,6 @@ button,
         line-height: ($button-height * $large-button-scale);
         height: ($button-height * $large-button-scale);
         padding: 0 ($std * $large-button-scale);
-
-        iplus {
-            margin-left: $small * $large-button-scale;
-        }
     }
 
     &.raised {
@@ -680,7 +571,7 @@ button,
     }
 
     &.fab {
-        @include fixed(null, ($std * 2), $std, null, 500);
+        @include fixed(null, $std, $std, null, 500);
         background: $color-primary;
         color: $color-primary-text;
         width: $fab-width;
@@ -748,6 +639,10 @@ button,
 
             label {
                 margin: 0;
+
+                span {
+                    margin: 0 $std 0 0;
+                }
             }
 
             &.no-margin {
@@ -772,6 +667,14 @@ button,
                 .fill {
                     flex: 1;
                 }
+
+                & > span {
+                    margin: 0 0 0 $std;
+
+                    &:first-child {
+                        margin: 0;
+                    }
+                }
             }
 
             h5 {
@@ -795,7 +698,7 @@ button,
                     display: none;
                 }
             }
-            span {
+            & > span {
                 margin: 0 $std 0 0;
             }
         }
@@ -1103,7 +1006,7 @@ button,
 }
 
 .toast {
-    @include fixed(null, 0, $page-bracket-width, 0, 500);
+    @include fixed(null, 0, $large, 0, 500);
     display: flex;
     justify-content: center;
 
@@ -1206,5 +1109,39 @@ label.icon-choice {
 
     @media #{$media-mobile} {
         width: 100%;
+    }
+}
+
+.payment-info {
+    max-width: 500px;
+    text-align: left;
+    margin: $small auto 0;
+    padding: $small $std;
+    border: 1px solid $color-hr;
+    border-radius: $small;
+
+    .StripeElement {
+        background-color: white;
+        padding: $small $small $small;
+        margin: $small 0 $large;
+        border: 1px solid transparent;
+        border-bottom: 1px solid $color-primary;
+        border-radius: $border-radius;
+    }
+
+    .StripeCardErrors {
+        margin: -$large 0 $large 0;
+        color: darkred;
+    }
+
+    .StripeElement--focus {
+    }
+
+    .StripeElement--invalid {
+        border-color: darkred;
+    }
+
+    .StripeElement--webkit-autofill {
+        background-color: #fefde5 !important;
     }
 }

@@ -20,7 +20,7 @@ import { Team } from '../../model/team';
 
 @Component({
     moduleId: module.id,
-    selector: '.improvplus-user-card',
+    selector: '.id-user-card',
     templateUrl: '../template/view/user-card.view.html'
 })
 export class UserCardView implements OnInit, OnDestroy {

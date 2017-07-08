@@ -1,12 +1,10 @@
 <div class="toolbar-row" [class.search-open]="searchOpen">
-    <iplus *ngIf="!showBack" (click)="toggleNav()"></iplus>
+    <logo *ngIf="!showBack" (click)="toggleNav()"></logo>
     <button *ngIf="showBack" (click)="back()">
         <i class="fa fa-arrow-left"></i>
     </button>
 
     <h2 [innerHTML]="title" (click)="showBack ? back() : toggleNav()"></h2>
-
-    <span class="spacer"></span>
 
     <span *ngIf="showSearch" class="search" [class.active]="(searchOpen || searchTerm) && !searchActive">
         <i class="fa fa-search"></i>

@@ -6,54 +6,34 @@
 
 <div class="page">
 
-    <!--<div class="paper-label big">
-        welcome to <span class="light">improv</span><strong>plus</strong>
-    </div>-->
-
     <dashboard-message-list></dashboard-message-list>
 
     <div class="card-list">
 
         <div class="paper-label big" *ngIf="userService.getLoggedInUser() && !userService.isExpired()">
-            your features
+            go to there
         </div>
 
-        <div routerLink="/app/materials" class="card red brackets clickable" *ngIf="userService.can('material_page_view')">
-            <h4>Materials</h4>
-            <p>Browse and download your ImprovPlus content.</p>
+        <div routerLink="/app/games" class="card small yellow clickable" *ngIf="userService.can('game_page_view')">
+            <div class="top">
+                <div class="content">
+                    <h3>Game Database</h3>
+                </div>
+            </div>
+            <div class="body">
+                <p>View the collection of over 200 Improv games.</p>
+            </div>
         </div>
 
-        <div routerLink="/app/games" class="card yellow brackets clickable" *ngIf="userService.can('game_page_view')">
-            <h4>Game Database</h4>
-            <p>View our collection of over 200 Improv exercises.</p>
-        </div>
-
-        <div routerLink="/app/videos" class="card brackets clickable" *ngIf="userService.can('video_page_view')">
-            <h4>Videos</h4>
-            <p>Browse examples, lessons, tips and tricks, and other exciting video content.</p>
-        </div>
-
-        <div routerLink="/app/glossary" class="card brackets clickable" *ngIf="userService.can('glossary_page_view')">
-            <h4>Glossary</h4>
-            <p>Get the answers you seek with our comprehensive Improv reference guide.</p>
-        </div>
-
-        <div class="card brackets blue clickable disabled" *ngIf="userService.can('community_page_view')">
-            <h4>Community</h4>
-            <p>Connect with other Facilitators and Improvisers.</p>
-            <em class="message">Coming soon!</em>
-        </div>
-
-        <div class="card brackets orange clickable disabled" *ngIf="userService.can('hire_page_view')">
-            <h4>Hire an Improviser</h4>
-            <p>Hire an expert (and fully verified) Improv coach.</p>
-            <em class="message">Coming soon!</em>
-        </div>
-
-        <div class="card brackets clickable disabled" *ngIf="userService.can('blog_page_view')">
-            <h4>Editorials</h4>
-            <p>Don't call it a Blog! Stay current with the latest thoughts and updates on the world of Improv and Facilitation.</p>
-            <em class="message">Coming soon!</em>
+        <div routerLink="/app/glossary" class="card small clickable" *ngIf="userService.can('glossary_page_view')">
+            <div class="top">
+                <div class="content">
+                    <h3>Glossary</h3>
+                </div>
+            </div>
+            <div class="body">
+                <p>A list of descriptions for (a bunch of) the tags in the database.</p>
+            </div>
         </div>
 
     </div>

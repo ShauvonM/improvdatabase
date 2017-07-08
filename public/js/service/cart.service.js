@@ -85,13 +85,13 @@ var CartService = (function () {
             return result.json();
         });
     };
+    CartService = __decorate([
+        core_1.Injectable(),
+        __metadata("design:paramtypes", [app_http_1.AppHttp,
+            user_service_1.UserService])
+    ], CartService);
     return CartService;
 }());
-CartService = __decorate([
-    core_1.Injectable(),
-    __metadata("design:paramtypes", [app_http_1.AppHttp,
-        user_service_1.UserService])
-], CartService);
 exports.CartService = CartService;
 
 //# sourceMappingURL=cart.service.js.map

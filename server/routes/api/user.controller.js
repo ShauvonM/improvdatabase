@@ -8,6 +8,8 @@ const   mongoose = require('mongoose'),
         emailUtil = require('../../email'),
         findModelUtil = require('./find-model.util'),
 
+        chargeApi = require('../charge'),
+
         Subscription = require('../../models/subscription.model'),
         User = require('../../models/user.model'),
         Team = require('../../models/team.model'),
@@ -271,7 +273,6 @@ module.exports = {
                 path: 'adminOfTeams memberOfTeams',
                 populate: {
                     path: 'subscription',
-                    select:'-stripeCustomerId',
                     populate: {
                         path: 'invites',
                         match: { accepted: false }
@@ -284,8 +285,7 @@ module.exports = {
                     path: 'admins members',
                     select:'-password',
                     populate: {
-                        path: 'subscription',
-                        select: '-stripeCustomerId'
+                        path: 'subscription'
                     }
                 }
             })
@@ -294,122 +294,82 @@ module.exports = {
             })
     },
 
-    // fetched with a GET call to /api/user/:_id/materials
-    materials: (req, res) => {
-        let userId = req.params.id,
-            query = User.findOne({}).where('_id').equals(userId);
-
-        return module.exports.collectMaterials(query, req, res);
-    },
-
-    collectMaterials: (query, req, res) => {
-        return query.select('purchases')
-            .populate({
-                path: 'purchases',
-                populate: {
-                    path: 'materials.materialItem packages.package',
-                    populate: {
-                        path: 'materials packages',
-                        match: {visible: true},
-                        populate: {
-                            path: 'materials',
-                            // lets only allow packages to include packages one level deep, because this is getting silly
-                            // so a package that includes packages can't be included in a package
-                            match: {visible: true}
-                        }
-                    }
-                }
-            })
-            .exec()
-            .then(u => {
-                let userData = u.toObject(),
-                    packages = [],
-                    materials = [],
-
-                    // TODO: some day - instead of selecting it all at once to begin with, we can do this with a recursive function that selects a thing and then selects all of the materials / packages inside the thing?
-
-                    addItems = array => {
-                        if (array && array.length) {
-                            array.forEach(arrayItem => {
-                                let item = arrayItem.package || arrayItem;
-                                if (item.name) {
-                                    // if it has a name, it's a package
-                                    // just add the data without adding the actual package because we don't want to cause any crazy recursiveness
-                                    let packageData = {
-                                        _id: item._id.toString(),
-                                        slug: item.slug,
-                                        name: item.name,
-                                        color: item.color,
-                                        price: item.price,
-                                        dateAdded: item.dateAdded,
-                                        dateModified: item.dateModified,
-                                        description: item.description,
-                                        materials: item.materials,
-                                        packages: []
-                                    };
-
-                                    item.packages.forEach(p => {
-                                        packageData.packages.push(p._id.toString());
-                                    });
-
-                                    packages = util.addToObjectIdArray(packages, packageData);
-                                }
-                                if (item.materials && item.materials.length) {
-                                    item.materials.forEach(m => {
-                                        materials = util.addToObjectIdArray(materials, m);
-                                    });
-                                }
-                                addItems(item.packages);
-                            });
-                        }
-                    };
-
-                addItems(userData.purchases);
-
-                packages = packages.sort((a, b) => {
-                    return a.name.localeCompare(b.name);
-                });
-
-                materials = materials.sort((a, b) => {
-                    return a.name.localeCompare(b.name);
-                })
-
-                let data = {
-                    packages: packages,
-                    materials: materials
-                }
-
-                if (res) {
-                    res.json(data);
-                } else {
-                    return Promise.resolve(data);
-                }
-            })
-    },
-
     subscription: (req, res) => {
-        return User.findOne({}).where('_id').equals(req.user._id)
-            .select('subscription')
-            .populate({
-                path: 'subscription',
-                select: '-stripeCustomerId',
-                populate: {
-                    path: 'parent',
-                    select: '-stripeCustomerId',
+        if (req.method == 'GET') {
+            return User.findOne({}).where('_id').equals(req.user._id)
+                .select('subscription')
+                .populate({
+                    path: 'subscription',
                     populate: {
-                        path: 'team',
-                        select: 'name'
+                        path: 'parent',
+                        populate: {
+                            path: 'team',
+                            select: 'name'
+                        }
                     }
+                })
+                .then(u => {
+                    let user = u.toObject();
+
+                    if (user.subscription) {
+                        user.subscription.roleName = roles.findRoleById(user.subscription.role).name;
+                    }
+
+                    res.json(user);
+                })
+        } else {
+            return util.notfound(req, res);
+        }
+    },
+
+    pledge: (req, res) => {
+        let stripe = require('stripe')(config.stripe.secret),
+
+            userId = req.user._id,
+            stripeToken = req.body.stripeToken,
+            token,
+
+            newPledgeInput = req.body.pledge || 0,
+            newPledge = parseFloat(newPledgeInput),
+            newPledgeString = newPledge.toFixed(2);
+
+        if (typeof stripeToken == 'object' && stripeToken.id) {
+            token = stripeToken.id;
+        }
+
+        return Subscription.findOne({})
+            .where('user').equals(userId)
+            .exec()
+            .then(sub => {
+                let stripeSubscriptionId = sub.stripeSubscriptionId,
+                    stripeCustomerId = sub.stripeCustomerId,
+                    planId = 'pledge-' + newPledgeString;
+
+                sub.pledge = newPledge;
+
+                if (newPledge > 0) {
+                    // we can update (or create) their subscription
+
+                    return chargeApi.createPledgeSubscription(newPledge, token, stripeCustomerId, stripeSubscriptionId)
+                        .then(stripeSub => {
+                            sub.stripeSubscriptionId = stripeSub.id;
+                            return sub.save();
+                        });
+
+                } else {
+                    // discontinue their subscription, if necessary
+                    
+                    return chargeApi.cancelPledgeSubscription(stripeSubscriptionId)
+                        .then(() => {
+                            sub.stripeSubscriptionId = null;
+
+                            return sub.save();
+                        });
+
                 }
             })
-            .then(u => {
-                let user = u.toObject();
-
-                if (user.subscription) {
-                    user.subscription.roleName = roles.findRoleById(user.subscription.role).name;
-                }
-
-                res.json(user);
+            .then(sub => {
+                res.json(sub);
             })
     },
 

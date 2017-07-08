@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var router_1 = require("@angular/router");
-var common_1 = require("@angular/common");
 var constants_1 = require("../../constants");
 var app_component_1 = require("../../component/app.component");
 var game_database_service_1 = require("../service/game-database.service");
@@ -22,13 +21,12 @@ var util_1 = require("../../util/util");
 var text_util_1 = require("../../util/text.util");
 var anim_util_1 = require("../../util/anim.util");
 var GameDetailsComponent = (function () {
-    function GameDetailsComponent(_app, gameDatabaseService, gameNoteService, router, route, location, userService) {
+    function GameDetailsComponent(_app, gameDatabaseService, gameNoteService, router, route, userService) {
         this._app = _app;
         this.gameDatabaseService = gameDatabaseService;
         this.gameNoteService = gameNoteService;
         this.router = router;
         this.route = route;
-        this.location = location;
         this.userService = userService;
         this.onClose = new core_1.EventEmitter();
         this.dialog = false;
@@ -97,7 +95,7 @@ var GameDetailsComponent = (function () {
     };
     GameDetailsComponent.prototype.ngOnChanges = function (changes) {
         // make sure that things get set up if the game changes
-        if (changes.game && (!this._gameId || this._gameId != changes.game.currentValue._id)) {
+        if (changes.game && changes.game.previousValue && (!this._gameId || this._gameId != changes.game.currentValue._id)) {
             this.setGame(changes.game.currentValue);
         }
     };
@@ -240,12 +238,12 @@ var GameDetailsComponent = (function () {
                 this._selectedTagIndex = -1;
                 this.addTagByName();
                 break;
-            case 27:
+            case 27:// escape
                 this._selectedTagIndex = -1;
                 this.addTagShown = false;
                 break;
             case 40: // down
-            case 38:
+            case 38:// up
                 if (key === 40) {
                     if (this._selectedTagIndex < this.tagHints.length - 1) {
                         this._selectedTagIndex++;
@@ -370,6 +368,9 @@ var GameDetailsComponent = (function () {
             this.gameNotFound = true;
         }
         else {
+            if (!this.dialog) {
+                this._app.setCurtainText(game.names.length ? game.names[0].name : 'New Game');
+            }
             this._gameId = game._id;
             this.game = game;
             if (this.game.names && this.game.names.length) {
@@ -458,44 +459,43 @@ var GameDetailsComponent = (function () {
             _this.userService.setPreference(constants_1.PREFERENCE_KEYS.showPrivateNotes, '' + _this.showPrivateNotes);
         }, 10);
     };
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", game_1.Game)
+    ], GameDetailsComponent.prototype, "game", void 0);
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", core_1.EventEmitter)
+    ], GameDetailsComponent.prototype, "onClose", void 0);
+    GameDetailsComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: 'game-details',
+            templateUrl: '../template/game-details.component.html',
+            animations: [
+                anim_util_1.ShrinkAnim.height,
+                core_1.trigger('expand', [
+                    core_1.state('in', core_1.style({ height: '*' })),
+                    core_1.transition('void => *', [
+                        core_1.style({ height: 0 }),
+                        core_1.animate(100)
+                    ]),
+                    core_1.transition('* => void', [
+                        core_1.style({ height: '*' }),
+                        core_1.animate(100, core_1.style({ height: 0 }))
+                    ])
+                ])
+            ]
+        }),
+        __metadata("design:paramtypes", [app_component_1.AppComponent,
+            game_database_service_1.GameDatabaseService,
+            game_note_service_1.GameNoteService,
+            router_1.Router,
+            router_1.ActivatedRoute,
+            user_service_1.UserService])
+    ], GameDetailsComponent);
     return GameDetailsComponent;
 }());
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", game_1.Game)
-], GameDetailsComponent.prototype, "game", void 0);
-__decorate([
-    core_1.Output(),
-    __metadata("design:type", core_1.EventEmitter)
-], GameDetailsComponent.prototype, "onClose", void 0);
-GameDetailsComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: 'game-details',
-        templateUrl: '../template/game-details.component.html',
-        animations: [
-            anim_util_1.ShrinkAnim.height,
-            core_1.trigger('expand', [
-                core_1.state('in', core_1.style({ height: '*' })),
-                core_1.transition('void => *', [
-                    core_1.style({ height: 0 }),
-                    core_1.animate(100)
-                ]),
-                core_1.transition('* => void', [
-                    core_1.style({ height: '*' }),
-                    core_1.animate(100, core_1.style({ height: 0 }))
-                ])
-            ])
-        ]
-    }),
-    __metadata("design:paramtypes", [app_component_1.AppComponent,
-        game_database_service_1.GameDatabaseService,
-        game_note_service_1.GameNoteService,
-        router_1.Router,
-        router_1.ActivatedRoute,
-        common_1.Location,
-        user_service_1.UserService])
-], GameDetailsComponent);
 exports.GameDetailsComponent = GameDetailsComponent;
 
 //# sourceMappingURL=game-details.component.js.map

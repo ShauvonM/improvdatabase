@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 // import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { IPlusView } from '../view/iplus.view';
+import { LogoView } from '../view/logo.view';
 import { LoginView } from '../view/login.view';
 import { UserFormView } from '../view/user-form.view';
 import { LandingHeroView } from '../view/landing-hero.view';
@@ -12,7 +12,6 @@ import { LegalView } from '../view/legal.view';
 
 // services
 import { UserService } from "../service/user.service";
-import { CartService } from '../service/cart.service';
 import { AppService } from '../service/app.service';
 
 import { FormInputDirective } from '../directive/form-input.directive';
@@ -21,6 +20,7 @@ import { DraggableDirective } from '../directive/draggable.directive';
 import { DroppableDirective } from '../directive/droppable.directive';
 import { FormSwitchDirective } from '../directive/form-switch.directive';
 import { InfiniteScrollDirective } from '../directive/infinite-scroll.directive';
+import { ScrollShadowDirective } from '../directive/scroll-shadow.directive';
 
 @NgModule({
     imports: [
@@ -30,7 +30,7 @@ import { InfiniteScrollDirective } from '../directive/infinite-scroll.directive'
         RouterModule
     ],
     declarations: [
-        IPlusView,
+        LogoView,
         LoginView,
         UserFormView,
         LandingHeroView,
@@ -40,10 +40,11 @@ import { InfiniteScrollDirective } from '../directive/infinite-scroll.directive'
         DraggableDirective,
         DroppableDirective,
         FormSwitchDirective,
-        InfiniteScrollDirective
+        InfiniteScrollDirective,
+        ScrollShadowDirective
     ],
     exports: [
-        IPlusView,
+        LogoView,
         LoginView,
         UserFormView,
         LandingHeroView,
@@ -53,12 +54,12 @@ import { InfiniteScrollDirective } from '../directive/infinite-scroll.directive'
         DraggableDirective,
         DroppableDirective,
         FormSwitchDirective,
-        InfiniteScrollDirective
+        InfiniteScrollDirective,
+        ScrollShadowDirective
     ],
     providers: [
         AppService,
-        UserService,
-        CartService
+        UserService
     ]
 })
 

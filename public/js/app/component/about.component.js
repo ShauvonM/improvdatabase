@@ -21,17 +21,17 @@ var AboutComponent = (function () {
     }
     AboutComponent.prototype.ngOnInit = function () {
     };
+    AboutComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: "history",
+            templateUrl: "../template/about.component.html"
+        }),
+        __metadata("design:paramtypes", [app_component_1.AppComponent,
+            router_1.Router])
+    ], AboutComponent);
     return AboutComponent;
 }());
-AboutComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: "history",
-        templateUrl: "../template/about.component.html"
-    }),
-    __metadata("design:paramtypes", [app_component_1.AppComponent,
-        router_1.Router])
-], AboutComponent);
 exports.AboutComponent = AboutComponent;
 
 //# sourceMappingURL=about.component.js.map

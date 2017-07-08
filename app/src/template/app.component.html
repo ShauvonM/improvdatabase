@@ -1,131 +1,103 @@
 <!-- TODO: make this a view, only include inside the app -->
 <nav [class.show] = "showMenu" *ngIf="inApp">
-    <div class="brackets">
         
-        <h1 routerLink="/welcome" class="clickable"><span class="light">improv</span><strong>plus</strong></h1>
-        
-        <div class="nav-top">
-            <!--<button (click)="toggleNav()">
-                <i class="fa fa-bars" [class.active]="showMenu"></i>
-            </button>
-            <button (click)="fullscreen()">
-                <i class="fa"
-                    [class.fa-expand]="!showFullscreen"
-                    [class.fa-compress]="showFullscreen"></i>
-            </button>-->
+    <div class="nav-top">
 
-            <!--<div class="content">
+        <img src="/images/background-user-1.jpg" />
 
-                <a routerLink="/user" (click)="toggleNav()" *ngIf="user"><i class="fa fa-user"></i> {{user.Email}}</a>
-                
-                <div class="login" *ngIf="!user">
-                    <a (click)="login()"><i class="fa fa-user"></i> Log In</a>
-                </div>
-            </div>-->
+        <div class="content clickable" *ngIf="user && userService.can('account_edit')" routerLinkActive="active" routerLink="/app/user">
 
-            <div class="content clickable" *ngIf="user && userService.can('account_edit')" routerLinkActive="active" routerLink="/app/user">
-
-                <div class="user-picture">
-                    <i class="fa fa-user"></i>
-                </div>
-                <div class="user-name">
-                    {{user.email}}
-                </div>
-                <div class="link">Your account</div>
-                
+            <div class="user-picture">
+                <i class="fa fa-user"></i>
             </div>
-        </div>
-        
-        <div class="scroll">
-
-            <a routerLink="/app/dashboard" routerLinkActive="active" class="nav-item"
-                *ngIf="userService.can('dashboard_page_view')">
-                <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-            </a>
-
-            <a routerLink="/app/materials" routerLinkActive="active" class="nav-item"
-                *ngIf="userService.can('material_page_view')">
-                <i class="fa fa-clipboard"></i> <span>Materials Library</span>
-            </a>
-
-            <a routerLink="/app/games" routerLinkActive="active" class="nav-item"
-                *ngIf="userService.can('game_page_view')">
-                <i class="fa fa-rocket"></i> <span>Game Database</span>
-            </a>
-
-            <a routerLink="/app/videos" routerLinkActive="active" class="nav-item"
-                *ngIf="userService.can('video_page_view')">
-                <i class="fa fa-video-camera"></i> <span>Video Gallery</span>
-            </a>
-
-            <a routerLink="/app/glossary" routerLinkActive="active" class="nav-item"
-                *ngIf="userService.can('glossary_page_view')">
-                <i class="fa fa-book"></i> <span>Glossary</span>
-            </a>
-
-            <hr *ngIf="userService.can('team_page_view')" />
-
-            <a routerLink="/app/teams" routerLinkActive="active" class="nav-item"
-                *ngIf="userService.can('team_page_view') && _teamCount != 1">
-                <i class="fa fa-users"></i>
-
-                <span *ngIf="_teamCount > 1">Your Teams</span>
-                <span *ngIf="_teamCount == 0">Create a Team</span>
-
-            </a>
-
-            <a routerLink="/app/team/{{_teamId}}" routerLinkActive="active" class="nav-item"
-                *ngIf="userService.can('team_page_view') && _teamCount == 1">
-                <i class="fa fa-users"></i>
-                <span>Your Team</span>
-            </a>
-
-            <hr />
-
-            <a routerLink="/app/contact/featurerequest" routerLinkActive="active" class="nav-item"
-                *ngIf="userService.can('contact_page_view')">
-                <i class="fa fa-exclamation-circle"></i> <span>Request a Feature</span>
-            </a>
-
-            <a routerLink="/app/contact/reportbug" routerLinkActive="active" class="nav-item"
-                *ngIf="userService.can('contact_page_view')">
-                <i class="fa fa-bug"></i> <span>Report a Bug</span>
-            </a>
-
-            <a routerLink="/app/help" routerLinkActive="active" class="nav-item">
-                <i class="fa fa-question"></i> <span>Help</span>
-            </a>
-
-            <hr *ngIf="userService.isSuperAdmin()" />
-
-            <a routerLink="/app/admin" routerLinkActive="active" class="nav-item" 
-                *ngIf="userService.isSuperAdmin()">
-                <i class="fa fa-motorcycle"></i> <span>Admin</span>
-            </a>
-
-            <hr />
+            <div class="user-name">
+                {{user.email}}
+            </div>
+            <!--<div class="link">Your account</div>-->
             
-            <a *ngIf="user" (click)="logout()" class="nav-item">
-                <i class="fa fa-sign-out"></i> <span>Log Out</span>
-            </a>
-
         </div>
-
-        <footer>
-            <a routerLink="/app/about">version <strong>{{config.version}}</strong></a>
-        </footer>
     </div>
+    
+    <div class="scroll">
+
+        <a routerLink="/app/dashboard" routerLinkActive="active" class="nav-item"
+            *ngIf="userService.can('dashboard_page_view')">
+            <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+        </a>
+
+        <a routerLink="/app/games" routerLinkActive="active" class="nav-item"
+            *ngIf="userService.can('game_page_view')">
+            <i class="fa fa-rocket"></i> <span>Game Database</span>
+        </a>
+
+        <a routerLink="/app/glossary" routerLinkActive="active" class="nav-item"
+            *ngIf="userService.can('glossary_page_view')">
+            <i class="fa fa-book"></i> <span>Glossary</span>
+        </a>
+
+        <hr *ngIf="userService.can('team_page_view')" />
+
+        <a routerLink="/app/teams" routerLinkActive="active" class="nav-item"
+            *ngIf="userService.can('team_page_view') && _teamCount != 1">
+            <i class="fa fa-users"></i>
+
+            <span *ngIf="_teamCount > 1">Your Teams</span>
+            <span *ngIf="_teamCount == 0">Register a Team</span>
+
+        </a>
+
+        <a routerLink="/app/team/{{_teamId}}" routerLinkActive="active" class="nav-item"
+            *ngIf="userService.can('team_page_view') && _teamCount == 1">
+            <i class="fa fa-users"></i>
+            <span>Your Team</span>
+        </a>
+
+        <hr />
+
+        <a routerLink="/app/contact/featurerequest" routerLinkActive="active" class="nav-item"
+            *ngIf="userService.can('contact_page_view')">
+            <i class="fa fa-exclamation-circle"></i> <span>Request a Feature</span>
+        </a>
+
+        <a routerLink="/app/contact/reportbug" routerLinkActive="active" class="nav-item"
+            *ngIf="userService.can('contact_page_view')">
+            <i class="fa fa-bug"></i> <span>Report a Bug</span>
+        </a>
+
+        <a routerLink="/app/help" routerLinkActive="active" class="nav-item">
+            <i class="fa fa-question"></i> <span>Help</span>
+        </a>
+
+        <hr *ngIf="userService.isSuperAdmin()" />
+
+        <a routerLink="/app/admin" routerLinkActive="active" class="nav-item" 
+            *ngIf="userService.isSuperAdmin()">
+            <i class="fa fa-motorcycle"></i> <span>Admin</span>
+        </a>
+
+        <hr />
+        
+        <a *ngIf="user" (click)="logout()" class="nav-item">
+            <i class="fa fa-sign-out"></i> <span>Log Out</span>
+        </a>
+
+    </div>
+
+    <footer>
+        <a routerLink="/app/about">version <strong>{{config.version}}</strong></a>
+    </footer>
+    
 </nav>
 
 <div (click)="closeOverlays()" class="backdrop nav-backdrop" [@fade] [class.show]="showBackdrop"></div>
-
-<div class="left-bracket" [class.white]="whiteBrackets"></div>
-<div class="right-bracket" [class.white]="whiteBrackets"></div>
 
 <div class="curtain"
     *ngIf="inApp"
     [style.top]="(scrollpos * 0.75) + 'px'">
     <!--<img src="/app/images/header-bg-graphic.png" />-->
+
+    <h2 *ngIf="curtainText" [style.top]="(scrollpos * 0.1) + 'px'" [@bubble]>{{curtainText}}</h2>
+
 </div>
 
 <div class="background" *ngIf="backgroundVisible" [@shrinkVertical]></div>
@@ -141,7 +113,7 @@
         </div>
         <div class="button-group">
             <button (click)="onDialogDismiss()" *ngIf="!dialogHideCancel">{{dialogCancel}}</button>
-            <button class="button brackets" *ngIf="dialogConfirm" (click)="onDialogConfirm()" [class.disabled]="dialogPrompt && !dialogInput">{{dialogConfirm}}</button>
+            <button class="button raised" *ngIf="dialogConfirm" (click)="onDialogConfirm()" [class.disabled]="dialogPrompt && !dialogInput">{{dialogConfirm}}</button>
         </div>
     </div>
 </div>
@@ -153,13 +125,13 @@
 <login [show]="showLogin" (done)="handleLogin($event)" class="dialog-container" [class.show]="showLogin"></login>
 
 <div class="loader" *ngIf="loaderVisible">
-    <iplus class="white"></iplus>
+    <logo class="white"></logo>
 </div>
 
-<footer (window:scroll)="onScroll()">
+<footer (window:scroll)="onScroll()" [@fade]>
 
-    <span>&copy;2017 Kate Bringardner, LLC</span>
-    <a routerLink="/app/legal" *ngIf="user">Legal stuff</a>
+    <span>&copy;2017 Shauvon McGill, LLC</span>
+    <!--<a routerLink="/app/legal" *ngIf="user">Legal stuff</a>-->
     <img src="/images/comodo_secure_seal_76x26_transp.png" />
     <a *ngIf="user" (click)="logout()">Log Out</a>
 

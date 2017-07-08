@@ -57,29 +57,29 @@ var CreateMetadataView = (function () {
         this.done.emit(null);
         return false;
     };
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", core_1.EventEmitter)
+    ], CreateMetadataView.prototype, "done", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], CreateMetadataView.prototype, "type", void 0);
+    CreateMetadataView = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: "create-metadata",
+            templateUrl: "../template/view/create-metadata.view.html",
+            animations: [
+                anim_util_1.DialogAnim.dialog,
+                anim_util_1.ToggleAnim.fade
+            ]
+        }),
+        __metadata("design:paramtypes", [user_service_1.UserService,
+            game_database_service_1.GameDatabaseService])
+    ], CreateMetadataView);
     return CreateMetadataView;
 }());
-__decorate([
-    core_1.Output(),
-    __metadata("design:type", core_1.EventEmitter)
-], CreateMetadataView.prototype, "done", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], CreateMetadataView.prototype, "type", void 0);
-CreateMetadataView = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: "create-metadata",
-        templateUrl: "../template/view/create-metadata.view.html",
-        animations: [
-            anim_util_1.DialogAnim.dialog,
-            anim_util_1.ToggleAnim.fade
-        ]
-    }),
-    __metadata("design:paramtypes", [user_service_1.UserService,
-        game_database_service_1.GameDatabaseService])
-], CreateMetadataView);
 exports.CreateMetadataView = CreateMetadataView;
 
 //# sourceMappingURL=create-metadata.view.js.map

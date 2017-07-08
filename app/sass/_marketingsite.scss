@@ -19,24 +19,14 @@ landing-hero {
         @include abs(0, null, null, 0, 1);
         width: 100%;
         height: 100%;
-        filter: saturate(2%);
+        // filter: saturate(2%);
         overflow: hidden;
         background: $color-bg;
 
         img {
-            @include abs(0,null,null,0);
-            z-index: 1;
+            @include abs(0,null,null,50%, 1);
+            transform: translateX(-50%);
             max-width: none;
-        }
-
-        iframe {
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            position: relative;
-            z-index: 2;
-
-            transition: opacity 600ms;
         }
     }
 
@@ -79,26 +69,18 @@ landing-hero {
         margin-bottom: $large;
 
         @media #{$media-mobile} {
-            font-size: 65px;
-        }
-    }
-
-    h2 {
-        font-size: 30px;
-        // margin-top: $large;
-        margin: 0 $std;
-        
-        @media #{$media-mobile} {
-            font-size: $large;
+            font-size: 45px;
         }
     }
 
     h3 {
-        font-size: $large;
-        margin: $small $std;
+        font-size: 30px;
+        // margin-top: $large;
+        margin: 0 $std;
+        font-weight: lighter;
         
         @media #{$media-mobile} {
-            margin: $small 0;
+            font-size: $large;
         }
     }
 
@@ -135,15 +117,10 @@ landing-hero {
 
     .block {
         margin: $large 0;
-        max-width: 690px;
         text-align: center;
     }
 
     @media #{$media-mobile} {
-        iplus {
-            margin-left: $small;
-        }
-
         .columns > * {
             margin: 0 $small;
         }
@@ -173,6 +150,7 @@ marketing-toolbar {
                 text-transform: uppercase;
                 cursor: pointer;
                 padding: $small $std;
+                text-shadow: 0px 0px 8px rgba(255,255,255,1);
 
                 i {
                     margin-left: $small;
@@ -200,10 +178,11 @@ marketing-toolbar {
 
         }
 
-        iplus {
+        logo {
             @include abs(0, null, null, 50%, 7);
             margin-left: -23px;
             padding: $std - 5;
+            transition: background-color 300ms;
 
             @media #{$media-mobile} {
                 top: 100%;
@@ -221,25 +200,19 @@ marketing-toolbar {
         &.on {
             a {
                 color: $color-white;
+                text-shadow: none;
             }
-
-            .iplus:hover .plus {
-                color: $color-white;
-            }
-
-            @media #{$media-mobile} {
-                iplus:before {
-                    background-color: $color-primary;
-                    border-radius: 0 0 50% 50%;
-                    @include md-elevation($toolbar-elevation);
-                }
-            } 
         }
 
         @media #{$media-mobile} {
             // top: -($toolbar-height * 4);
             transform: translateY(-100%);
             transition: transform 300ms;
+
+            &.on logo {
+                background: $color-primary;
+                border-radius: 0 0 50% 50%;
+            }
         }
 
         &.open {
@@ -263,12 +236,16 @@ welcome, signup, for-improvisers {
         z-index: 4;
         padding-top: 0;
 
-        h4 {
+        h2 {
             font-size: 4em;
             margin-bottom: $home-page-spacing;
         
             @media #{$media-mobile} {
                 font-size: 3.5em;
+
+                span {
+                    display: block;
+                }
             }
         }
 
@@ -385,37 +362,6 @@ welcome, signup, for-improvisers {
             }
         }
     }
-
-    .payment-info {
-        max-width: 500px;
-        text-align: left;
-        margin: 0 auto;
-
-        .StripeElement {
-            background-color: white;
-            padding: $small $small $small;
-            margin: $small (-$small) $large;
-            border: 1px solid transparent;
-            border-bottom: 1px solid $color-primary;
-            border-radius: $border-radius;
-        }
-
-        .StripeCardErrors {
-            margin: -$large 0 $large 0;
-            color: darkred;
-        }
-
-        .StripeElement--focus {
-        }
-
-        .StripeElement--invalid {
-            border-color: darkred;
-        }
-
-        .StripeElement--webkit-autofill {
-            background-color: #fefde5 !important;
-        }
-    }
 }
 
 welcome .blackbox h2 {
@@ -423,10 +369,5 @@ welcome .blackbox h2 {
 }
 
 signup .page {
-    padding-top: $page-bracket-width;
-
-    @media #{$media-mobile} {
-        padding-top: ($large * 2);
-        padding-bottom: ($large * 4);
-    }
+    padding-top: ($toolbar-height + $std);
 }

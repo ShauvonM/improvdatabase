@@ -97,21 +97,21 @@ var ContactComponent = (function () {
             });
         }
     };
+    ContactComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: "contact",
+            templateUrl: "../template/contact.component.html",
+            styles: ["\n        #contactSigOutput {\n            font-family: 'Alex Brush';\n            font-size: 52px;\n            transform: rotateZ(-5deg);\n            transform-origin: 0%;\n            color: #333;\n        }\n    "]
+        }),
+        __metadata("design:paramtypes", [app_component_1.AppComponent,
+            router_1.Router,
+            router_1.ActivatedRoute,
+            app_http_1.AppHttp,
+            user_service_1.UserService])
+    ], ContactComponent);
     return ContactComponent;
 }());
-ContactComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: "contact",
-        templateUrl: "../template/contact.component.html",
-        styles: ["\n        #contactSigOutput {\n            font-family: 'Alex Brush';\n            font-size: 52px;\n            transform: rotateZ(-5deg);\n            transform-origin: 0%;\n            color: #333;\n        }\n    "]
-    }),
-    __metadata("design:paramtypes", [app_component_1.AppComponent,
-        router_1.Router,
-        router_1.ActivatedRoute,
-        app_http_1.AppHttp,
-        user_service_1.UserService])
-], ContactComponent);
 exports.ContactComponent = ContactComponent;
 
 //# sourceMappingURL=contact.component.js.map

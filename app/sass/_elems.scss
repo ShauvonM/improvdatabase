@@ -9,6 +9,7 @@ body {
 
 a {
     color: $color-primary;
+    cursor: pointer;
 
     &:visited {
         color: $color-primary;
@@ -55,7 +56,7 @@ strong {
     font-weight: 300;
 }
 
-improvplus {
+improvdatabase {
     @include abs(0px, 0px, 0px, 0px, 2);
     overflow: hidden;
     position: relative;
@@ -161,4 +162,13 @@ sup {
 
 [draggable] {
     user-select: none;
+}
+
+::selection {
+    background: $color-secondary;
+    color: $color-white;
+}
+::-moz-selection {
+    background: $color-secondary;
+    color: $color-white;
 }

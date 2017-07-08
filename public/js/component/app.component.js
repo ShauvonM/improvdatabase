@@ -41,7 +41,6 @@ var AppComponent = (function () {
         this.loaderVisible = true;
         this.showMenu = false;
         this.showFullscreen = false;
-        this.whiteBrackets = false;
         // generic dialogs
         this.showDialog = false;
         this.dialogTitle = "";
@@ -58,21 +57,19 @@ var AppComponent = (function () {
         this.router.events.filter(function (event) { return event instanceof router_1.NavigationStart; }).subscribe(function (event) {
             _this.backgroundVisible = true;
             _this.backgroundRequested = false;
-            _this.showWhiteBrackets(false);
             _this.closeOverlays();
-            _this.showLoader();
-        });
-        this.router.events.filter(function (event) { return event instanceof router_1.NavigationEnd; }).subscribe(function (event) {
-            if (!_this.backgroundRequested) {
-                _this.backgroundVisible = false;
-            }
-            _this.hideLoader();
             if (event.url.indexOf('/app') > -1) {
                 _this.inApp = true;
             }
             else {
                 _this.inApp = false;
             }
+        });
+        this.router.events.filter(function (event) { return event instanceof router_1.NavigationEnd; }).subscribe(function (event) {
+            if (!_this.backgroundRequested) {
+                _this.backgroundVisible = false;
+            }
+            _this.setCurtainText('');
         });
         this.setUser(this.userService.getLoggedInUser());
         this.userSubscription = this.userService.loginState$.subscribe(function (user) {
@@ -139,9 +136,6 @@ var AppComponent = (function () {
         setTimeout(function () {
             _this.backgroundVisible = show;
         }, 50);
-    };
-    AppComponent.prototype.showWhiteBrackets = function (show) {
-        this.whiteBrackets = show;
     };
     AppComponent.prototype.setUser = function (user) {
         this.user = user;
@@ -278,6 +272,9 @@ var AppComponent = (function () {
             this.pathLocationStrategy.pushState({}, '', path, '');
         }
     };
+    AppComponent.prototype.setCurtainText = function (text) {
+        this.curtainText = text;
+    };
     AppComponent.prototype.scrollTo = function (to, duration) {
         var maxScroll = document.body.scrollHeight - window.innerHeight;
         if (maxScroll < to) {
@@ -322,30 +319,30 @@ var AppComponent = (function () {
         };
         requestAnimationFrame(scrollFunc);
     };
+    AppComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: 'improvdatabase',
+            templateUrl: '../template/app.component.html',
+            animations: [
+                anim_util_1.DialogAnim.dialog,
+                anim_util_1.ToggleAnim.fade,
+                anim_util_1.ToggleAnim.bubble,
+                anim_util_1.ShrinkAnim.vertical
+            ]
+        }),
+        __param(0, core_1.Inject(constants_1.CONFIG_TOKEN)),
+        __metadata("design:paramtypes", [config_1.Config,
+            core_1.Renderer2,
+            router_1.Router,
+            router_1.ActivatedRoute,
+            app_service_1.AppService,
+            user_service_1.UserService,
+            common_1.PathLocationStrategy,
+            app_http_1.AppHttp])
+    ], AppComponent);
     return AppComponent;
 }());
-AppComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: 'improvplus',
-        templateUrl: '../template/app.component.html',
-        animations: [
-            anim_util_1.DialogAnim.dialog,
-            anim_util_1.ToggleAnim.fade,
-            anim_util_1.ToggleAnim.bubble,
-            anim_util_1.ShrinkAnim.vertical
-        ]
-    }),
-    __param(0, core_1.Inject(constants_1.CONFIG_TOKEN)),
-    __metadata("design:paramtypes", [config_1.Config,
-        core_1.Renderer2,
-        router_1.Router,
-        router_1.ActivatedRoute,
-        app_service_1.AppService,
-        user_service_1.UserService,
-        common_1.PathLocationStrategy,
-        app_http_1.AppHttp])
-], AppComponent);
 exports.AppComponent = AppComponent;
 
 //# sourceMappingURL=app.component.js.map

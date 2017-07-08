@@ -13,24 +13,11 @@ const SubscriptionSchema = new mongoose.Schema({
     expiration: Date,
     role: Number,
     stripeCustomerId: String,
+    stripeSubscriptionId: String,
 
-    type: String, // either 'facilitator' or 'improviser'
+    pledge: Number,
 
-    // for team subscriptions
-    team: { type: mongoose.Schema.Types.ObjectId, ref: 'Team' },
-    subscriptions: Number, // the number of users purchased
-    children: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Subscription' }], // users that have inherited from this
-
-    // invites to users with their own subscriptions
-    invites: [{type: mongoose.Schema.Types.ObjectId, ref: 'Invite' }],
-    // invites to new users, this + children should be <= subscriptions
-    subscriptionInvites: [{type: mongoose.Schema.Types.ObjectId, ref: 'Invite'}],
-
-    // for user subscriptions
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-
-    // for users when they inherit from a team subscription
-    parent: { type: mongoose.Schema.Types.ObjectId, ref: 'Subscription' }
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 });
 
 SubscriptionSchema.methods.createChildSubscription = function(user) {

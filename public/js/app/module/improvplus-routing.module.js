@@ -10,7 +10,6 @@ var core_1 = require("@angular/core");
 var router_1 = require("@angular/router");
 var auth_guard_service_1 = require("../service/auth-guard.service");
 var dashboard_component_1 = require("../component/dashboard.component");
-var materials_library_component_1 = require("../component/materials-library.component");
 var help_component_1 = require("../component/help.component");
 var unauthorized_component_1 = require("../component/unauthorized.component");
 var game_database_component_1 = require("../component/game-database.component");
@@ -47,20 +46,6 @@ var routes = [
                         component: dashboard_component_1.DashboardComponent,
                         data: {
                             action: 'dashboard_page_view'
-                        }
-                    },
-                    {
-                        path: 'materials',
-                        component: materials_library_component_1.MaterialsLibraryComponent,
-                        data: {
-                            action: 'material_page_view'
-                        }
-                    },
-                    {
-                        path: 'materials/:packageSlug',
-                        component: materials_library_component_1.MaterialsLibraryComponent,
-                        data: {
-                            action: 'material_page_view'
                         }
                     },
                     {
@@ -161,14 +146,14 @@ var routes = [
 var ImprovPlusRoutingModule = (function () {
     function ImprovPlusRoutingModule() {
     }
+    ImprovPlusRoutingModule = __decorate([
+        core_1.NgModule({
+            imports: [router_1.RouterModule.forChild(routes)],
+            exports: [router_1.RouterModule]
+        })
+    ], ImprovPlusRoutingModule);
     return ImprovPlusRoutingModule;
 }());
-ImprovPlusRoutingModule = __decorate([
-    core_1.NgModule({
-        imports: [router_1.RouterModule.forChild(routes)],
-        exports: [router_1.RouterModule]
-    })
-], ImprovPlusRoutingModule);
 exports.ImprovPlusRoutingModule = ImprovPlusRoutingModule;
 ;
 

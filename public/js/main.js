@@ -3,10 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var platform_browser_dynamic_1 = require("@angular/platform-browser-dynamic");
 var app_module_1 = require("./module/app.module");
 var constants_1 = require("./constants");
-var promise_polyfill_1 = require("promise-polyfill");
+var es6_promise_1 = require("es6-promise");
 require("whatwg-fetch");
 if (!window.Promise) {
-    window.Promise = promise_polyfill_1.default;
+    window.Promise = es6_promise_1.Promise;
 }
 fetch('/config').then(function (response) {
     response.json().then(function (configData) {

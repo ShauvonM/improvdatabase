@@ -53,27 +53,27 @@ var ChangePasswordComponent = (function () {
             });
         }
     };
+    __decorate([
+        core_1.HostBinding('class.dialog-container'),
+        core_1.HostBinding('class.show'),
+        __metadata("design:type", Boolean)
+    ], ChangePasswordComponent.prototype, "isDialog", void 0);
+    ChangePasswordComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: "change-password",
+            templateUrl: '../template/change-password.component.html',
+            animations: [
+                anim_util_1.DialogAnim.dialog
+            ]
+        }),
+        __metadata("design:paramtypes", [app_component_1.AppComponent,
+            router_1.Router,
+            router_1.ActivatedRoute,
+            user_service_1.UserService])
+    ], ChangePasswordComponent);
     return ChangePasswordComponent;
 }());
-__decorate([
-    core_1.HostBinding('class.dialog-container'),
-    core_1.HostBinding('class.show'),
-    __metadata("design:type", Boolean)
-], ChangePasswordComponent.prototype, "isDialog", void 0);
-ChangePasswordComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: "change-password",
-        templateUrl: '../template/change-password.component.html',
-        animations: [
-            anim_util_1.DialogAnim.dialog
-        ]
-    }),
-    __metadata("design:paramtypes", [app_component_1.AppComponent,
-        router_1.Router,
-        router_1.ActivatedRoute,
-        user_service_1.UserService])
-], ChangePasswordComponent);
 exports.ChangePasswordComponent = ChangePasswordComponent;
 
 //# sourceMappingURL=change-password.component.js.map

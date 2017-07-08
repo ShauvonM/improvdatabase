@@ -16,8 +16,8 @@ import { UserService } from '../service/user.service';
 @Injectable()
 export class AppHttp {
 
-    private TOKEN_STORAGE_KEY = 'improvplus_token';
-    private EXPIRATION_STORAGE_KEY = 'improvplus_tokenExpires';
+    private TOKEN_STORAGE_KEY = 'improvdatabase_token';
+    private EXPIRATION_STORAGE_KEY = 'improvdatabase_tokenExpires';
 
     private token: string;
     private tokenExpires: number;

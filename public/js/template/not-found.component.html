@@ -1,6 +1,6 @@
 <div class="toolbar" [class.on]="(pageStart - _app.scrollpos) <= 20">
     <div class="toolbar-row">
-        <iplus class="white" (click)="login()" *ngIf="!_app.loaderVisible"></iplus>
+        <logo class="white" (click)="login()" *ngIf="!_app.loaderVisible"></logo>
     </div>
 </div>
 
@@ -16,7 +16,7 @@
         </p>
 
         <div class="columns">
-            <a (click)="goback()" class="button brackets">Go Back</a>
+            <a (click)="goback()" class="button raised">Go Back</a>
 
             <a (click)="dashboard()" class="button brackets" *ngIf="_app.user">Dashboard</a>
         </div>

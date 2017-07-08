@@ -10,13 +10,10 @@ import { API } from '../constants';
 import { Util } from '../util/util';
 
 import { User } from "../model/user";
+import { Subscription } from '../model/subscription';
 import { Team } from '../model/team';
 import { Purchase } from '../model/purchase';
 import { Invite } from '../model/invite';
-
-// import { TeamService } from '../app/service/team.service';
-
-import { Library } from '../model/library';
 
 class LoginResponse {
     user: User;
@@ -27,7 +24,7 @@ class LoginResponse {
 @Injectable()
 export class UserService {
 
-    private USER_STORAGE_KEY = 'improvplus_user';
+    private USER_STORAGE_KEY = 'improvdatabase_user';
 
     loggedInUser: User;
 
@@ -348,6 +345,21 @@ export class UserService {
                 });
         }
         return this._subscriptionPromise;
+    }
+
+    /**
+     * Update the user's pledge level
+     */
+    updatePledge(pledge: string, token?: any): Promise<Subscription> {
+        return this.http.put(API.userPledge(this.loggedInUser._id), 
+                { pledge: pledge, stripeToken: token })
+            .toPromise()
+            .then(response => {
+                let sub = response.json() as Subscription;
+                this.loggedInUser.subscription = sub;
+                this.saveUserData(this.loggedInUser);
+                return sub;
+            });
     }
 
 }

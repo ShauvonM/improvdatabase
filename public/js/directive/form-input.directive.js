@@ -77,36 +77,36 @@ var FormInputDirective = (function () {
     FormInputDirective.prototype.clickHelp = function () {
         this.helpClicked.emit(true);
     };
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], FormInputDirective.prototype, "error", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], FormInputDirective.prototype, "asterisk", void 0);
+    __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], FormInputDirective.prototype, "helpLink", void 0);
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", core_1.EventEmitter)
+    ], FormInputDirective.prototype, "helpClicked", void 0);
+    FormInputDirective = __decorate([
+        core_1.Directive({
+            selector: '[formInput]',
+            host: {
+                '(focus)': 'focus()',
+                '(blur)': 'blur()',
+                '(input)': 'input()'
+            }
+        }),
+        __metadata("design:paramtypes", [core_1.ElementRef,
+            core_1.Renderer2])
+    ], FormInputDirective);
     return FormInputDirective;
 }());
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], FormInputDirective.prototype, "error", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Boolean)
-], FormInputDirective.prototype, "asterisk", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], FormInputDirective.prototype, "helpLink", void 0);
-__decorate([
-    core_1.Output(),
-    __metadata("design:type", core_1.EventEmitter)
-], FormInputDirective.prototype, "helpClicked", void 0);
-FormInputDirective = __decorate([
-    core_1.Directive({
-        selector: '[formInput]',
-        host: {
-            '(focus)': 'focus()',
-            '(blur)': 'blur()',
-            '(input)': 'input()'
-        }
-    }),
-    __metadata("design:paramtypes", [core_1.ElementRef,
-        core_1.Renderer2])
-], FormInputDirective);
 exports.FormInputDirective = FormInputDirective;
 
 //# sourceMappingURL=form-input.directive.js.map

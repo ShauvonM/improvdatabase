@@ -23,7 +23,7 @@ export class DropdownOption {
 
 @Component({
     moduleId: module.id,
-    selector: '.improvplus-editable-metadata',
+    selector: '.id-editable-metadata',
     templateUrl: '../template/view/editable-metadata.view.html'
 })
 export class EditableMetadataView implements OnInit, OnChanges {

@@ -1,11 +1,12 @@
 footer {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
-    @include abs(null, $page-bracket-width, 0, $page-bracket-width, 5);
+    position: relative;
+    z-index: 5;
     height: $toolbar-height;
-    padding: 0 ($toolbar-height / 2);
+    padding: 0 $paper-margin-horizontal;
     font-size: 13px;
     font-weight: 300;
 
@@ -13,5 +14,10 @@ footer {
         color: $color-text;
         text-decoration: underline;
         cursor: pointer;
+    }
+
+    @media #{$media-mobile} {
+        padding: 0 $std;
+        flex-wrap: wrap;
     }
 }

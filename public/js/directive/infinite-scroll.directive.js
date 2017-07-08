@@ -55,23 +55,23 @@ var InfiniteScrollDirective = (function () {
             this.load.emit(this.loadCount);
         }
     };
+    __decorate([
+        core_1.Output(),
+        __metadata("design:type", Object)
+    ], InfiniteScrollDirective.prototype, "load", void 0);
+    __decorate([
+        core_1.Input('disable'),
+        __metadata("design:type", Boolean)
+    ], InfiniteScrollDirective.prototype, "_disabled", void 0);
+    InfiniteScrollDirective = __decorate([
+        core_1.Directive({
+            selector: '[infiniteScroll]'
+        }),
+        __metadata("design:paramtypes", [core_1.ElementRef,
+            app_component_1.AppComponent])
+    ], InfiniteScrollDirective);
     return InfiniteScrollDirective;
 }());
-__decorate([
-    core_1.Output(),
-    __metadata("design:type", Object)
-], InfiniteScrollDirective.prototype, "load", void 0);
-__decorate([
-    core_1.Input('disable'),
-    __metadata("design:type", Boolean)
-], InfiniteScrollDirective.prototype, "_disabled", void 0);
-InfiniteScrollDirective = __decorate([
-    core_1.Directive({
-        selector: '[infiniteScroll]'
-    }),
-    __metadata("design:paramtypes", [core_1.ElementRef,
-        app_component_1.AppComponent])
-], InfiniteScrollDirective);
 exports.InfiniteScrollDirective = InfiniteScrollDirective;
 
 //# sourceMappingURL=infinite-scroll.directive.js.map

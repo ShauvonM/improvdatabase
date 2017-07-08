@@ -25,7 +25,7 @@ import { DialogAnim, ToggleAnim, ShrinkAnim } from '../util/anim.util';
 
 @Component({
     moduleId: module.id,
-    selector: 'improvplus',
+    selector: 'improvdatabase',
     templateUrl: '../template/app.component.html',
     animations: [
         DialogAnim.dialog,
@@ -55,8 +55,6 @@ export class AppComponent implements OnInit {
     showMenu: boolean = false;
     showFullscreen: boolean = false;
 
-    whiteBrackets: boolean = false;
-
     private _teamCount: number;
     private _teamId: string;
 
@@ -83,6 +81,8 @@ export class AppComponent implements OnInit {
     toastMessage: string;
     private toastMessageQueue: string[] = [];
 
+    curtainText: string;
+
     constructor(
         @Inject(CONFIG_TOKEN) config: Config,
 
@@ -103,23 +103,21 @@ export class AppComponent implements OnInit {
         this.router.events.filter(event => event instanceof NavigationStart).subscribe(event => {
             this.backgroundVisible = true;
             this.backgroundRequested = false;
-            this.showWhiteBrackets(false);
             this.closeOverlays();
-            this.showLoader();
-        });
-
-        this.router.events.filter(event => event instanceof NavigationEnd).subscribe(event => {
-            if (!this.backgroundRequested) {
-                this.backgroundVisible = false;
-            }
-            this.hideLoader();
 
             if ((<NavigationStart> event).url.indexOf('/app') > -1) {
                 this.inApp = true;
             } else {
                 this.inApp = false;
             }
-        })
+        });
+
+        this.router.events.filter(event => event instanceof NavigationEnd).subscribe(event => {
+            if (!this.backgroundRequested) {
+                this.backgroundVisible = false;
+            }
+            this.setCurtainText('');
+        });
 
         this.setUser(this.userService.getLoggedInUser());
 
@@ -196,10 +194,6 @@ export class AppComponent implements OnInit {
         setTimeout(() => {
             this.backgroundVisible = show;
         }, 50);
-    }
-
-    showWhiteBrackets(show: boolean): void {
-        this.whiteBrackets = show;
     }
 
     setUser(user: User): void {
@@ -349,6 +343,10 @@ export class AppComponent implements OnInit {
         } else {
             this.pathLocationStrategy.pushState({}, '', path, '');
         }
+    }
+
+    setCurtainText(text: string): void {
+        this.curtainText = text;
     }
 
     scrollTo(to: number, duration?: number) {

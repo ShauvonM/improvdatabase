@@ -21,17 +21,17 @@ var VideosComponent = (function () {
     }
     VideosComponent.prototype.ngOnInit = function () {
     };
+    VideosComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: "videos",
+            templateUrl: "../template/videos.component.html"
+        }),
+        __metadata("design:paramtypes", [app_component_1.AppComponent,
+            router_1.Router])
+    ], VideosComponent);
     return VideosComponent;
 }());
-VideosComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: "videos",
-        templateUrl: "../template/videos.component.html"
-    }),
-    __metadata("design:paramtypes", [app_component_1.AppComponent,
-        router_1.Router])
-], VideosComponent);
 exports.VideosComponent = VideosComponent;
 
 //# sourceMappingURL=videos.component.js.map

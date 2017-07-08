@@ -1,254 +1,80 @@
 <marketing-toolbar [on]="(_app.scrollpos) > 20" [onWhenOpen]="true"></marketing-toolbar>
 
-<landing-hero [showContent]="false" [video]="false"></landing-hero>
+<landing-hero [showContent]="false"></landing-hero>
 
 <div class="page" #page>
 
     <div class="blackbox center">
-        <h2><span class="light">find your path to</span> <strong>plus</strong></h2>
-        <p>Answer three simple questions and you'll have <span class="light">improv</span><strong>plus</strong></p>
+        <h2><span class="light">yes</span> <strong>and</strong></h2>
+        <p>Register an account on the Improv Database and you can get all up in there.</p>
     </div>
 
-
-    <!-- step 1: who are you? -->
-    <div class="block center" [@bubbleSlow]>
-        
-        <div class="card">
-            1. Set up your account.
-        </div>
-
-        <div class="card-list">
-
-            <div class="card red brackets clickable" bracketCard #facilitatorCard>
-
-                <i class="fa fa-book"></i>
-
-                <div class="body-default">
-                    <p>Let's start with the email and password you want to use for your new Facilitator account.</p>
-                    
-                    <input name="email"
-                        [(ngModel)]="email"
-                        (input)="emailInput()"
-                        placeholder="Email"
-                        formInput
-                        required
-                        autocomplete="off"
-                        type="text" />
-                    <span class="error" *ngIf="emailError">{{emailError}}</span>
-                    
-                    <input name="password" 
-                        [(ngModel)]="password"
-                        placeholder="Password"
-                        formInput
-                        required
-                        autocomplete="off"
-                        type="password" />
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <i class="fa fa-chevron-down huge text-shadow-2"
-            [class.text-red]="userType == 'facilitator'" 
-            [class.text-blue]="userType == 'improviser'" *ngIf="userType" [@bubble]></i>
-    </div>
-
-    <!-- step 2: yourself or your team -->
-    <div class="block center" *ngIf="userType" [@bubbleSlow]>
-        
-        <div class="card">
-            2. Who do you represent?
-        </div>
-
-        <div class="card clickable" (click)="reset()" *ngIf="!teamOption" [@bubble]>
-            <i class="fa fa-caret-up"></i> Start over?
-        </div>
-
-        <div class="card-list">
-
-            <div class="card brackets clickable" bracketCard 
-                    [class.red]="userType == 'facilitator'" 
-                    [class.blue]="userType == 'improviser'"
-                    #yourselfCard
-                    (click)="selectYourself()">
-
-                <i class="fa fa-user"></i>
-
-                <div class="body-default">
-                    <h4>Yourself</h4>
-
-                    <ul *ngIf="userType == 'facilitator'">
-                        <li>You conduct trainings yourself.</li>
-                        <li>You want to join a team that was already registered.</li>
-                        <li>You aren't sure (you can always register your team later).</li>
-                    </ul>
-
-                    <ul *ngIf="userType == 'improviser'">
-                        <li>You aren't part of a group right now.</li>
-	                    <li>You want to join an Improv Team that was already registered.</li>
-                        <li>You aren't sure (you can always register your team later).</li>
-                    </ul>
-                </div>
-
-                <div class="body-open">
-                    <p>Hello! What do we call you?</p>
-                    <input
-                        autocomplete="off" formInput name="userName" placeholder="Your Name" [(ngModel)]="userName" required type="text" />
-                </div>
-
-            </div>
-
-            <div class="card brackets clickable" bracketCard 
-                    [class.red]="userType == 'facilitator'" 
-                    [class.blue]="userType == 'improviser'"
-                    #yourTeamCard
-                    (click)="selectYourTeam()">
-
-                <i class="fa fa-users"></i>
-
-                <div class="body-default">
-                    <h4>Your Company</h4>
-
-                    <ul *ngIf="userType == 'facilitator'">
-                        <li>You want to share your ImprovPlus resources.</li>
-                        <li>You want to set up multiple user accounts.</li>
-                        <li>You want to collaborate with other members of your team.</li>
-                    </ul>
-
-                    <ul *ngIf="userType == 'improviser'">
-                        <li>You want to collaborate with your Improv Team.</li>
-                        <li>You want a collection of user accounts to share with your team.</li>
-                        <li>You want access to powerful tools to help your team practice and promote itself.</li>
-                    </ul>
-                </div>
-
-                <div class="body-open">
-                    <p>What should we call your team?</p>
-
-                    <input formInput
-                        name="teamName"
-                        placeholder="Company Name"
-                        [(ngModel)]="teamName"
-                        required
-                        (input)="teamInput($event)"
-                        autocomplete="off"
-                        type="text" />
-                    <span class="error" *ngIf="teamError">{{teamError}}</span>
-
-                    <p *ngIf="userType == 'facilitator'"><em>Feel free to use your company name here, and be as specific as possible. Think "Encom, Inc. HR Department" instead of just "HR Department."</em></p>
-                    
-                </div>
-            </div>
-
-        </div>
-
-        <i class="fa fa-chevron-down huge text-shadow-2"
-            [class.text-red]="userType == 'facilitator'" 
-            [class.text-blue]="userType == 'improviser'" *ngIf="teamOption" [@bubble]></i>
-
-    </div>
-
-    <!-- step 3: choose your package -->
-    <div class="block center" *ngIf="teamOption" [@bubbleSlow]>
+    <div class="block card-list center">
 
         <div class="card">
-            3. Which option is for you?
-        </div>
 
-        <div class="card clickable" (click)="reset()" *ngIf="!isFormValid()">
-            <i class="fa fa-caret-up"></i> Start over?
-        </div>
+            <i class="fa fa-user"></i>
 
-        <div class="card-list">
+            <!--<p>Let's get the important details first (you can fill in more info about yourself later).</p>-->
 
-            <div class="card brackets clickable {{package.color}}" bracketCard
-                *ngFor="let package of options"
-                (click)="selectPackage($event, package, packageCard)"
-                #packageCard>
+            <input
+                autocomplete="off"
+                formInput
+                name="userName"
+                placeholder="Your Name"
+                [(ngModel)]="userName"
+                type="text" />
 
-                <div class="body-default">
-                    <h4>{{package.name}}</h4>
+            <input name="email"
+                [(ngModel)]="email"
+                (input)="emailInput()"
+                placeholder="Email"
+                formInput
+                required
+                autocomplete="off"
+                type="text" />
+            <span class="error" *ngIf="emailError">{{emailError}}</span>
+            
+            <input name="password" 
+                [(ngModel)]="password"
+                placeholder="Password"
+                formInput
+                required
+                autocomplete="off"
+                type="password" />
 
-                    <ul>
-                        <li *ngFor="let desc of package.description">{{desc}}</li>
+            <!--<p>Pay what you want.</p>-->
 
-                        <li *ngIf="package._id != 'sub' && userType=='facilitator' && teamOption=='individual'">Includes a one-year subscription to the app.</li>
-                        <li *ngIf="package._id != 'sub' && userType=='facilitator' && teamOption=='team'">Includes {{config.fac_team_sub_count}} user subscriptions for you and your team.</li>
+            <div class="payment-info">
+                <form id="payment-form" #paymentForm="ngForm">
+                    <div class="form-row">
+                        <input name="pledge" 
+                            [(ngModel)]="pledge"
+                            placeholder="Monthly Pledge"
+                            [helpLink]="'Pay what you want.'"
+                            (helpClicked)="showPledgeInfo()"
+                            formInput
+                            autocomplete="off"
+                            type="text" />
 
-                        <li *ngIf="userType=='improviser' && teamOption=='team'">Includes {{config.improv_team_sub_count}} user subscriptions to share the love your team.</li>
-                    </ul>
-
-                    <h4>${{package.price}}</h4>
-                </div>
-
-                <div class="body-open left payment-info">
-                    <p><strong>{{package.name}}</strong> ${{package.price}}</p>
-
-                    <p>Now we just need your billing info. Don't worry - your information is secure through the whole process.</p>
-                    <form id="payment-form" *ngIf="selectedPackage == package" (ngSubmit)="submitPayment()" #paymentForm="ngForm">
-                        <div class="form-row">
-                            <label for="card-element">
-                                Credit or debit card number
-                            </label>
-                            <div id="card-element">
-                            <!-- a Stripe Element will be inserted here. -->
-                            </div>
-
-                            <!-- Used to display form errors -->
-                            <div class="StripeCardErrors" *ngIf="cardError">{{cardError}}</div>
+                        <label for="card-element">
+                            Credit or debit card number
+                        </label>
+                        <div id="card-element">
+                        <!-- a Stripe Element will be inserted here. -->
                         </div>
 
-                        <!--<div class="action right" *ngIf="!isPosting">
-                            <span class="button" (click)="showUser()">Back</span>
-                            <button class="button raised" [class.disabled]="!cardComplete || cardError">Submit Payment</button>
-                        </div>
+                        <!-- Used to display form errors -->
+                        <div class="StripeCardErrors" *ngIf="cardError">{{cardError}}</div>
 
-                        <div class="action right" *ngIf="isPosting">
-                            <div class="button"><i class="loading"></i></div>
-                        </div>-->
-                    </form>
-                </div>
+                        <label><em>Payment processing is all handled securely by Stripe, so your information is safe.</em></label>
+                        
+                    </div>
+                </form>
             </div>
 
-        </div>
 
-        <i class="fa fa-chevron-down huge text-shadow-2"
-            [class.text-red]="userType == 'facilitator'" 
-            [class.text-blue]="userType == 'improviser'"
-            *ngIf="selectedPackage" [@bubble]></i>
-
-    </div>
-
-    <!--<div class="block center" *ngIf="selectedPackage && !isFormValid()" [@bubble]>
-        <div class="card">
-            Make sure you have entered all of the information above, and we'll be ready to roll.
-        </div>
-    </div>-->
-
-    <!-- step 4: GO! -->
-    <div class="block center" *ngIf="selectedPackage" [@bubbleSlow]>
-
-        <div class="card">
-            4. Let's do this.
-        </div>
-
-        <div class="card clickable" (click)="reset()">
-            <i class="fa fa-caret-up"></i> Start over?
-        </div>
-
-        <div class="card-list">
-
-            <div class="card brackets clickable" bracketCard
-                [class.red]="userType == 'facilitator'" 
-                [class.blue]="userType == 'improviser'">
-
-                <i class="fa fa-rocket"></i>
-
-                <h4>Final Details</h4>
-
-                <p>Just to make sure we're all on the same page, you'll have to <a (click)="showTerms()">check out our terms</a> and give them the thumbs up. (We know, this sort of thing is boring, but we have to)</p>
+            <!--<p>Just to make sure we're all on the same page, you'll have to <a (click)="showTerms()">check out our terms</a> and give them the thumbs up.</p>
 
                 <p>
                     <label class="icon-choice">
@@ -256,22 +82,48 @@
                         <input type="checkbox" formSwitch class="inline-block" name="terms-accepted" [(ngModel)]="termsAccepted" />
                         <i class="fa fa-thumbs-o-up"></i>
                     </label>
-                </p>
+                </p>-->
 
-                <button class="button brackets" (click)="submitPayment()" [class.disabled]="!isFormValid()">Join</button>
+            <div class="button-group">
+                <button class="button raised" (click)="submitPayment()" [class.disabled]="!isFormValid()">Join</button>
             </div>
 
         </div>
 
     </div>
 
+
+</div>
+
+
+<div class="dialog-container" [class.show]="pledgeInfoDialogVisible">
+    <div class="dialog-dismiss" (click)="hidePledgeInfo()"></div>
+
+    <div class="dialog" [@dialog]="'default'" *ngIf="pledgeInfoDialogVisible">
+
+        <div class="dialog-content">
+            <h2>Pay what you want.</h2>
+            
+            <p>You can enter whatever you think this project is worth to you. $5.00? $1.00? $0.50? $0.00?</p>
+            <p>You certainly don't have to pay anything to use this app (though I do reserve the right to only allow paying users into certain areas to keep out ne'erdowells and trolls).</p>
+            <p>Your emotional and spiritual support is wonderful and they are what motivate me to keep working on this project, but a bit of financial support would be pretty helpful too. Keeping things running is not free, so even $0.10 / month would help me keep the lights on.</p>
+            <p>I don't want to get too preachy, but just keep in mind that I built and maintain this whole thing entirely by myself in my spare time.</p>
+            <p>Please note that the number you enter is a monthly pledge, so this amount will be charged to your card every month. You can change this amount at any time within your account.</p>
+
+        </div>
+
+        <div class="button-group">
+            <div class="button" (click)="hidePledgeInfo()">Okay Bye</div>
+        </div>
+
+    </div>
 </div>
 
 
 <div class="dialog-container" [class.show]="termsDialogVisible">
     <div class="dialog-dismiss" (click)="hideTerms()"></div>
 
-    <div class="dialog scroll" [@dialog]="'default'" *ngIf="termsDialogVisible">
+    <div class="dialog" [@dialog]="'default'" *ngIf="termsDialogVisible">
 
         <div class="dialog-content">
             <h2>Our Terms</h2>

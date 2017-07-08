@@ -179,13 +179,13 @@ var LibraryService = (function () {
         console.error('An error has occurred', error);
         return Promise.reject(error.message || error);
     };
+    LibraryService = __decorate([
+        core_1.Injectable(),
+        __metadata("design:paramtypes", [app_http_1.AppHttp,
+            user_service_1.UserService])
+    ], LibraryService);
     return LibraryService;
 }());
-LibraryService = __decorate([
-    core_1.Injectable(),
-    __metadata("design:paramtypes", [app_http_1.AppHttp,
-        user_service_1.UserService])
-], LibraryService);
 exports.LibraryService = LibraryService;
 
 //# sourceMappingURL=library.service.js.map

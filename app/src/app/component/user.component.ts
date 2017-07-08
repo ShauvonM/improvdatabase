@@ -20,14 +20,20 @@ import { Subscription } from '../../model/subscription';
 import { Purchase } from '../../model/purchase';
 import { Team } from '../../model/team';
 
+import { Util } from '../../util/util';
 import { TimeUtil } from '../../util/time.util';
+
+import { ShrinkAnim } from '../../util/anim.util';
 
 const MAX_ATTEMPTS = 5;
 
 @Component({
     moduleId: module.id,
     selector: "user",
-    templateUrl: "../template/user.component.html"
+    templateUrl: "../template/user.component.html",
+    animations: [
+        ShrinkAnim.height
+    ]
 })
 export class UserComponent implements OnInit, OnDestroy {
 
@@ -35,19 +41,14 @@ export class UserComponent implements OnInit, OnDestroy {
 
     tabs = [
         {
-            name: 'Your Account',
+            name: 'Details',
             id: 'user',
             icon: 'user'
         },
         {
-            name: 'Your Subscription',
+            name: 'Your Account',
             id: 'subscription',
             icon: 'id-card-o'
-        },
-        {
-            name: 'Purchase History',
-            id: 'purchases',
-            icon: 'money'
         }
     ];
     selectedTab: string = 'user';
@@ -70,6 +71,13 @@ export class UserComponent implements OnInit, OnDestroy {
 
     subscription: Subscription;
     purchases: Purchase[];
+
+    changePledgeShown: boolean;
+    pledge: string;
+
+    creditCard: any;
+    cardComplete: boolean;
+    cardError: string;
 
     constructor(
         private userService: UserService,
@@ -109,6 +117,7 @@ export class UserComponent implements OnInit, OnDestroy {
 
     selectTab(tab: TabData): void {
         this.selectedTab = tab.id;
+        this.changePledgeShown = false;
     }
 
     logout(): void {
@@ -148,5 +157,61 @@ export class UserComponent implements OnInit, OnDestroy {
 
     cancelSubscription(): void {
         this._app.toast("This button doesn't work yet.");
+    }
+
+    showChangePledge(): void {
+        this.pledge = this.subscription.pledge.toFixed(2);
+        this.changePledgeShown = true;
+
+        this.creditCard = Util.setupStripe(this._app.config.stripe, e => {
+            this.cardComplete = e.complete;
+
+            if (e.error) {
+                this.cardError = e.error.message;
+            } else {
+                this.cardError = '';
+            }
+        });
+
+        setTimeout(() => {
+            this.creditCard.mount('#card-element');
+        });
+    }
+
+    pledgeFormValid(): boolean {
+        return parseFloat(this.pledge) != this.subscription.pledge &&
+                (parseFloat(this.pledge) == 0 || this.cardComplete);
+    }
+
+    savePledge(): void {
+
+        if (parseFloat(this.pledge) != this.subscription.pledge) {
+
+            this.isPosting = true;
+
+            if (this.pledge && this.cardComplete) {
+                Util.getStripeToken(this._app.config.stripe, this.creditCard).then(result => {
+                    if (result.error) {
+                        this.cardError = result.error.message;
+                    } else {
+                        this._savePledge(result.token);
+                    }
+                });
+            } else {
+                this._savePledge();
+            }
+
+        } else {
+            this.changePledgeShown = false;
+        }
+
+    }
+
+    private _savePledge(token?: any): void {
+        this.userService.updatePledge(this.pledge, token).then(sub => {
+            this.subscription = sub;
+            this.changePledgeShown = false;
+            this.isPosting = false;
+        });
     }
 }

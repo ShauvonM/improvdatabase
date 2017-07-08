@@ -85,9 +85,9 @@ export class TeamService {
             .then(response => {
                 let invite = response.json() as Invite;
                 let teamToUpdate = this.findTeamById(team._id);
-                if (teamToUpdate) {
-                    teamToUpdate.subscription.invites.push(invite);
-                }
+                // if (teamToUpdate) {
+                //     teamToUpdate.subscription.invites.push(invite);
+                // }
                 
                 return invite;
             });
@@ -122,23 +122,6 @@ export class TeamService {
                 return team;
             })
     }
-    
-    fetchPurchases(team: Team): Promise<Purchase[]> {
-        return this.http.get(API.teamPurchases(team._id))
-            .toPromise()
-            .then(response => {
-                return response.json() as Purchase[];
-            });
-    }
-
-    fetchSubscription(team: Team): Promise<Subscription> {
-        return this.http.get(API.teamSubscription(team._id))
-            .toPromise()
-            .then(response => {
-                let team = response.json() as Team;
-                return team.subscription;
-            })
-    }
 
     fetchTeams(user?: User): Promise<User> {
         user = user || this.userService.getLoggedInUser();
@@ -153,13 +136,6 @@ export class TeamService {
 
                 return user;
             });
-    }
-
-    buySubscriptions(teamId: string, count: number, stripeToken: string): Promise<Subscription> {
-        return this.http.post(API.teamSubscription(teamId), {count: count, stripeToken: stripeToken}).toPromise()
-            .then(response => {
-                return response.json() as Subscription;
-            })
     }
 
 }

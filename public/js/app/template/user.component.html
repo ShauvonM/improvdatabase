@@ -16,10 +16,10 @@
         </span>
     </div>
 
-    <div class="paper has-brackets" *ngIf="user && selectedTab == 'user'">
+    <div class="paper" *ngIf="user && selectedTab == 'user'">
 
         <div class="content">
-            <user-form 
+            <user-form
                 [user]="user"
                 [isPosting]="isPosting"
                 [backText]="'Log Out'"
@@ -27,11 +27,9 @@
                 (valid)="submitEditUser($event)"></user-form>
         </div>
 
-        <div class="left-bracket"><h1><span class="light">improv</span><strong>plus</strong></h1></div>
-        <div class="right-bracket"><h1>your account</h1></div>
     </div>
 
-    <div class="paper has-brackets" *ngIf="subscription && selectedTab == 'subscription'">
+    <div class="paper" *ngIf="subscription && selectedTab == 'subscription'">
 
         <div class="card-list">
 
@@ -48,71 +46,45 @@
                 <div class="body">
                     <p>Activated {{getDate(subscription.start)}}</p>
 
-                    <p *ngIf="subscription.parent">Inherited from <strong>{{subscription.parent.team.name}}</strong></p>
-                    <p *ngIf="subscription.parent">When {{subscription.parent.team.name}}'s Subscription is renewed, yours will be too.</p>
+                    <p *ngIf="!changePledgeShown">${{subscription.pledge.toFixed(2)}} / Month (<a (click)="showChangePledge()">change</a>)</p>
+                    
+                    <div *ngIf="changePledgeShown" class="payment-info" [@shrinkHeight]>
+                        <form id="payment-form" #paymentForm="ngForm">
+                            <div class="form-row">
+                                <input name="pledge" 
+                                    [(ngModel)]="pledge"
+                                    placeholder="Monthly Pledge"
+                                    formInput
+                                    autocomplete="off"
+                                    type="text" />
+
+                                <label for="card-element">
+                                    Credit or debit card number (leave it blank if you're setting your pledge to 0)
+                                </label>
+                                <div id="card-element">
+                                <!-- a Stripe Element will be inserted here. -->
+                                </div>
+
+                                <!-- Used to display form errors -->
+                                <div class="StripeCardErrors" *ngIf="cardError">{{cardError}}</div>
+
+                                <label><em>Payment processing is all handled securely by Stripe, so your information is safe.</em></label>
+                                
+                            </div>
+                            <div class="button-group">
+                                <button *ngIf="!isPosting" class="button raised" [class.disabled]="!pledgeFormValid()" (click)="savePledge()">Save</button>
+                                <div *ngIf="isPosting" class="button"><i class="loading"></i></div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
                 <div class="action">
-                    <a (click)="cancelSubscription()" class="button" *ngIf="!userService.isExpired()">Cancel Your Subscription</a>
-                    <a (click)="cancelSubscription()" class="button" *ngIf="userService.isExpired()">Renew Your Subscription</a>
+                    <a (click)="cancelSubscription()" class="button">Delete Your Account</a>
                 </div>
             </div>
 
         </div>
 
-        <div class="left-bracket"><h1><span class="light">improv</span><strong>plus</strong></h1></div>
-        <div class="right-bracket"><h1>your subscription</h1></div>
-    </div>
-
-    <div class="paper has-brackets" *ngIf="purchases && selectedTab == 'purchases'">
-
-        <div class="card-list">
-
-            <div class="card"
-                *ngFor="let purchase of purchases">
-
-                <div class="top">
-                    <i class="fa fa-users" *ngIf="purchase.team" title="This purchase was made for your team."></i>
-                    <div class="content">
-                        <h4 *ngIf="purchase.team">{{purchase.team.name}}</h4>
-                        <h3>{{getDate(purchase.date)}}</h3>
-                        <h4>{{getTime(purchase.date)}}</h4>
-                    </div>
-                </div>
-                <div class="body">
-                    <div class="columns fill" *ngFor="let package of purchase.packages">
-                        <span>{{package.package.name}}</span>
-                        <span>${{package.price}}</span>
-                    </div>
-                    <div class="columns fill" *ngFor="let o of purchase.other">
-                        <span>{{o.description}}</span>
-                        <span>${{o.price}}</span>
-                    </div>
-
-                    <!--<div class="columns fill" *ngIf="purchase.packages">
-                        <div>
-                            <p><strong>{{purchase.package.name}}</strong></p>
-                            <p *ngIf="purchase.package.subscriptions == 1"><em>One-year App Subscription</em></p>
-                            <p *ngIf="purchase.package.subscriptions > 1"><em>{{purchase.package.subscriptions}} App Subscriptions</em></p>
-                            <p *ngIf="purchase.package.materials.length > 1"><em>{{purchase.package.materials.length}} Materials</em></p>
-                        </div>
-                        <p>${{purchase.package.price}}</p>
-                    </div>-->
-
-                    <div class="columns fill">
-                        <div>---</div>
-                    </div>
-
-                    <div class="columns fill">
-                        <span>Total:</span>
-                        <strong>${{purchase.total}}</strong>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="left-bracket"><h1><span class="light">improv</span><strong>plus</strong></h1></div>
-        <div class="right-bracket"><h1>your purchase history</h1></div>
     </div>
 
 </div>

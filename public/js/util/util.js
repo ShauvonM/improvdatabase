@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var stripe;
 var Util = (function () {
     function Util() {
     }
@@ -13,8 +14,8 @@ var Util = (function () {
         });
         return index;
     };
-    Util.setupStripe = function (stripeConfig) {
-        var stripe = Stripe(stripeConfig);
+    Util.setupStripe = function (stripeConfig, changeCallback) {
+        stripe = stripe || Stripe(stripeConfig);
         var elements = stripe.elements();
         var creditCard = elements.create('card', {
             // value: {postalCode: this.user.zip},
@@ -35,7 +36,14 @@ var Util = (function () {
                 }
             }
         });
+        if (changeCallback) {
+            creditCard.addEventListener('change', changeCallback);
+        }
         return creditCard;
+    };
+    Util.getStripeToken = function (stripeConfig, creditCard) {
+        stripe = stripe || Stripe(stripeConfig);
+        return stripe.createToken(creditCard); //.then(callback);
     };
     return Util;
 }());

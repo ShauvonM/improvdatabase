@@ -38,18 +38,18 @@ var TeamListComponent = (function () {
     TeamListComponent.prototype.getTime = function (date) {
         return time_util_1.TimeUtil.simpleTime(date);
     };
+    TeamListComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: "team-list",
+            templateUrl: "../template/team-list.component.html"
+        }),
+        __metadata("design:paramtypes", [app_component_1.AppComponent,
+            router_1.Router,
+            team_service_1.TeamService])
+    ], TeamListComponent);
     return TeamListComponent;
 }());
-TeamListComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: "team-list",
-        templateUrl: "../template/team-list.component.html"
-    }),
-    __metadata("design:paramtypes", [app_component_1.AppComponent,
-        router_1.Router,
-        team_service_1.TeamService])
-], TeamListComponent);
 exports.TeamListComponent = TeamListComponent;
 
 //# sourceMappingURL=team-list.component.js.map

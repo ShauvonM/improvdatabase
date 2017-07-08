@@ -13,11 +13,7 @@ exports.API = {
     user: '/api/user',
     validateUser: '/api/user/validate',
     invite: '/api/invite',
-    charge: '/charge',
     signup: '/signup',
-    packageConfig: '/packageConfig',
-    package: '/api/package',
-    materials: '/api/material',
     validateTeam: '/api/team/validate',
     updateUser: function (id) {
         return this.user + '/' + id;
@@ -37,12 +33,6 @@ exports.API = {
     demoteUser: function (teamId, userId) {
         return this.getTeam(teamId) + "/demote/" + userId;
     },
-    teamPurchases: function (teamId) {
-        return this.getTeam(teamId) + "/purchases";
-    },
-    teamSubscription: function (teamId) {
-        return this.getTeam(teamId) + "/subscription";
-    },
     cancelInvite: function (inviteId) {
         return this.invite + '/' + inviteId;
     },
@@ -57,6 +47,9 @@ exports.API = {
     },
     userSubscription: function (userId) {
         return this.user + "/" + userId + "/subscription";
+    },
+    userPledge: function (userId) {
+        return this.user + "/" + userId + "/pledge";
     },
     games: '/api/game',
     names: '/api/name',
@@ -90,33 +83,9 @@ exports.API = {
         return this.notes + "/" + noteId;
     },
     history: '/api/history',
-    userMaterials: function (userId) {
-        return this.updateUser(userId) + "/materials";
-    },
-    teamMaterials: function (teamId) {
-        return this.getTeam(teamId) + "/materials";
-    },
     team: '/api/team',
     getTeam: function (teamId) {
         return this.team + "/" + teamId;
-    },
-    getMaterial: function (id) {
-        return this.materials + "/" + id;
-    },
-    getPackage: function (id) {
-        return this.package + "/" + id;
-    },
-    materialVersion: function (id) {
-        return this.getMaterial(id) + "/version";
-    },
-    getMaterialVersion: function (materialId, versionId) {
-        return this.getMaterial(materialId) + "/version/" + versionId;
-    },
-    savePackagePackages: function (packageId) {
-        return this.getPackage(packageId) + "/packages";
-    },
-    savePackageMaterials: function (packageId) {
-        return this.getPackage(packageId) + "/materials";
     }
 };
 exports.PREFERENCE_KEYS = {

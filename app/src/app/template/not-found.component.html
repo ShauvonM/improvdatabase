@@ -16,9 +16,9 @@
         </p>
 
         <div class="columns">
-            <a (click)="goback()" class="button brackets">Go Back</a>
+            <a (click)="goback()" class="button" [class.raised]="!_app.user">Go Back</a>
 
-            <a (click)="dashboard()" class="button brackets" *ngIf="_app.user">Dashboard</a>
+            <a (click)="dashboard()" class="button raised" *ngIf="_app.user">Dashboard</a>
         </div>
     </div>
 
