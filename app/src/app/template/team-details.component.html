@@ -93,7 +93,7 @@
     </div>
 
     <!-- member list -->
-    <div class="paper" *ngIf="selectedTab == 'members' && team && subscription">
+    <div class="paper" *ngIf="selectedTab == 'members' && team">
 
         <div class="list">
             <div class="item id-user-card clickable" *ngFor="let user of [].concat(team.admins, team.members)"
@@ -106,7 +106,7 @@
                 (demoteUser)="demoteUser($event)">
             </div>
 
-            <div class="item clickable" *ngFor="let invite of [].concat(subscription.subscriptionInvites, subscription.invites)"
+            <!--<div class="item clickable" *ngFor="let invite of [].concat(subscription.subscriptionInvites, subscription.invites)"
                 [class.selected] = "invite === selectedInvite"
                 (click)="selectInvite(invite)">
 
@@ -133,7 +133,7 @@
                 <div class="action">
                     <div class="button" title="Cancel this invitation?!" *ngIf="isUserAdmin()" (click)="cancelInvite(invite)"><i class="fa fa-times"></i></div>
                 </div>
-            </div>
+            </div>-->
         </div>
 
         <div class="right">

@@ -11,8 +11,7 @@
 
     <div class="row">
         <span *ngIf="!user.subscription">No Subscription</span>
-        <span *ngIf="user.subscription && (!team || user.subscription.parent != team.subscription._id)"><i class="fa fa-id-card-o"></i> Subscription expires: {{_timeUtil.simpleDate(user.subscription.expiration)}}</span>
-        <span *ngIf="user.subscription && team && user.subscription.parent == team.subscription._id"><i class="fa fa-id-card-o"></i> Using Team Subscription</span>
+        <span *ngIf="user.subscription"><i class="fa fa-id-card-o"></i> Subscription expires: {{_timeUtil.simpleDate(user.subscription.expiration)}}</span>
     </div>
 </div>
 
