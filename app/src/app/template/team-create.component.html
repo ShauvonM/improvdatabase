@@ -1,0 +1,37 @@
+<div class="toolbar"
+    [class.on]="_app.toolbarVisible"
+    [tools]="_tools"
+    [title]="'Register a Team'"
+    ></div>
+
+<div class="page">
+
+    <div class="card-list center">
+        <div class="card">
+
+            <i class="fa fa-users"></i>
+            
+            <input
+                autocomplete="off"
+                formInput
+                required
+                name="teamName"
+                placeholder="Team Name"
+                [(ngModel)]="teamName"
+                type="text" />
+            <span class="error" *ngIf="nameError">{{nameError}}</span>
+
+            <div class="button-group">
+                <button
+                    *ngIf="!isPosting"
+                    class="button raised"
+                    (click)="createTeam()"
+                    [class.disabled]="!teamName || nameError">Register</button>
+
+                <button class="button" *ngIf="isPosting"><i class="loading"></i></button>
+            </div>
+
+        </div>
+    </div>
+
+</div>

@@ -189,7 +189,10 @@ export class AppComponent implements OnInit {
         this.showBackdrop = false;
     }
 
-    showBackground(show: boolean): void {
+    showBackground(show?: boolean): void {
+        if (show == undefined) {
+            show = true;
+        }
         this.backgroundRequested = true;
         setTimeout(() => {
             this.backgroundVisible = show;

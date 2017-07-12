@@ -59,6 +59,16 @@ var TeamService = (function () {
             });
         }
     };
+    TeamService.prototype.createTeam = function (team) {
+        var _this = this;
+        return this.http.post(constants_1.API.team, team)
+            .toPromise()
+            .then(function (response) {
+            var team = response.json();
+            _this.addTeam(team);
+            return team;
+        });
+    };
     TeamService.prototype.saveTeam = function (team) {
         var _this = this;
         return this.http.put(constants_1.API.getTeam(team._id), team)

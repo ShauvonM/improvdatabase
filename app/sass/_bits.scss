@@ -453,6 +453,9 @@ logo {
         margin: 0;
         height: 100%;
         box-sizing: border-box;
+        position: relative;
+        z-index: 2;
+        transition: opacity 100ms;
     }
 
     textarea {
@@ -460,7 +463,7 @@ logo {
     }
 
     .help {
-        @include abs(25px, $small, null, null, 2);
+        @include abs(25px, $small, null, null, 3);
         cursor: pointer;
         text-decoration: none;
         transition: opacity 250ms;
@@ -469,6 +472,17 @@ logo {
             opacity: 0;
             z-index: 0;
         }
+    }
+
+    .prefix {
+        @include abs(26px, null, null, 0, 2);
+        transition: opacity 200ms;
+        color: $color-hr;
+        opacity: 0;
+    }
+
+    .prefix + input {
+        padding-left: ($std - ($small / 2));
     }
 
     & + .button-group {

@@ -132,6 +132,9 @@ var AppComponent = (function () {
     };
     AppComponent.prototype.showBackground = function (show) {
         var _this = this;
+        if (show == undefined) {
+            show = true;
+        }
         this.backgroundRequested = true;
         setTimeout(function () {
             _this.backgroundVisible = show;

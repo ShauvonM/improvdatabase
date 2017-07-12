@@ -28,8 +28,8 @@ const config = require('./config')(),
 
 module.exports = {
 
-    fromAddress: 'contact@improvpl.us',
-    contactAddress: 'contact@improvpl.us',
+    fromAddress: 'contact@improvdatabase.com',
+    contactAddress: 'contact@improvdatabase.com',
 
     send: (sendObject, callback) => {
 
@@ -40,22 +40,22 @@ module.exports = {
             sendgrid = require('sendgrid')(config.sendgrid.key),
 
             from_email = new sendgridHelper.Email(sendObject.from || module.exports.fromAddress,
-                                                sendObject.fromName || 'ImprovPlus'),
+                                                sendObject.fromName || 'The Improv Database'),
             to_email = new sendgridHelper.Email(sendObject.to || module.exports.contactAddress, 
-                                                sendObject.toName || 'Proprietors of ImprovPlus'),
+                                                sendObject.toName || 'The Improv Database'),
             //content = new sendgridHelper.Content(type, sendObject.body),
             content = sendObject.content,
             renderPromise;
 
         if (!content.baseUrl) {
-            content.baseUrl = 'https://improvpl.us';
+            content.baseUrl = 'https://www.improvdatabase.com';
         }
 
         if (!content.afterAction) {
             content.afterAction = `
                 <p>Sincerely,</p>
 
-                <p>The Proprietors of <span class="light">improv</span><strong>plus</strong>.</p>
+                <p>Shauvon McGill, Creator</p>
             `;
         }
 

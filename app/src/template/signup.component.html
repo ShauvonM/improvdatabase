@@ -5,8 +5,10 @@
 <div class="page" #page>
 
     <div class="blackbox center">
-        <h2><span class="light">yes</span> <strong>and</strong></h2>
-        <p>Register an account on the Improv Database and you can get all up in there.</p>
+        <h1><span class="light">yes</span> <strong>and</strong></h1>
+
+        <p *ngIf="!inviteId">Register an account on the Improv Database and you can get all up in there.</p>
+        <p *ngIf="inviteId">You've been invited!</p>
     </div>
 
     <div class="block card-list center">
@@ -17,18 +19,10 @@
 
             <!--<p>Let's get the important details first (you can fill in more info about yourself later).</p>-->
 
-            <input
-                autocomplete="off"
-                formInput
-                name="userName"
-                placeholder="Your Name"
-                [(ngModel)]="userName"
-                type="text" />
-
             <input name="email"
                 [(ngModel)]="email"
                 (input)="emailInput()"
-                placeholder="Email"
+                [placeholder]="inviteId ? 'Verify your Email' : 'Email'"
                 formInput
                 required
                 autocomplete="off"
@@ -42,6 +36,14 @@
                 required
                 autocomplete="off"
                 type="password" />
+                
+            <input
+                autocomplete="off"
+                formInput
+                name="userName"
+                placeholder="Your Name"
+                [(ngModel)]="userName"
+                type="text" />
 
             <!--<p>Pay what you want.</p>-->
 
@@ -52,6 +54,7 @@
                             [(ngModel)]="pledge"
                             placeholder="Monthly Pledge"
                             [helpLink]="'Pay what you want.'"
+                            [prefix]="'$'"
                             (helpClicked)="showPledgeInfo()"
                             formInput
                             autocomplete="off"
@@ -67,11 +70,13 @@
                         <!-- Used to display form errors -->
                         <div class="StripeCardErrors" *ngIf="cardError">{{cardError}}</div>
 
-                        <label><em>Payment processing is all handled securely by Stripe, so your information is safe.</em></label>
+                        <label><em>Payment processing is all handled securely by <a href="https://www.stripe.com" target="_blank">Stripe</a>, so your information is safe.</em></label>
                         
                     </div>
                 </form>
             </div>
+
+            <p class="error" *ngIf="inviteError" [@shrinkHeight]>{{inviteError}}</p>
 
 
             <!--<p>Just to make sure we're all on the same page, you'll have to <a (click)="showTerms()">check out our terms</a> and give them the thumbs up.</p>
@@ -85,7 +90,13 @@
                 </p>-->
 
             <div class="button-group">
-                <button class="button raised" (click)="submitPayment()" [class.disabled]="!isFormValid()">Join</button>
+                <button
+                    *ngIf="!isPosting"
+                    class="button raised"
+                    (click)="submitPayment()"
+                    [class.disabled]="!isFormValid()">Join</button>
+
+                <button class="button" *ngIf="isPosting"><i class="loading"></i></button>
             </div>
 
         </div>

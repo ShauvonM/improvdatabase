@@ -2,14 +2,14 @@ const mongoose = require('mongoose'),
 
     util = require('../util'),
 
-    User = require('./user.model');
+    User = require('./user.model'),
+    Invite = require('./invite.model');
 
 const TeamSchema = new mongoose.Schema({
     name: String,
     description: String,
     phone: String,
     email: String,
-    company: String,
     address: String,
     city: String,
     state: String,
@@ -28,31 +28,8 @@ const TeamSchema = new mongoose.Schema({
     admins: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     members: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 
-    subscription: { type: mongoose.Schema.Types.ObjectId, ref: 'Subscription' },
-    purchases: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Purchase' }]
+    invites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Invite' }]
 });
-
-TeamSchema.methods.addSubscription = function(role, stripeCustomerId, subCount, expires) {
-    if (!expires) {
-        expires = new Date();
-        expires.setFullYear(expires.getFullYear() + 100);
-    }
-    let expiration = Date.now();
-    if (typeof(expires) == 'object' && expires.getTime) {
-        expiration = expires.getTime();
-    }
-    return mongoose.model('Subscription').create({
-        team: this._id,
-        role: role,
-        expiration: expiration,
-        subscriptions: subCount || 1,
-        stripeCustomerId: stripeCustomerId
-    }).then(sub => {
-        this.subscription = sub;
-
-        return this.save();
-    })
-}
 
 TeamSchema.methods.addUser = function(user) {
     this.members = util.addToObjectIdArray(this.members, user);

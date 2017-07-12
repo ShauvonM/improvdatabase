@@ -3,9 +3,7 @@ const mongoose = require('mongoose'),
 
     util = require('../util'),
 
-    Team = require('./team.model');
     User = require('./user.model');
-    Invite = require('./invite.model');
 
 // track a user's account status in the app
 const SubscriptionSchema = new mongoose.Schema({

@@ -2,7 +2,6 @@ const express = require('express'),
       router = express.Router(),
       mongoose = require('mongoose'),
 
-      PackageConfig = require('../models/packageconfig.model'),
       roles = require('../roles'),
       util = require('../util'),
       
@@ -52,7 +51,7 @@ router.get('/*', function(req, res, next) {
   let template = process.env.NODE_ENV == 'production' || process.env.NODE_ENV == 'qa' ? 'index-prod' : 'index-dev';
 
   res.render(template, {
-       title: 'improvplus',
+       title: config.title,
        prod: process.env.NODE_ENV == 'production',
        baseHref: '/'
    });

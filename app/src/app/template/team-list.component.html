@@ -6,7 +6,6 @@
 
 <div class="page">
 
-    <div class="paper">
 
         <div class="card-list">
 
@@ -26,10 +25,6 @@
                         <span>Members</span>
                         <span>{{team.admins.length + team.members.length}}</span>
                     </div>
-                    <div class="columns fill data-row">
-                        <span>Available Subscriptions</span>
-                        <span>{{team.subscription.subscriptions - team.subscription.children.length}}</span>
-                    </div>
                 </div>
             </div>
 
@@ -38,25 +33,19 @@
                 *ngFor="let team of memberOfTeams">
 
                 <div class="top">
-                    <i class="fa fa-lock" title="You are not an admin of this team."></i>
                     <div class="content">
                         <h3>{{team.name}}</h3>
+                        <h4>Registered {{getDate(team.dateAdded)}}</h4>
                     </div>
                 </div>
                 <div class="body">
                     <div class="columns fill data-row">
-                        <span>Created</span>
-                        <span>{{getDate(team.dateAdded)}}</span>
-                    </div>
-                    <div class="columns fill data-row">
                         <span>Members</span>
-                        <span>{{(team.admins.length || 0) + (team.members.length + 0)}}</span>
+                        <span>{{team.admins.length + team.members.length}}</span>
                     </div>
                 </div>
             </div>
 
         </div>
-
-    </div>
 
 </div>

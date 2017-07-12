@@ -31,7 +31,7 @@ const routes: Routes = [
     },
     {
         path: 'invite/:id',
-        component: InviteComponent
+        component: SignupComponent
     },
     {
         path: 'resetMyPassword/:token',

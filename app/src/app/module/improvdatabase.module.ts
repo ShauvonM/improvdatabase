@@ -28,6 +28,7 @@ import { GameDetailsComponent } from '../component/game-details.component';
 import { HelpComponent } from "../component/help.component";
 import { LegalComponent } from "../component/legal.component";
 import { AdminComponent } from '../component/admin.component';
+import { TeamCreateComponent } from '../component/team-create.component';
 import { TeamListComponent } from '../component/team-list.component';
 import { TeamDetailsComponent } from '../component/team-details.component';
 import { VideosComponent } from '../component/videos.component';
@@ -64,6 +65,7 @@ import { GameNoteView } from '../view/game-note.view';
         ContactComponent,
         UserComponent,
         HelpComponent,
+        TeamCreateComponent,
         TeamListComponent,
         TeamDetailsComponent,
         GameDetailsComponent,

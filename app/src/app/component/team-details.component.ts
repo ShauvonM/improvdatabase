@@ -37,7 +37,19 @@ export class TeamDetailsComponent implements OnInit {
     @Input() team: Team;
     user: User;
 
-    tabs: TabData[];
+    tabs: TabData[] = [
+        {
+            name: 'Team Details',
+            id: 'team',
+            icon: 'users'
+        },
+        {
+            name: 'Members',
+            id: 'members',
+            icon: 'user-plus'
+        }
+    ];
+
     selectedTab: string = 'team';
 
     private adminActions = [
@@ -49,8 +61,6 @@ export class TeamDetailsComponent implements OnInit {
     ]
 
     address: string;
-    remainingSubs: number;
-    pendingInvites: number;
 
     selectedUser: User;
 
@@ -136,32 +146,6 @@ export class TeamDetailsComponent implements OnInit {
         this.team = team;
 
         this.title = team.name;
-
-        this.tabs = [
-            {
-                name: 'Company Details',
-                id: 'team',
-                icon: 'users'
-            },
-            {
-                name: 'Members',
-                id: 'members',
-                icon: 'user-plus'
-            }
-        ];
-
-        if (this.can('team_purchases_view')) {
-            this.tabs.push({
-                name: 'Company Subscription',
-                id: 'subscription',
-                icon: 'id-card-o'
-            })
-            this.tabs.push({
-                name: 'Purchase History',
-                id: 'purchases',
-                icon: 'money'
-            })
-        }
     }
 
     renderDescription(): void {
@@ -190,11 +174,6 @@ export class TeamDetailsComponent implements OnInit {
 
     saveEditUrl(url: string): void {
         this.team.url = url;
-        this.teamService.saveTeam(this.team);
-    }
-
-    saveEditCompany(company: string): void {
-        this.team.company = company;
         this.teamService.saveTeam(this.team);
     }
 
@@ -264,6 +243,8 @@ export class TeamDetailsComponent implements OnInit {
 
         this.teamService.invite(this.team, this.inviteEmail)
             .then(invite => {
+                this.team.invites.push(invite);
+
                 this.isPosting = false;
                 this.inviteStatus = 'wait';
                 this.inviteModel = invite;
@@ -303,6 +284,11 @@ export class TeamDetailsComponent implements OnInit {
             () => {
                 this.userService.cancelInvite(invite).then(done => {
                     if (done) {
+                        let index = Util.indexOfId(this.team.invites, invite);
+
+                        if (index > -1) {
+                            this.team.invites.splice(index, 1);
+                        }
                     }
                 })
             });
@@ -326,57 +312,6 @@ export class TeamDetailsComponent implements OnInit {
             });
 
         });
-    }
-
-    showBuySubscriptionDialog: boolean;
-    showBuySubscriptionCC: boolean;
-    buySubCount: number;
-
-    buySubscription(): void {
-        // this._app.backdrop(true);
-
-        // this.showBuySubscriptionDialog = true;
-        // this.buySubCount = 0;
-
-        this._app.dialog('Not Ready Yet', 'We are terribly sorry, but this feature is not ready yet. If this is a problem, please contact us using the "request a feature" option in the App menu.');
-    }
-
-    cancelBuySubscriptionDialog(): void {
-        this._app.backdrop(false);
-        this.showBuySubscriptionDialog = false;
-    }
-
-    cardComplete: boolean;
-    cardError: string;
-
-    submitBuySubscriptions(): void {
-        this.showBuySubscriptionDialog = false;
-
-        setTimeout(() => {
-            this.showBuySubscriptionCC = true;
-
-            // let creditCard = Util.setupStripe(this._app.config.stripe);
-
-            // creditCard.addEventListener('change', (e: any) => {
-                
-            //     this.cardComplete = e.complete;
-
-            //     if (e.error) {
-            //         this.cardError = e.error.message;
-            //     } else {
-            //         this.cardError = '';
-            //     }
-            // });
-
-            // // setup the stripe credit card input
-            // setTimeout(() => {
-            //     creditCard.mount('#card-element');
-            // }, 100)
-        }, 300)
-    }
-
-    doBuySubscriptions(): void {
-        this.isPosting = true;
     }
 
     getUserName(user: User): string {

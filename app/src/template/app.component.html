@@ -37,19 +37,22 @@
 
         <hr *ngIf="userService.can('team_page_view')" />
 
-        <a routerLink="/app/teams" routerLinkActive="active" class="nav-item"
-            *ngIf="userService.can('team_page_view') && _teamCount != 1">
-            <i class="fa fa-users"></i>
-
-            <span *ngIf="_teamCount > 1">Your Teams</span>
-            <span *ngIf="_teamCount == 0">Register a Team</span>
-
-        </a>
-
         <a routerLink="/app/team/{{_teamId}}" routerLinkActive="active" class="nav-item"
             *ngIf="userService.can('team_page_view') && _teamCount == 1">
             <i class="fa fa-users"></i>
             <span>Your Team</span>
+        </a>
+
+        <a routerLink="/app/teams" routerLinkActive="active" class="nav-item"
+            *ngIf="userService.can('team_page_view') && _teamCount > 1">
+            <i class="fa fa-users"></i>
+            <span *ngIf="_teamCount > 1">Your Teams</span>
+        </a>
+
+        <a routerLink="/app/team/create" routerLinkActive="active" class="nav-item"
+            *ngIf="userService.can('team_create')">
+            <i class="fa fa-plus-circle"></i>
+            <span>Register a Team</span>
         </a>
 
         <hr />
@@ -105,6 +108,8 @@
 <router-outlet></router-outlet>
 
 <div class="dialog-container" [class.show]="showDialog">
+    <div class="dialog-dismiss" (click)="onDialogDismiss()"></div>
+
     <div class="dialog" [@dialog]="'default'" *ngIf="showDialog">
         <div class="dialog-content">
             <h2>{{dialogTitle}}</h2>

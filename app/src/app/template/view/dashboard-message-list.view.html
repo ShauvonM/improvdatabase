@@ -6,7 +6,7 @@
 
         <div [innerHTML]="visibleMessage.body"></div>
 
-        <div class="action right">
+        <div class="button-group">
             <span class="button" (click)="dismissVisibleMessage()" *ngIf="!visibleMessage.notDismissable">Dismiss</span>
             <button class="button raised" (click)="visibleMessage.action()" *ngIf="visibleMessage.button">{{visibleMessage.button}}</button>
         </div>
@@ -15,7 +15,7 @@
 
     <div class="card full center" bracketCard #dashboardMessage *ngIf="visibleMessage.key == 'invite' && !inviteAccepted && !inviteRejected">
 
-        <h4>You have a pending Company Invite</h4>
+        <h4>You have a pending Team Invite</h4>
 
         <p *ngIf="invite.user.firstName">{{invite.user.firstName + ' ' + invite.user.lastName}} has invited you to join {{invite.team.name}}.</p>
 
@@ -23,27 +23,27 @@
 
         <p *ngIf="userService.isExpired()">You will be able to utilize one of {{invite.team.name}}'s subscriptions, which means you'll get full access to the app.</p>
 
-        <div class="action right" *ngIf="!isPosting">
+        <div class="button-group" *ngIf="!isPosting">
             <span class="button" (click)="rejectInvite()">Reject their offer</span>
             <span class="button raised" (click)="acceptInvite()">Join {{invite.team.name}}</span>
         </div>
 
-        <div class="action right" *ngIf="isPosting">
+        <div class="button-group" *ngIf="isPosting">
             <span class="button"><i class="loading"></i></span>
         </div>
 
     </div>
     <div class="card full center" bracketCard #dashboardMessage *ngIf="visibleMessage.key == 'invite' && inviteAccepted">
         <h4>Welcome to {{invite.team.name}}!</h4>
-        <p>You are now part of the Company. You now have access to any of the Company's resources, and you can collaborate with other members of your Company. View details about the Company using the app menu (the <logo></logo> logo up in the corner).</p>
-        <div class="action right">
+        <p>You are now part of the Team. You now have access to any of the Company's resources, and you can collaborate with other members of your Company. View details about the Company using the app menu (the <logo></logo> logo up in the corner).</p>
+        <div class="button-group">
             <span class="button" (click)="dismissInvite()">Dismiss</span>
         </div>
     </div>
     <div class="card full center" bracketCard #dashboardMessage *ngIf="visibleMessage.key == 'invite' && inviteRejected">
         <h4>So long, {{invite.team.name}}!</h4>
         <p>The Company will be notified that you have turned down their offer, and you won't be bothered by them anymore (unless they try to invite you again).</p>
-        <div class="action right">
+        <div class="button-group">
             <span class="button" (click)="dismissInvite()">Dismiss</span>
         </div>
     </div>
@@ -55,7 +55,7 @@
         <p>This is your dashboard. Check back here for important messages, updates, and other stuff.</p>
         <p>Click the <logo></logo> logo in the top left corner to open the App Menu. From there you can get anywhere you want to be.</p>
 
-        <div class="action right">
+        <div class="button-group">
             <span class="button" (click)="dismissVisibleMessage()">Dismiss</span>
         </div>
         
@@ -79,7 +79,7 @@
                     type="text" />
             </div>
 
-            <div class="action right">
+            <div class="button-group">
                 <span class="button pull-left" (click)="router.navigate(['/app/user'])">Edit your profile</span>
                 <span class="button" (click)="dismissVisibleMessage()">Dismiss</span>
 
@@ -118,7 +118,7 @@
                 </div>
             </div>
 
-            <div class="action right">
+            <div class="button-group">
                 <span class="button pull-left" (click)="router.navigate(['/app/user'])">Edit your profile</span>
                 <span class="button" (click)="dismissVisibleMessage()">Dismiss</span>
 

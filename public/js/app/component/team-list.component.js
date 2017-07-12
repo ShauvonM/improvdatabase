@@ -19,7 +19,7 @@ var TeamListComponent = (function () {
         this._app = _app;
         this._router = _router;
         this.teamService = teamService;
-        this.title = '<span class="light">your</span><strong>teams</strong>';
+        this.title = 'Your Teams';
         this._tools = [];
     }
     TeamListComponent.prototype.ngOnInit = function () {

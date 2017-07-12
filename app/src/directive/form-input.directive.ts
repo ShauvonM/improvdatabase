@@ -6,7 +6,8 @@ import {
     Input,
     Output,
     EventEmitter,
-    Renderer2
+    Renderer2,
+    ChangeDetectorRef
 } from '@angular/core';
 
 @Directive({
@@ -22,6 +23,7 @@ export class FormInputDirective implements OnInit, OnDestroy {
     @Input() error: string;
     @Input() asterisk: boolean = true;
     @Input() helpLink: string;
+    @Input() prefix: string;
 
     @Output() helpClicked: EventEmitter<boolean> = new EventEmitter();
 
@@ -31,9 +33,12 @@ export class FormInputDirective implements OnInit, OnDestroy {
     helpLinkElement: HTMLAnchorElement;
     placeholder: string;
 
+    prefixElement: HTMLSpanElement;
+
     constructor(
         el: ElementRef,
-        private renderer: Renderer2
+        private renderer: Renderer2,
+        private _changeDetector: ChangeDetectorRef
         ) {
         this.inputElement = el.nativeElement;
     }
@@ -72,6 +77,13 @@ export class FormInputDirective implements OnInit, OnDestroy {
             }
             this.divElement.appendChild(this.labelElement);
 
+            if (this.prefix) {
+                this.prefixElement = document.createElement('span');
+                this.prefixElement.className = 'prefix';
+                this.prefixElement.textContent = this.prefix;
+                this.divElement.insertBefore(this.prefixElement, this.inputElement);
+            }
+
             setTimeout(() => {
                 if (this.inputElement.value) {
                     this.focus();
@@ -86,11 +98,19 @@ export class FormInputDirective implements OnInit, OnDestroy {
 
     focus(): void {
         this.labelElement.className = 'active';
+
+        if (this.prefixElement) {
+            this.prefixElement.style.opacity = '1';
+        }
     }
 
     blur(): void {
         if (!this.inputElement.value) {
             this.labelElement.className = '';
+
+            if (this.prefixElement) {
+                this.prefixElement.style.opacity = '0';
+            }
         } else {
             this.focus();
         }

@@ -22,7 +22,9 @@ app.use(function(req, res, next) {
 
 // connect to MongoDB
 mongoose.Promise = Promise;
-mongoose.connect(config.mongodb.uri);
+mongoose.connect(config.mongodb.uri, {
+  useMongoClient: true
+});
 
 // view engine setup
 let hbs = exphbs.create({
@@ -50,7 +52,7 @@ app.all( '/api/*', function( req, res, next ) {
 
 app.use(morgan(':remote-addr :remote-user - :method :url :status :response-time ms - :res[content-length]', {
   skip: (req, res) => {
-    return req.path.match(/\.js|\.html|\.css|\.jpg|\.png|\.ico/);
+    return req.path.match(/\.js|\.map|\.html|\.css|\.jpg|\.png|\.ico|fonts\//);
   }
 }));
 

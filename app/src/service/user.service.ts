@@ -181,6 +181,24 @@ export class UserService {
         }
     }
 
+    addAdminTeam(team: Team): User {
+        let user = this.getLoggedInUser();
+        if (!user.adminOfTeams) {
+            user.adminOfTeams = [];
+        }
+        (<Team[]>user.adminOfTeams).push(team);
+        return user;
+    }
+
+    addTeam(team: Team): User {
+        let user = this.getLoggedInUser();
+        if (!user.memberOfTeams) {
+            user.memberOfTeams = [];
+        }
+        (<Team[]>user.memberOfTeams).push(team);
+        return user;
+    }
+
     getAdminTeams(): Team[] | string[] {
         return this.getLoggedInUser().adminOfTeams;
     }

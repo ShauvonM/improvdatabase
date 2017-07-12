@@ -24,6 +24,16 @@ gulp.task('compileAppSass', function() {
         .pipe(gulp.dest('./public/css'));
 });
 
+gulp.task('compileFontAwesome', function() {
+    return gulp.src('./app/fontawesome/font-awesome.scss')
+        .pipe(plumber({ errorHandler: handleError }))
+        .pipe(maps.init())
+        .pipe(sass())
+        .pipe(maps.write('./'))
+        .pipe(plumber.stop())
+        .pipe(gulp.dest('./public/css'));
+})
+
 gulp.task('tscompile', function() {
     return gulp.src(['./app/src/**/*.ts', '!./app/src/main-aot.ts'])
         .pipe(plumber({ errorHandler: handleError }))
@@ -47,7 +57,8 @@ function handleError(err) {
 gulp.task('watch', function () {
     gulp.watch('./app/**/*.ts', ['tscompile']);
     gulp.watch('./app/**/*.html', ['templateCopy']);
-    gulp.watch('./app/**/*.scss', ['compileAppSass']);
+    gulp.watch('./app/fontawesome/**/*.scss', ['compileFontAwesome']);
+    gulp.watch('./app/sass/**/*.scss', ['compileAppSass']);
 });
 
 gulp.task('build', ['compileAppSass', 'tscompile', 'templateCopy']);

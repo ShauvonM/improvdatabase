@@ -1,5 +1,4 @@
-import {Purchase} from './purchase';
-import {Subscription} from './subscription';
+import {Invite} from './invite';
 import {User} from './user';
 
 export class Team {
@@ -8,7 +7,6 @@ export class Team {
     description: string;
     phone: string;
     email: string;
-    company: string;
     address: string;
     city: string;
     state: string;
@@ -17,13 +15,15 @@ export class Team {
     url: string;
 
     dateAdded: Date;
+    addedUser: User;
+
     dateModified: Date;
+    modifiedUser: User;
 
     lookingForMembers: Boolean;
 
     admins: string[];
     members: string[];
 
-    subscription: Subscription;
-    purchases: Purchase[];
+    invites: Invite[];
 }

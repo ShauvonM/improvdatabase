@@ -13,9 +13,6 @@ const charge = require('../charge'),
 
 let databases = {
     'Invite': require('../../models/invite.model'),
-    'MaterialItem': require('../../models/material-item.model'),
-    'PackageConfig': require('../../models/packageconfig.model'),
-    'Package': require('../../models/package.model'),
     'Preference': require('../../models/preference.model'),
     'Purchase': require('../../models/purchase.model'),
     'Subscription': require('../../models/subscription.model'),

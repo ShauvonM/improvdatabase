@@ -16,7 +16,7 @@ import { TimeUtil } from '../../util/time.util';
 })
 export class TeamListComponent implements OnInit {
 
-    title: string = '<span class="light">your</span><strong>teams</strong>';
+    title: string = 'Your Teams';
 
     memberOfTeams: Team[];
     adminOfTeams: Team[];

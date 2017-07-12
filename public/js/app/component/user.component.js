@@ -59,6 +59,7 @@ var UserComponent = (function () {
         });
         this.userService.fetchSubscription().then(function (u) {
             _this.subscription = u.subscription;
+            _this.subscription.pledge = _this.subscription.pledge || 0;
         });
     };
     UserComponent.prototype.ngOnDestroy = function () {

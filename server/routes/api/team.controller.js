@@ -58,13 +58,39 @@ module.exports = {
         }
     },
 
-    createTeam: (name) => {
-        return Team.create({
-            name: name
-        });
+    create: (req, res) => {
+        let userId = req.user._id,
+            name = req.body.name,
+            email = req.body.email;
+
+        return module.exports.doValidate(name)
+            .then(e => {
+                if (e) {
+                    res.status(409).json(e);
+                } else {
+                    let team;
+                    return Team.create({
+                        name: name,
+                        email: email,
+                        addedUser: userId
+                    }).then(t => {
+                        team = t;
+                        return findModelUtil.findUser(userId);
+                    }).then(user => {
+                        user.adminOfTeams.push(team._id);
+                        user.save();
+
+                        team.admins.push(user);
+                        return team.save();
+                    }).then(t => {
+                        res.json(t);
+                    });
+                }
+            });
     },
 
     backup: (req, res) => {
+
         Team.find({}).exec().then(t => {
             res.json(t);
         });
@@ -74,6 +100,16 @@ module.exports = {
         let name = req.body.name,
             teamId = req.body.teamId;
 
+        return module.exports.doValidate(name, teamId).then(e => {
+            if (e) {
+                res.status(409).json(e)
+            } else {
+                res.end();
+            }
+        });
+    },
+
+    doValidate: function(name, teamId) {
         let promise = Team.findOne({}).where('name').equals(name);
 
         if (teamId) {
@@ -83,43 +119,13 @@ module.exports = {
         return promise.exec()
             .then(t => {
                 if (t) {
-                    res.json({
+                    return Promise.resolve({
                         conflict: 'name'
                     });
                 } else {
-                    res.json({});
+                    return Promise.resolve();
                 }
             });
-    },
-
-    materials: (req, res) => {
-        // first, make sure the user is a member of this team
-        if (!req.user.superAdmin) {
-            if (util.indexOfObjectId(req.user.memberOfTeams, req.params.id) == -1 &&
-                util.indexOfObjectId(req.user.adminOfTeams, req.params.id) == -1) {
-                    auth.unauthorized(req, res);
-                    return;
-                }
-        }
-
-        let query = Team.findOne({}).where('_id').equals(req.params.id);
-
-        return userController.collectMaterials(query, req, res);
-    },
-
-    purchases: (req, res) => {
-        // only team admins can do this
-        if (util.indexOfObjectId(req.user.adminOfTeams, req.params.id) == -1) {
-            return auth.unauthorized(req, res);
-        }
-
-        return Purchase.find({})
-            .where('team').equals(req.params.id)
-            .populate('packages.package materials.material user')
-            .exec()
-            .then(p => {
-                res.json(p);
-            })
     },
 
     removeUser: (req, res) => {
@@ -257,16 +263,17 @@ module.exports = {
 
         // first, see that the user requesting this is an admin of the team
         if (util.indexOfObjectId(user.adminOfTeams, teamId) > -1) {
-            return Subscription.findOne({})
-                .where('team').equals(teamId)
-                .populate('team')
+
+            // get the team model
+            Team.findOne({})
+                .where('_id').equals(teamId)
                 .exec()
-                .then(subscription => {
+                .then(team => {
 
                     //  check to see if the user has already been invited
                     Invite.count()
                         .where('email').equals(email)
-                        .where('team').equals(subscription.team._id)
+                        .where('team').equals(teamId)
                         .where('accepted').equals(false)
                         .where('dateDeleted').equals(null)
                         .exec()
@@ -279,36 +286,11 @@ module.exports = {
                             // check if the email address entered is already a user
                             findModelUtil.findUser(email)
                                 .then(addUser => {
-                                    let needsSubscription = true;
-
-                                    if (addUser) {
-                                        // make sure they aren't already in this team
-                                        if (util.indexOfObjectId(addUser.memberOfTeams, teamId) > -1 ||
-                                                util.indexOfObjectId(addUser.adminOfTeams, teamId) > -1) {
-                                            
-                                            res.status(409).json({error: 'user already in team'});
-                                            return;
-                                        }
-
-                                        // make sure they are the correct type of user
-                                        if (addUser.subscription &&
-                                                !addUser.superAdmin &&
-                                                roles.getRoleType(subscription.role) != roles.ROLE_NOBODY &&
-                                                roles.getRoleType(addUser.subscription.role) !== roles.getRoleType(subscription.role)) {
-
-                                                res.status(500).json({error: 'user type mismatch'});
-                                                return;
-                                        }
-
-                                        if (!util.isExpired(addUser.subscription)) {
-                                            needsSubscription = false;
-                                        }
-                                    }
-
-                                    // see if the team has available subscriptions left
-                                    if (subscription.subscriptionInvites.length + subscription.children.length >= subscription.subscriptions &&
-                                            needsSubscription) {
-                                        res.status(409).json({error: 'out of subscriptions'})
+                                    // make sure they aren't already in this team
+                                    if (addUser && (util.indexOfObjectId(addUser.memberOfTeams, teamId) > -1 ||
+                                            util.indexOfObjectId(addUser.adminOfTeams, teamId) > -1)) {
+                                        
+                                        res.status(409).json({error: 'user already in team'});
                                         return;
                                     }
 
@@ -316,44 +298,46 @@ module.exports = {
                                     return Invite.create({
                                             user: req.user._id,
                                             email: email,
-                                            role: subscription.role,
-                                            team: subscription.team._id
+                                            role: roles.ROLE_USER,
+                                            team: teamId
                                         })
                                         .then(invite => {
                                             // send an email to the user using the new invite's _id
                                             let inviteId = invite._id.toString(),
                                                 name = user.firstName + ' ' + user.lastName,
                                                 nameText = name.trim() ? 'Your colleague, ' + name + ', ' : 'Your colleague',
-                                                link, subject, greeting, body, actionText;
+                                                link, subject, greeting, body, actionText,
+
+                                                teamName = team.name;
 
                                             if (addUser) {
-                                                subject = 'You have been invited to a Team on ImprovPlus';
+                                                subject = 'You have been invited to a Team on the Improv Database';
                                                 let name = 'Hello ' + addUser.firstName;
                                                 greeting = name.trim() + ','
                                                 actionText = 'Accept Invitation';
                                                 link = 'https://' + req.get('host') + '/app/dashboard';
                                             } else {
-                                                subject = 'You have been invited to join ImprovPlus',
-                                                greeting = 'ImprovPlus Awaits!';
+                                                subject = 'You have been invited to join the Improv Database',
+                                                greeting = 'The Improv Database Awaits!';
                                                 actionText = 'Join Now';
                                                 link = 'https://' + req.get('host') + '/invite/' + inviteId;
                                             }
 
                                             body = `
-                                                <p>${nameText} has invited you to join ${subscription.team.name} on ImprovPlus.</p>
+                                                <p>${nameText} has invited you to join ${teamName} on the Improv Database.</p>
                                             `;
 
                                             if (!addUser) {
-                                                body += `<p>ImprovPlus is an online community for the world of Improv, helping Facilitators and Improvisers connect, share, and develop themselves and their techniques. By joining ImprovPlus, you will be on your way to making your world more Awesome.</p>`;
+                                                body += `<p>The Improv Database is an online community for the world of Improv, helping Improvisers connect, share, and develop themselves and their techniques. By joining us, you will be able to get involved with this world as it evolves, and hopefully you'll be able to help shape the future of Improv around the world.</p>`;
                                             }
 
                                             if (!addUser || !addUser.subscription || addUser.subscription.expires < Date.now()) {
                                                 body += `
-                                                    <p>You will be able to use the subscription already set up for ${subscription.team.name}, which means you will gain full access to the app and all of your team's resources right away.</p>
+                                                    <p>You can create an account on the database right now, and pay whatever you want (or nothing at all).</p>
                                                 `;
                                             } else {
                                                 body += `
-                                                    <p>You already have a subscription to ImprovPlus, but now you will be able to connect and collaborate with your teammates.</p>
+                                                    <p>You already have an account on the Improv Database. Now you will be able to connect and collaborate with your teammates.</p>
                                                 `;
                                             }
 
@@ -374,24 +358,17 @@ module.exports = {
 
                                                         <p>Sincerely,</p>
 
-                                                        <p>The Proprietors of <span class="light">improv</span><strong>plus</strong>.</p>
+                                                        <p>Shauvon McGill, creator.</p>
                                                     `
                                                 }
                                             }, (error, response) => {
 
-                                                if (needsSubscription) {
-                                                    subscription.subscriptionInvites.push(invite);
-                                                } else {
-                                                    subscription.invites.push(invite);
-                                                }
-
-                                                if (addUser) {
-                                                    addUser.invites.push(invite);
-                                                    addUser.save();
-                                                }
-
-                                                subscription.save().then(subscription => {
+                                                team.invites.push(invite);
+                                                team.save().then(t => {
                                                     if (addUser) {
+                                                        addUser.invites.push(invite);
+                                                        addUser.save();
+
                                                         invite = invite.toObject();
                                                         invite.inviteUser = {
                                                             firstName: addUser.firstName,
@@ -406,99 +383,15 @@ module.exports = {
 
                                             })
                                         });
-
-                                    // }
                                 })
-                        })
+                        });
 
-                })
+                });
 
         } else {
             auth.unauthorized(req, res);
         }
 
-    },
-
-    subscription: (req, res) => {
-        if (util.indexOfObjectId(req.user.memberOfTeams, req.params.id) == -1 &&
-            util.indexOfObjectId(req.user.adminOfTeams, req.params.id) == -1) {
-                util.unauthorized(req, res);
-                return;
-            }
-
-        if (req.method == 'GET') {
-            return Team.findOne({}).where('_id').equals(req.params.id)
-                .select('subscription')
-                .populate({
-                    path: 'subscription',
-                    select: '-stripeCustomerId',
-                    populate: {
-                        path: 'parent invites subscriptionInvites',
-                        select: '-stripeCustomerId',
-                        match: {
-                            accepted: false,
-                            dateDeleted: undefined
-                        },
-                        populate: {
-                            path: 'team',
-                            select: 'name'
-                        }
-                    }
-                })
-                .then(t => {
-                    team = t.toObject();
-
-                    if (team.subscription) {
-                        team.subscription.type = roles.findRoleById(roles.getRoleType(team.subscription.role)).name;
-                        team.subscription.roleName = roles.findRoleById(team.subscription.role).name;
-                    }
-
-                    if (team.subscription.invites || team.subscription.subscriptionInvites) {
-                        return util.iterate([].concat(team.subscription.subscriptionInvites, team.subscription.invites), (invite) => {
-                            if (invite && invite.email) {
-                                return findModelUtil.findUser(invite.email)
-                                    .then(user => {
-                                        if (user) {
-                                            invite.inviteUser = {
-                                                firstName: user.firstName,
-                                                lastName: user.lastName,
-                                                email: user.email,
-                                                _id: user._id,
-                                                subscription: user.subscription
-                                            };
-                                        }
-                                    });
-                            } else {
-                                return Promise.resolve();
-                            }
-                        }).then(() => {
-                            return Promise.resolve(team);
-                        })
-                    } else {
-                        return Promise.resolve(team);
-                    }
-                })
-                .then(team => {
-                    res.json(team);
-                })
-        } else if (req.method == 'POST') {
-            // purchase new subscriptions!
-
-            // this requires a team admin
-            if (util.indexOfObjectId(req.user.adminOfTeams, req.params.id) == -1) {
-                util.unauthorized(req, res);
-                return;
-            }
-
-            let teamId = req.params.id,
-                subCount = req.body.count,
-                stripeToken = req.body.stripeToken;
-
-            return chargeController.buyTeamSubscriptions(req.user, teamId, subCount, stripeToken)
-                .then(subscription => {
-                    res.json(subscription);
-                });
-        }
-    },
+    }
 
 }

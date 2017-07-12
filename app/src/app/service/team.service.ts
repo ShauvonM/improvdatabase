@@ -69,6 +69,16 @@ export class TeamService {
         }
     }
 
+    createTeam(team: Team): Promise<Team> {
+        return this.http.post(API.team, team)
+            .toPromise()
+            .then(response => {
+                let team = response.json() as Team;
+                this.addTeam(team);
+                return team;
+            })
+    }
+
     saveTeam(team: Team): Promise<Team> {
         return this.http.put(API.getTeam(team._id), team)
             .toPromise()

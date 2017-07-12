@@ -1,6 +1,7 @@
-const mongoose = require('mongoose'),
+const mongoose  = require('mongoose'),
 
-    Preference   = require('./preference.model');
+    Preference  = require('./preference.model'),
+    roles       = require('../roles');
 
 const UserSchema = new mongoose.Schema({
     email: { type: String, unique: true },
@@ -38,7 +39,7 @@ const UserSchema = new mongoose.Schema({
     dateLoggedIn: Date
 });
 
-UserSchema.methods.addSubscription = function(role, pledge, stripeCustomerId, stripeSubscriptionId, expires) {
+UserSchema.methods.addSubscription = function(pledge, stripeCustomerId, stripeSubscriptionId, role, expires) {
     if (!expires) {
         expires = new Date();
         expires.setFullYear(2233);
@@ -46,6 +47,13 @@ UserSchema.methods.addSubscription = function(role, pledge, stripeCustomerId, st
     let expiration = Date.now();
     if (typeof(expires) == 'object' && expires.getTime) {
         expiration = expires.getTime();
+    }
+    if (!role) {
+        if (pledge && pledge > 0 && stripeCustomerId) {
+            role = roles.ROLE_USER_PAID;
+        } else {
+            role = roles.ROLE_USER;
+        }
     }
     return mongoose.model('Subscription').create({
         user: this._id,
@@ -146,7 +154,7 @@ UserSchema.virtual('simpleName')
         if (this.firstName) {
             return this.firstName;
         } else {
-            return 'ImprovPlus user';
+            return 'Improv Database user';
         }
     })
 

@@ -51,13 +51,6 @@
                 [canEdit]="can('team_edit')"
                 (save)="saveEditURL($event)"></span>
 
-            <span class="bullet id-editable-metadata"
-                [text]="team.company"
-                [blankText]="'No Company'"
-                [icon]="'building'"
-                [canEdit]="can('team_edit')"
-                (save)="saveEditCompany($event)"></span>
-
             <span class="id-editable-metadata"
                 [address]="team.address"
                 [city]="team.city"
@@ -106,7 +99,7 @@
                 (demoteUser)="demoteUser($event)">
             </div>
 
-            <!--<div class="item clickable" *ngFor="let invite of [].concat(subscription.subscriptionInvites, subscription.invites)"
+            <div class="item clickable" *ngFor="let invite of team.invites"
                 [class.selected] = "invite === selectedInvite"
                 (click)="selectInvite(invite)">
 
@@ -121,8 +114,6 @@
                     </div>
                     <div class="row" *ngIf="invite.inviteUser">
                         <h5>{{invite.inviteUser.firstName ? invite.inviteUser.firstName + ' ' + invite.inviteUser.lastName : invite.email}}</h5>
-                        <em *ngIf="userService.isExpired(invite.inviteUser)">Will use Company's Subscription</em>
-                        <em *ngIf="!userService.isExpired(invite.inviteUser)">Has their own Subscription</em>
                     </div>
 
                     <div class="row">
@@ -133,29 +124,17 @@
                 <div class="action">
                     <div class="button" title="Cancel this invitation?!" *ngIf="isUserAdmin()" (click)="cancelInvite(invite)"><i class="fa fa-times"></i></div>
                 </div>
-            </div>-->
+            </div>
         </div>
 
         <div class="right">
             <p>Total Users: <span class="tag grey">{{team.admins.length + team.members.length}}</span></p>
+            <p *ngIf="team.invites && team.invites.length">Pending Invites: <span class="tag orange">{{team.invites.length}}</span></p>
 
-            <div *ngIf="isUserAdmin()" class="right">
-                <p *ngIf="pendingInvites">Pending Subscription Invites: <span class="tag orange">{{pendingInvites}}</span></p>
-                <p>Remaining User Subscriptions: <span class="tag">{{remainingSubs}} of {{team.subscription.subscriptions}}</span></p>
-
-                <p *ngIf="remainingSubs > 0">You can invite {{remainingSubs}} more of your Team to join the Improv Database.</p>
-                <p *ngIf="remainingSubs == 0">You have no more free invites, but you can buy additional user subscriptions or invite users with their own subscriptions.</p>
-
+            <div class="right">
                 <div class="button-group">
-                    <div class="button" (click)="leave()">Leave Company</div>
-                    <div class="button" (click)="buySubscription()">Buy Subscriptions</div>
-                    <div class="button raised" (click)="invite()">Invite Someone</div>
-                </div>
-            </div>
-
-            <div *ngIf="!isUserAdmin()" class="right">
-                <div class="button-group">
-                    <div class="button" (click)="leave()">Leave Company</div>
+                    <div class="button" (click)="leave()">Leave Team</div>
+                    <div class="button raised" *ngIf="isUserAdmin()" (click)="invite()">Invite Someone</div>
                 </div>
             </div>
         </div>
@@ -164,7 +143,7 @@
 
 </div>
 
-<div class="dialog-container" [class.show]="showInviteDialog || showBuySubscriptionDialog">
+<div class="dialog-container" [class.show]="showInviteDialog">
     <div class="dialog-dismiss" (click)="cancelInviteDialog()"></div>
 
     <div class="dialog invite-form" *ngIf="showInviteDialog && !inviteStatus" [@dialog]="'default'">
@@ -202,7 +181,7 @@
         <div class="dialog-content">
             <h2>Invite Sent!</h2>
 
-            <p>Your invite is on its way. When your colleague has accepted your invitation, they will take one of {{team.name}}'s user subscriptions. We will let you know when this happens. You can also check the status of your invite (and cancel it) here on your Company's profile.</p>
+            <p>Your invite is on its way. We will let you know when your colleague signs up. You can also check the status of your invite (and cancel it) here on your Team's profile.</p>
         </div>
 
         <div class="button-group">
@@ -216,57 +195,11 @@
         <div class="dialog-content">
             <h2>Invite Sent!</h2>
 
-            <p>Good news! That email address is registered to an active subscription already, so they will be able to join your team without using any of your user subscriptions. We will let you know when this happens. You can also check the status of your invite (and cancel it) here on your Company's profile.</p>
+            <p>Good news! That email address is registered to an account already, so they will be able to join up as soon as they log into the app. You can also check the status of your invite (and cancel it) here on your Company's profile.</p>
         </div>
 
         <div class="button-group">
             <a (click)="cancelInviteDialog()" class="button">Okay Bye</a>
-        </div>
-
-    </div>
-
-    <!-- the purchase subscription process -->
-    <div class="dialog" *ngIf="showBuySubscriptionDialog" [@dialog]="'default'">
-
-        <form class="block" name="invite" (ngSubmit)="submitBuySubscriptions()" #purchaseForm="ngForm">
-            <div class="dialog-content">
-                <h2>Buy Subscriptions for {{team.name}}</h2>
-                
-                <p>Buying more subscriptions will allow you to invite even more of your teammates to collaborate with you. These subscriptions will be renewed along with your Company.</p>
-
-                <p>You currently have {{remainingSubs}} subscriptions to use.</p>
-                
-                <div class="columns centered">
-                    <input name="buySubCount" formInput [asterisk]="false" [(ngModel)]="buySubCount" required type="text" placeholder="How many more do you need?" />
-                    <span>x ${{subscriptionPrice}}</span>
-                </div>
-            </div>
-
-            <div class="button-group" *ngIf="!isPosting">
-                <a (click)="cancelBuySubscriptionDialog()" class="button">Cancel</a>
-                <input type="submit" class="button raised" value="Next" [disabled]="!purchaseForm.form.valid" />
-            </div>
-        </form>
-
-    </div>
-
-    <div class="dialog" *ngIf="showBuySubscriptionCC" [@dialog]="'default'">
-
-        <div class="dialog-content">
-            <h2>Buy Subscriptions for {{team.name}}</h2>
-            
-            <div id="card-element">
-            <!-- a Stripe Element will be inserted here. -->
-            </div>
-        </div>
-
-        <div class="button-group" *ngIf="!isPosting">
-            <a (click)="cancelBuySubscriptionDialog()" class="button">Cancel</a>
-            <input type="submit" (click)="doBuySubscriptions()" class="button raised" value="Buy" [disabled]="!cardComplete" />
-        </div>
-
-        <div class="button-group" *ngIf="isPosting">
-            <div class="button"><i class="loading"></i></div>
         </div>
 
     </div>

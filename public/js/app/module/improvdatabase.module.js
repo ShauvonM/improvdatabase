@@ -32,6 +32,7 @@ var game_details_component_1 = require("../component/game-details.component");
 var help_component_1 = require("../component/help.component");
 var legal_component_1 = require("../component/legal.component");
 var admin_component_1 = require("../component/admin.component");
+var team_create_component_1 = require("../component/team-create.component");
 var team_list_component_1 = require("../component/team-list.component");
 var team_details_component_1 = require("../component/team-details.component");
 var videos_component_1 = require("../component/videos.component");
@@ -68,6 +69,7 @@ var ImprovDatabaseModule = (function () {
                 contact_component_1.ContactComponent,
                 user_component_1.UserComponent,
                 help_component_1.HelpComponent,
+                team_create_component_1.TeamCreateComponent,
                 team_list_component_1.TeamListComponent,
                 team_details_component_1.TeamDetailsComponent,
                 game_details_component_1.GameDetailsComponent,

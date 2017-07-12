@@ -17,10 +17,7 @@ const Subscription = require('./models/subscription.model');
 const Purchase = require('./models/purchase.model');
 const User = require('./models/user.model');
 const Team = require('./models/team.model');
-const MaterialItem = require('./models/material-item.model');
-const Package = require('./models/package.model');
 const Preference = require('./models/preference.model');
-const PackageConfig = require('./models/packageconfig.model');
 const HistoryModel = require('./models/history.model');
 
 const Game = require('./models/game.model'),
@@ -36,23 +33,11 @@ if (!mongoose.connection.readyState) {
     mongoose.connect(config.mongodb.uri);
 }
 
-const backuptime = 1496284211374;
+const backuptime = 1499782300138;
 const   databases = {
         'Invite': {
             time: backuptime,
             model: InviteModel
-        },
-        'MaterialItem': {
-            time: backuptime,
-            model: MaterialItem
-        },
-        'PackageConfig': {
-            time: backuptime,
-            model: PackageConfig
-        },
-        'Package': {
-            time: backuptime,
-            model: Package
         },
         'Preference': {
             time: backuptime,
@@ -64,7 +49,10 @@ const   databases = {
         },
         'Subscription': {
             time: backuptime,
-            model: Subscription
+            model: Subscription,
+            seed: (timestamp) => {
+                return Promise.resolve();
+            }
         },
         'Team': {
             time: backuptime,
@@ -75,15 +63,28 @@ const   databases = {
             model: User,
             seed: (timestamp) =>{
                 return doSeed('User', timestamp, (users) => {
+                    let useThese = [];
                     users.forEach(user => {
-                        // hash the password if it isn't already
-                        if (user.password.substr(0,2) !== '$2') {
-                            let salt = bcrypt.genSaltSync(config.saltRounds),
-                                password = user.password;
-                            user.password = bcrypt.hashSync(password, salt);
+                        if (user.email != 'kate@katebringardner.com') {
+                            // hash the password if it isn't already
+                            if (user.password.substr(0,2) !== '$2') {
+                                let salt = bcrypt.genSaltSync(config.saltRounds),
+                                    password = user.password;
+                                user.password = bcrypt.hashSync(password, salt);
+                            }
+                            delete user.subscription;
+                            useThese.push(user);
                         }
                     });
-                    return users;
+                    return useThese;
+                }, (users) => {
+                    return util.iterate(users, user => {
+                        if (user.email == 'smcgill@denyconformity.com') {
+                            return user.addSubscription('', '', '', 19);
+                        } else {
+                            return user.addSubscription();
+                        }
+                    });
                 });
             }
         },

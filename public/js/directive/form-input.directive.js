@@ -11,8 +11,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var FormInputDirective = (function () {
-    function FormInputDirective(el, renderer) {
+    function FormInputDirective(el, renderer, _changeDetector) {
         this.renderer = renderer;
+        this._changeDetector = _changeDetector;
         this.asterisk = true;
         this.helpClicked = new core_1.EventEmitter();
         this.inputElement = el.nativeElement;
@@ -43,6 +44,12 @@ var FormInputDirective = (function () {
                 _this.labelElement.textContent += ' *';
             }
             _this.divElement.appendChild(_this.labelElement);
+            if (_this.prefix) {
+                _this.prefixElement = document.createElement('span');
+                _this.prefixElement.className = 'prefix';
+                _this.prefixElement.textContent = _this.prefix;
+                _this.divElement.insertBefore(_this.prefixElement, _this.inputElement);
+            }
             setTimeout(function () {
                 if (_this.inputElement.value) {
                     _this.focus();
@@ -55,10 +62,16 @@ var FormInputDirective = (function () {
     };
     FormInputDirective.prototype.focus = function () {
         this.labelElement.className = 'active';
+        if (this.prefixElement) {
+            this.prefixElement.style.opacity = '1';
+        }
     };
     FormInputDirective.prototype.blur = function () {
         if (!this.inputElement.value) {
             this.labelElement.className = '';
+            if (this.prefixElement) {
+                this.prefixElement.style.opacity = '0';
+            }
         }
         else {
             this.focus();
@@ -90,6 +103,10 @@ var FormInputDirective = (function () {
         __metadata("design:type", String)
     ], FormInputDirective.prototype, "helpLink", void 0);
     __decorate([
+        core_1.Input(),
+        __metadata("design:type", String)
+    ], FormInputDirective.prototype, "prefix", void 0);
+    __decorate([
         core_1.Output(),
         __metadata("design:type", core_1.EventEmitter)
     ], FormInputDirective.prototype, "helpClicked", void 0);
@@ -103,7 +120,8 @@ var FormInputDirective = (function () {
             }
         }),
         __metadata("design:paramtypes", [core_1.ElementRef,
-            core_1.Renderer2])
+            core_1.Renderer2,
+            core_1.ChangeDetectorRef])
     ], FormInputDirective);
     return FormInputDirective;
 }());

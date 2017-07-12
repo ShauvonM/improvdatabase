@@ -8,8 +8,6 @@ const   mongoose = require('mongoose'),
         emailUtil = require('../../email'),
         findModelUtil = require('./find-model.util'),
 
-        chargeApi = require('../charge'),
-
         Subscription = require('../../models/subscription.model'),
         User = require('../../models/user.model'),
         Team = require('../../models/team.model'),
@@ -21,6 +19,8 @@ module.exports = {
 
     /**
      * POST: /api/user is used to accept an invitation and create a new user
+     * 
+     * @Deprecated, invites are now handled by the charge controller
      */
     create: (req, res) => {
         
@@ -210,13 +210,6 @@ module.exports = {
         } else {
             // the user is either expired or doesn't have a subscription
             user.actions = roles.getActionsForRole(roles.ROLE_USER);
-
-            if (user.subscription && roles.getRoleType(user.subscription.role) == roles.ROLE_FACILITATOR) {
-                // expired facilitator accounts should still have access to the facilitator role features, without the subscriber features
-                user.actions = util.unionArrays(roles.getActionsForRole(roles.ROLE_FACILITATOR, true), user.actions);
-            } else if (user.subscription && roles.getRoleType(user.subscription.role) == roles.ROLE_IMPROVISER) {
-                user.actions = util.unionArrays(roles.getActionsForRole(roles.ROLE_IMPROVISER, true), user.actions);
-            }
         }
 
         return user;
@@ -254,11 +247,11 @@ module.exports = {
 
     /**
      * Get all of a user's purchases
+     * @Deprecated
      */
     purchases: (req, res) => {
         return Purchase.find({})
             .where('user').equals(req.user._id)
-            .populate('team packages.package materials.material')
             .exec()
             .then(p => {
                 res.json(p);
@@ -272,10 +265,10 @@ module.exports = {
             .populate({
                 path: 'adminOfTeams memberOfTeams',
                 populate: {
-                    path: 'subscription',
-                    populate: {
-                        path: 'invites',
-                        match: { accepted: false }
+                    path: 'invites',
+                    match: {
+                        accepted: false,
+                        dateDeleted: undefined
                     }
                 }
             })
@@ -350,7 +343,7 @@ module.exports = {
                 if (newPledge > 0) {
                     // we can update (or create) their subscription
 
-                    return chargeApi.createPledgeSubscription(newPledge, token, stripeCustomerId, stripeSubscriptionId)
+                    return module.exports.createPledgeSubscription(newPledge, token, stripeCustomerId, stripeSubscriptionId)
                         .then(stripeSub => {
                             sub.stripeSubscriptionId = stripeSub.id;
                             return sub.save();
@@ -359,7 +352,7 @@ module.exports = {
                 } else {
                     // discontinue their subscription, if necessary
                     
-                    return chargeApi.cancelPledgeSubscription(stripeSubscriptionId)
+                    return module.exports.cancelPledgeSubscription(stripeSubscriptionId)
                         .then(() => {
                             sub.stripeSubscriptionId = null;
 
@@ -521,14 +514,6 @@ module.exports = {
                     // collect this for later
                     roleId = invite.role;
 
-                    //check the invite role against the user to make sure they are the same type
-                    if (user.subscription && roles.getRoleType(roleId) != roles.ROLE_NOBODY && roles.getRoleType(user.subscription.role) !== roles.getRoleType(roleId)) {
-                        return Promise.reject({
-                            status: 500,
-                            message: 'user type mismatch'
-                        });
-                    }
-
                     invite.accepted = true;
                     invite.dateAccepted = Date.now();
 
@@ -557,26 +542,9 @@ module.exports = {
                         target: team._id
                     });
 
-                    let needsSubscription = !user.subscription || user.subscription.expiration < Date.now();
+                    module.exports.sendUserJoinedTeamEmail(team.admins, user, team.name, team._id, req);
 
-                    module.exports.sendUserJoinedTeamEmail(team.admins, user, needsSubscription, team.name, team._id, req);
-
-                    if (needsSubscription) {
-                        return Subscription.findOne({})
-                            .where('_id').equals(util.getObjectIdAsString(team.subscription))
-                            .exec()
-                            .then(teamSubscription => {
-                                return teamSubscription.createChildSubscription(user);
-                            })
-                            .then(() => {
-                                return findModelUtil.findUser(user._id);
-                            });
-                    } else if (roles.getRoleType(roleId) == roles.getRoleType(user.subscription.role) && roleId > user.subscription.role) {
-                        // upgrade the user's subscription role to the team's (a team subscription is one higher than the user version)
-                        return user.setSubscriptionRole(roleId);
-                    } else {
-                        return user.save();
-                    }
+                    return user.save();
                 }
             });
 
@@ -629,41 +597,7 @@ module.exports = {
 
     },
 
-    doesUserOwn: (user, materialId, packageId) => {
-        let itemKey = materialId ? 'materials' : 'packages',
-            searchId = materialId ? materialId : packageId;
-
-        return module.exports.collectMaterials(User.findOne({}).where('_id').equals(user._id.toString()))
-            .then(usersStuff => {
-                if (util.indexOfObjectId(usersStuff[itemKey], searchId) > -1) {
-                    // the user owns this item directly - woohoo!
-                    return Promise.resolve(true);
-                } else {
-                    let teamIds = util.unionArrays(user.memberOfTeams, user.adminOfTeams),
-                        checkTeamStuff = index => {
-                            return module.exports.collectMaterials(Team.findOne({}).where('_id').equals(teamIds[index].toString()))
-                                .then(stuff => {
-                                    if (util.indexOfObjectId(stuff[itemKey], searchId) > -1) {
-                                        // this team owns the item! hooray!
-                                        return Promise.resolve(true);
-                                    } else {
-                                        // move on to the next one
-                                        index++;
-                                        if (teamIds[index]) {
-                                            return checkTeamStuff(index);
-                                        } else {
-                                            return Promise.resolve(false);
-                                        }
-                                    }
-                                })
-                        }
-
-                    return checkTeamStuff(0);
-                }
-            });
-    },
-
-    sendUserJoinedTeamEmail: (toUsers, newUser, usedSubscription, teamName, teamId, req) => {
+    sendUserJoinedTeamEmail: (toUsers, newUser, teamName, teamId, req) => {
 
         let newUserName = newUser.fullName ? ', one ' + newUser.fullName + ', ' : '';
 
@@ -671,20 +605,14 @@ module.exports = {
             <p>A user${newUserName} has joined your team, ${teamName}! You don't necessarily need to do anything, but we're just letting you know.</p>
         `;
 
-        if (usedSubscription) {
-            body += `
-                <p>They will utilize one of the User Subscriptions on your Team. To see details about your team (including how many subscriptions you have left), visit the ImprovPlus app.</p>
-            `
-        }
-
         toUsers.forEach(toUser => {
 
-            let toUserName = !toUser.simpleName || toUser.simpleName == 'undefined' ? 'ImprovPlus User' : toUser.simpleName;
+            let toUserName = !toUser.simpleName || toUser.simpleName == 'undefined' ? 'Improv Database User' : toUser.simpleName;
 
             let sendObject = {
                 to: toUser.email,
                 toName: toUserName,
-                subject: 'User has joined your Team',
+                subject: 'Someone has joined your Team',
                 content: {
                     type: 'text',
                     baseUrl: 'https://' + req.get('host'),
@@ -703,6 +631,73 @@ module.exports = {
 
         });
 
+    },
+
+    createPledgeSubscription: function (pledgeFloat, stripeToken, stripeCustomerId, stripeSubscriptionId) {
+        if (!pledgeFloat || pledgeFloat == 0) {
+            return this.cancelPledgeSubscription(stripeSubscriptionId);
+        }
+
+        let stripe = require('stripe')(config.stripe.secret);
+
+        let pledgeString = pledgeFloat.toFixed(2),
+            planId = 'pledge-' + pledgeString;
+
+        // first create a stripe customer ID, or update one if we were given one
+        let p;
+        if (stripeCustomerId) {
+            p = stripe.customers.update(stripeCustomerId, { source: stripeToken });
+        } else {
+            p = stripe.customers.create({
+                source: stripeToken
+            });
+        }
+
+        // see if a plan already exists at this level
+        return p
+            .then(customer => {
+                stripeCustomerId = customer.id;
+                return stripe.plans.retrieve(planId);
+            })
+            .catch(error => {
+                if (error.type == 'StripeInvalidRequestError') {
+                    return stripe.plans.create({
+                        id: planId,
+                        amount: pledgeFloat * 100, // stripe expects price in cents
+                        interval: 'month',
+                        name: 'Improv Database $' + pledgeString + ' Monthly Pledge',
+                        currency: 'usd'
+                    });
+                }
+            })
+            .then(plan => {
+                if (plan) {
+                    if (stripeSubscriptionId) {
+                        return stripe.subscriptions.update(
+                            stripeSubscriptionId,
+                            { plan: planId }
+                        );
+                    } else {
+                        // create a new subscription
+                        return stripe.subscriptions.create({
+                            customer: stripeCustomerId,
+                            plan: planId
+                        })
+                    }
+                } else {
+                    return Promise.resolve();
+                }
+            })
+    },
+
+    cancelPledgeSubscription: function (stripeSubscriptionId) {
+        if (stripeSubscriptionId) {
+            let stripe = require('stripe')(config.stripe.secret);
+
+            return stripe.subscriptions.del(stripeSubscriptionId);
+        } else {
+            return Promise.resolve();
+        }
     }
 
 }

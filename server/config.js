@@ -2,7 +2,6 @@ module.exports = function () {
     if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
         return {
             "token": "fe73_yspk3g2i+6$nba6_p2zm$v0rz4ihdme*!z@++ej@^463p",
-            salt: process.env.IMPROVPLUS_SALT,
             redis: {
                 port: 6379,
                 host: '127.0.0.1',
@@ -23,12 +22,12 @@ module.exports = function () {
             },
             pdftkPath: 'C:\\Program Files (x86)\\PDFtk Server\\bin\\pdftk.exe',
             port: 1919,
-            saltRounds: 10
+            saltRounds: 10,
+            title: 'The Improv Database'
         };
     } else if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'qa') {
         return {
             token: process.env.SECRET,
-            salt: process.env.IMPROVPLUS_SALT,
             redis: {
                 url: process.env.REDISCLOUD_URL
             },
@@ -46,7 +45,8 @@ module.exports = function () {
                 backups: 'improvdatabase.backups'
             },
             port: process.env.PORT || 5000,
-            saltRounds: 10
+            saltRounds: 10,
+            title: 'The Improv Database'
         };
     }
 };

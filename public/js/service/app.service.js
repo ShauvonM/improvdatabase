@@ -53,13 +53,14 @@ var AppService = (function () {
             }
         });
     };
-    AppService.prototype.signup = function (email, password, name, pledge, token) {
+    AppService.prototype.signup = function (email, password, name, pledge, token, invite) {
         return this.http.post(constants_1.API.signup, {
             stripeToken: token,
             pledge: pledge,
             email: email,
             password: password,
-            name: name
+            name: name,
+            invite: invite
         }).toPromise()
             .then(function (result) {
             return result.json();

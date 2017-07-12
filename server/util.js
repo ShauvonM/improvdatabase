@@ -147,15 +147,6 @@ module.exports = {
         return intersection;
     },
 
-    populations: {
-        materials: {
-            path: 'materials',
-            options: {
-                sort: 'name'
-            }
-        }
-    },
-
     breakStringIntoParagraphs: (strings) => {
         let body = '';
         strings = [].concat(strings);

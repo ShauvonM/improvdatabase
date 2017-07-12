@@ -18,18 +18,23 @@ var user_1 = require("../model/user");
 var anim_util_1 = require("../util/anim.util");
 var util_1 = require("../util/util");
 var SignupComponent = (function () {
-    function SignupComponent(_app, _service, router, userService) {
+    function SignupComponent(_app, _service, router, route, userService) {
         this._app = _app;
         this._service = _service;
         this.router = router;
+        this.route = route;
         this.userService = userService;
         this.isPosting = false;
         this.cardComplete = false;
     }
     SignupComponent.prototype.ngOnInit = function () {
+        var _this = this;
         if (this.userService.isLoggedIn()) {
             this.router.navigate(['/app/dashboard'], { replaceUrl: true });
         }
+        this.route.params.forEach(function (params) {
+            _this.inviteId = params['id'];
+        });
         this.setup();
     };
     SignupComponent.prototype.setup = function () {
@@ -45,7 +50,6 @@ var SignupComponent = (function () {
             }
         });
         this.creditCard.mount('#card-element');
-        this._app.hideLoader();
     };
     SignupComponent.prototype.emailInput = function () {
         var _this = this;
@@ -83,7 +87,11 @@ var SignupComponent = (function () {
         if (!this.isFormValid()) {
             return;
         }
-        this._app.showLoader();
+        this.pledge = this.pledge.trim();
+        if (isNaN(parseFloat(this.pledge))) {
+            this.inviteError = "Please enter a number (or nothing) for your pledge amount.";
+            return;
+        }
         this.isPosting = true;
         if (this.pledge && this.cardComplete) {
             util_1.Util.getStripeToken(this._app.config.stripe, this.creditCard).then(function (result) {
@@ -101,18 +109,7 @@ var SignupComponent = (function () {
     };
     SignupComponent.prototype._signup = function (token) {
         var _this = this;
-        this._service.signup(this.email, this.password, this.userName, this.pledge, token)
-            .catch(function (response) {
-            _this._app.hideLoader();
-            _this.isPosting = false;
-            var msg = response.json();
-            if (msg.error && msg.error == 'email already exists') {
-                _this.emailError = "That email address is already registered.";
-            }
-            else if (msg.error) {
-                _this._app.dialog('An error has occurred.', 'We are so sorry. Something happened, and we can\'t be sure what. Please try again, and if this keeps happening, reach out to us by emailing contact@improvpl.us. Have a nice day, dude.', 'Okay bye', null, true);
-            }
-        })
+        this._service.signup(this.email, this.password, this.userName, this.pledge, token, this.inviteId)
             .then(function (user) {
             _this._app.hideLoader();
             if (user && user.email) {
@@ -122,7 +119,31 @@ var SignupComponent = (function () {
                 // uh oh?
                 _this._app.toast("Something bad happened. I'm not sure what to tell you.");
             }
+        }, function (response) {
+            _this._app.hideLoader();
+            _this.isPosting = false;
+            var msg = response.json();
+            _this._handleError(msg);
+            // TODO: handle invite errors
+            // TODO: verify the invite on load?
         });
+    };
+    SignupComponent.prototype._handleError = function (msg) {
+        if (msg.error && msg.error == 'email already exists') {
+            this.emailError = "That email address is already registered.";
+        }
+        else if (msg.error && msg.error == 'unknown invite') {
+            this.inviteError = "That invite code doesn't appear to be valid.";
+        }
+        else if (msg.error && msg.error == 'invite taken') {
+            this.inviteError = 'That invite has already been claimed.';
+        }
+        else if (msg.error && msg.error == 'wrong email') {
+            this.emailError = "Please use the email address that this invite was sent to (you can change it later).";
+        }
+        else if (msg.error) {
+            this._app.dialog('An error has occurred.', 'We are so sorry. Something happened, and we can\'t be sure what. Please try again, and if this keeps happening, reach out to us by emailing contact@improvpl.us. Have a nice day, dude.', 'Okay bye', null, true);
+        }
     };
     SignupComponent.prototype.showTerms = function () {
         this._app.backdrop(true);
@@ -146,15 +167,14 @@ var SignupComponent = (function () {
             selector: "signup",
             templateUrl: '../template/signup.component.html',
             animations: [
-                anim_util_1.ToggleAnim.fadeAbsolute,
-                anim_util_1.ToggleAnim.bubble,
-                anim_util_1.ToggleAnim.bubbleSlow,
-                anim_util_1.DialogAnim.dialog
+                anim_util_1.DialogAnim.dialog,
+                anim_util_1.ShrinkAnim.height
             ]
         }),
         __metadata("design:paramtypes", [app_component_1.AppComponent,
             app_service_1.AppService,
             router_1.Router,
+            router_1.ActivatedRoute,
             user_service_1.UserService])
     ], SignupComponent);
     return SignupComponent;

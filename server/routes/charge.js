@@ -12,14 +12,13 @@ let util = require('../util'),
 let userController = require('./api/user.controller'),
     teamController = require('./api/team.controller'),
     auth = require('../auth'),
-    roles = require('../roles'),
-    PackageConfig = require('../models/packageconfig.model');
+    roles = require('../roles');
 
 let User = require('../models/user.model'),
     Team = require('../models/team.model'),
     Purchase = require('../models/purchase.model'),
     Subscription = require('../models/subscription.model'),
-    Package = require('../models/package.model'),
+    Invite = require('../models/invite.model'),
     HistoryModel = require('../models/history.model');
 
 
@@ -28,26 +27,22 @@ module.exports = {
     signup: (req, res) => {
 
         let stripe = require('stripe')(config.stripe.secret),
-            
-            tokenVal = req.body.stripeToken,
-            pledgeInput = req.body.pledge,
-            pledge = pledgeInput ? parseFloat(pledgeInput) : 0,
-            pledgeString = pledge.toFixed(2),
+
             email = req.body.email,
             password = req.body.password,
             userName = req.body.name,
+            
+            tokenVal = req.body.stripeToken,
+            pledgeInput = req.body.pledge,
+
+            inviteId = req.body.invite,
+
+            pledge = pledgeInput ? parseFloat(pledgeInput) : 0,
+            pledgeString = pledge.toFixed(2),
+
+            inviteTeam,
+            role = roles.ROLE_USER, // the user role defaults to USER - fancy that
             userId,
-
-            /**
-             * Payload: {
-             *  stripeToken: Stripe token (either string or object with id property)
-             *  cart: Purchase[]
-             *  email: string (new user's email)
-             *  password: string (new user's password)
-             *  teamName: string (name of the team, optional)
-             * }
-             */
-
             token,
             stripeCustomerId,
             stripeSubscriptionId,
@@ -74,23 +69,47 @@ module.exports = {
             .then(user => {
                 if (user) {
                     return Promise.reject('email already exists');
+                } else if (inviteId) {
+                    // if the user was invited, let's make sure everything is in order
+                    return Invite.findOne({})
+                        .where('_id').equals(inviteId)
+                        .where('dateDeleted').equals(null)
+                        .exec();
+                } else {
+                    return Promise.resolve();
                 }
             })
-            .then(stripeCustomer => {
+            .then(invite => {
+                if (!!inviteId && !!!invite) { // !!!!!
+                    // if there IS an inviteID, but no Invite object was found, there's a problem-o
+                    return Promise.reject('unknown invite');
+                } else if (invite) {
+                    if (invite.accepted) {
+                        // if someone already accepted this invite, there's a problem-o
+                        return Promise.reject('invite taken');
+                    } else if (invite.email != email) {
+                        // if the supplied email isn't what the invite was sent to, there's a problem-o
+                        return Promise.reject('wrong email');
+                    } else {
+                        // the invite is valid, and this is the right user
+                        // remember what the invite includes for later reference
+                        inviteTeam = util.getObjectIdAsString(invite.team);
+                        role = invite.role;
+
+                        return Promise.resolve();
+                    }
+                } else {
+                    return Promise.resolve();
+                }
+            })
+            .then(() => {
+                // if we have a stripe token, create a new stripe subscription for the user
                 if (token) {
-
-                    return module.exports.createPledgeSubscription(pledge, token);
-                
-                    // if (res.headersSent || error) {
-                    //     return Promise.reject(error || 'nothing purchased');
-                    // }
-
-                    // return stripe.charges.create({
-                    //     amount: pledge * 100, // stripe expects the price in cents
-                    //     currency: "usd",
-                    //     description: 'Signup',
-                    //     customer: stripeCustomerId
-                    // });
+                    // this is a paying user, so upgrade their role to that (unless they were invited to some special role)
+                    if (!role || role == roles.ROLE_USER) {
+                        role = roles.ROLE_USER_PAID;
+                    }
+                    return userController.createPledgeSubscription(pledge, token);
                 } else {
                     return Promise.resolve();
                 }
@@ -122,7 +141,15 @@ module.exports = {
             })
             .then(user => {
                 // save the subscription data to the user
-                return user.addSubscription(roles.ROLE_IMPROVISER, pledge, stripeCustomerId, stripeSubscriptionId);
+                return user.addSubscription(pledge, stripeCustomerId, stripeSubscriptionId, role);
+            })
+            .then(user => {
+                // if the invite was to a specific team, handle adding the user to that team
+                if (inviteTeam) {
+                    return userController.doAcceptInvite(user._id, inviteId, req);
+                } else {
+                    return Promise.resolve(user);
+                }
             })
             .then(user => {
 
@@ -130,8 +157,14 @@ module.exports = {
 
                 let body = `
                     <p>Thank you for signing up for the Improv Database!</p>
-                    <p>Your subscription is now active. You can log into the app and browse all of our fabulous feature(s). </p>
+                    <p>Your subscription is now active. You can log into the app and browse all of our fabulous feature(s).</p>
                 `;
+
+                if (inviteTeam) {
+                    body += `
+                        <p>You were invited to join a team, which you are now officially a part of. You can check out your team and collaborate with them through the app.</p>
+                    `
+                }
 
                 if (pledge) {
                     body += `
@@ -162,7 +195,7 @@ module.exports = {
                     }
                 }, (error, response) => {
 
-                    res.json(user);
+                    res.json(userController.prepUserObject(user));
 
                 })
             })
@@ -170,74 +203,6 @@ module.exports = {
                 console.error('signup error!', error);
                 res.status(500).json({error: error});
             })
-    },
-
-    createPledgeSubscription: function (pledgeFloat, stripeToken, stripeCustomerId, stripeSubscriptionId) {
-        if (!pledgeFloat || pledgeFloat == 0) {
-            return this.cancelPledgeSubscription(stripeSubscriptionId);
-        }
-
-        let stripe = require('stripe')(config.stripe.secret);
-
-        let pledgeString = pledgeFloat.toFixed(2),
-            planId = 'pledge-' + pledgeString;
-
-        // first create a stripe customer ID, or update one if we were given one
-        let p;
-        if (stripeCustomerId) {
-            p = stripe.customers.update(stripeCustomerId, { source: stripeToken });
-        } else {
-            p = stripe.customers.create({
-                email: email,
-                source: stripeToken
-            });
-        }
-
-        // see if a plan already exists at this level
-        return p
-            .then(customer => {
-                stripeCustomerId = customer.id;
-                return stripe.plans.retrieve(planId);
-            })
-            .catch(error => {
-                if (error.type == 'StripeInvalidRequestError') {
-                    return stripe.plans.create({
-                        id: planId,
-                        amount: pledgeFloat * 100, // stripe expects price in cents
-                        interval: 'month',
-                        name: 'Improv Database $' + pledgeString + ' Monthly Pledge',
-                        currency: 'usd'
-                    });
-                }
-            })
-            .then(plan => {
-                if (plan) {
-                    if (stripeSubscriptionId) {
-                        return stripe.subscriptions.update(
-                            stripeSubscriptionId,
-                            { plan: planId }
-                        );
-                    } else {
-                        // create a new subscription
-                        return stripe.subscriptions.create({
-                            customer: stripeCustomerId,
-                            plan: planId
-                        })
-                    }
-                } else {
-                    return Promise.resolve();
-                }
-            })
-    },
-
-    cancelPledgeSubscription: function (stripeSubscriptionId) {
-        if (stripeSubscriptionId) {
-            let stripe = require('stripe')(config.stripe.secret);
-
-            return stripe.subscriptions.del(stripeSubscriptionId);
-        } else {
-            return Promise.resolve();
-        }
     }
 
 }

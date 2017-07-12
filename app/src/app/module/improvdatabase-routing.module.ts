@@ -11,6 +11,7 @@ import { ContactComponent } from "../component/contact.component";
 import { GameDetailsComponent } from '../component/game-details.component';
 import { UserComponent } from '../component/user.component';
 import { LegalComponent } from "../component/legal.component";
+import { TeamCreateComponent } from '../component/team-create.component';
 import { TeamListComponent } from '../component/team-list.component';
 import { TeamDetailsComponent } from '../component/team-details.component';
 import { VideosComponent } from '../component/videos.component';
@@ -76,6 +77,13 @@ const routes: Routes = [
                         component: TeamListComponent,
                         data: {
                             action: 'team_page_view'
+                        }
+                    },
+                    {
+                        path: 'team/create',
+                        component: TeamCreateComponent,
+                        data: {
+                            action: 'team_create'
                         }
                     },
                     {

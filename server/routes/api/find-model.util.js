@@ -107,14 +107,10 @@ module.exports = {
                 }
             })
             .populate({
-                path: 'subscription',
-                select:'-stripeCustomerId',
-                populate: {
-                    path: 'invites',
-                    match: {
-                        accepted: false,
-                        dateDeleted: undefined
-                    }
+                path: 'invites',
+                match: {
+                    accepted: false,
+                    dateDeleted: undefined
                 }
             });
 

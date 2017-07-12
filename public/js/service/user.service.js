@@ -158,6 +158,22 @@ var UserService = (function () {
             return null;
         }
     };
+    UserService.prototype.addAdminTeam = function (team) {
+        var user = this.getLoggedInUser();
+        if (!user.adminOfTeams) {
+            user.adminOfTeams = [];
+        }
+        user.adminOfTeams.push(team);
+        return user;
+    };
+    UserService.prototype.addTeam = function (team) {
+        var user = this.getLoggedInUser();
+        if (!user.memberOfTeams) {
+            user.memberOfTeams = [];
+        }
+        user.memberOfTeams.push(team);
+        return user;
+    };
     UserService.prototype.getAdminTeams = function () {
         return this.getLoggedInUser().adminOfTeams;
     };

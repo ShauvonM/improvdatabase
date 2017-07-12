@@ -18,6 +18,7 @@ var contact_component_1 = require("../component/contact.component");
 var game_details_component_1 = require("../component/game-details.component");
 var user_component_1 = require("../component/user.component");
 var legal_component_1 = require("../component/legal.component");
+var team_create_component_1 = require("../component/team-create.component");
 var team_list_component_1 = require("../component/team-list.component");
 var team_details_component_1 = require("../component/team-details.component");
 var videos_component_1 = require("../component/videos.component");
@@ -81,6 +82,13 @@ var routes = [
                         component: team_list_component_1.TeamListComponent,
                         data: {
                             action: 'team_page_view'
+                        }
+                    },
+                    {
+                        path: 'team/create',
+                        component: team_create_component_1.TeamCreateComponent,
+                        data: {
+                            action: 'team_create'
                         }
                     },
                     {

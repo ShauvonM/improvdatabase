@@ -19,6 +19,7 @@ var team_service_1 = require("../service/team.service");
 var app_service_1 = require("../../service/app.service");
 var time_util_1 = require("../../util/time.util");
 var text_util_1 = require("../../util/text.util");
+var util_1 = require("../../util/util");
 var anim_util_1 = require("../../util/anim.util");
 var TeamDetailsComponent = (function () {
     function TeamDetailsComponent(_app, router, route, _service, userService, teamService, pathLocationStrategy, _location) {
@@ -30,6 +31,18 @@ var TeamDetailsComponent = (function () {
         this.teamService = teamService;
         this.pathLocationStrategy = pathLocationStrategy;
         this._location = _location;
+        this.tabs = [
+            {
+                name: 'Team Details',
+                id: 'team',
+                icon: 'users'
+            },
+            {
+                name: 'Members',
+                id: 'members',
+                icon: 'user-plus'
+            }
+        ];
         this.selectedTab = 'team';
         this.adminActions = [
             'team_subscription_invite',
@@ -95,30 +108,6 @@ var TeamDetailsComponent = (function () {
     TeamDetailsComponent.prototype.setTeam = function (team) {
         this.team = team;
         this.title = team.name;
-        this.tabs = [
-            {
-                name: 'Company Details',
-                id: 'team',
-                icon: 'users'
-            },
-            {
-                name: 'Members',
-                id: 'members',
-                icon: 'user-plus'
-            }
-        ];
-        if (this.can('team_purchases_view')) {
-            this.tabs.push({
-                name: 'Company Subscription',
-                id: 'subscription',
-                icon: 'id-card-o'
-            });
-            this.tabs.push({
-                name: 'Purchase History',
-                id: 'purchases',
-                icon: 'money'
-            });
-        }
     };
     TeamDetailsComponent.prototype.renderDescription = function () {
         if (this.team.description) {
@@ -143,10 +132,6 @@ var TeamDetailsComponent = (function () {
     };
     TeamDetailsComponent.prototype.saveEditUrl = function (url) {
         this.team.url = url;
-        this.teamService.saveTeam(this.team);
-    };
-    TeamDetailsComponent.prototype.saveEditCompany = function (company) {
-        this.team.company = company;
         this.teamService.saveTeam(this.team);
     };
     TeamDetailsComponent.prototype.saveEditAddress = function (address) {
@@ -196,6 +181,7 @@ var TeamDetailsComponent = (function () {
         this.inviteError = '';
         this.teamService.invite(this.team, this.inviteEmail)
             .then(function (invite) {
+            _this.team.invites.push(invite);
             _this.isPosting = false;
             _this.inviteStatus = 'wait';
             _this.inviteModel = invite;
@@ -237,6 +223,10 @@ var TeamDetailsComponent = (function () {
         this._app.dialog('Cancel an Invitation', 'Are you sure you want to revoke your invitation to ' + invite.email + '? We already sent them the invite, but the link inside will no longer work. We will not notify them that it was cancelled.', 'Yes', function () {
             _this.userService.cancelInvite(invite).then(function (done) {
                 if (done) {
+                    var index = util_1.Util.indexOfId(_this.team.invites, invite);
+                    if (index > -1) {
+                        _this.team.invites.splice(index, 1);
+                    }
                 }
             });
         });
@@ -252,39 +242,6 @@ var TeamDetailsComponent = (function () {
                 }, 500);
             });
         });
-    };
-    TeamDetailsComponent.prototype.buySubscription = function () {
-        // this._app.backdrop(true);
-        // this.showBuySubscriptionDialog = true;
-        // this.buySubCount = 0;
-        this._app.dialog('Not Ready Yet', 'We are terribly sorry, but this feature is not ready yet. If this is a problem, please contact us using the "request a feature" option in the App menu.');
-    };
-    TeamDetailsComponent.prototype.cancelBuySubscriptionDialog = function () {
-        this._app.backdrop(false);
-        this.showBuySubscriptionDialog = false;
-    };
-    TeamDetailsComponent.prototype.submitBuySubscriptions = function () {
-        var _this = this;
-        this.showBuySubscriptionDialog = false;
-        setTimeout(function () {
-            _this.showBuySubscriptionCC = true;
-            // let creditCard = Util.setupStripe(this._app.config.stripe);
-            // creditCard.addEventListener('change', (e: any) => {
-            //     this.cardComplete = e.complete;
-            //     if (e.error) {
-            //         this.cardError = e.error.message;
-            //     } else {
-            //         this.cardError = '';
-            //     }
-            // });
-            // // setup the stripe credit card input
-            // setTimeout(() => {
-            //     creditCard.mount('#card-element');
-            // }, 100)
-        }, 300);
-    };
-    TeamDetailsComponent.prototype.doBuySubscriptions = function () {
-        this.isPosting = true;
     };
     TeamDetailsComponent.prototype.getUserName = function (user) {
         return user.firstName ? user.firstName : 'this user';
