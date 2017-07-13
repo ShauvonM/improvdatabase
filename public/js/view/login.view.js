@@ -35,9 +35,7 @@ var LoginView = (function () {
             //this.router.navigate(['/games']);
             _this.done.emit(user);
             _this.isPosting = false;
-        })
-            .catch(function (reason) {
-            console.log(reason.json());
+        }, function (reason) {
             _this.state = 'shake';
             if (reason.status == 401) {
                 _this.isPosting = false;
@@ -100,10 +98,6 @@ var LoginView = (function () {
         this.isPosting = true;
         this.recoverPasswordError = '';
         this.userService.recoverPassword(this.email)
-            .catch(function (e) {
-            console.log(e);
-            _this.recoverPasswordError = 'We had a problem looking up that address.';
-        })
             .then(function (success) {
             _this.isPosting = false;
             if (success) {
@@ -114,9 +108,8 @@ var LoginView = (function () {
                     _this.show = true;
                 }, 200);
             }
-            else {
-                _this.recoverPasswordError = 'We had a problem looking up that address.';
-            }
+        }, function (e) {
+            _this.recoverPasswordError = 'There doesn\'t seem to be an account registered with that address.';
         });
     };
     __decorate([

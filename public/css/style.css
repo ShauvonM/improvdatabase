@@ -647,7 +647,7 @@ logo {
     height: 100%;
     box-sizing: border-box;
     position: relative;
-    z-index: 2;
+    z-index: 1;
     transition: opacity 100ms; }
   .form-input textarea {
     height: 10em; }

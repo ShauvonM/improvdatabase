@@ -77,9 +77,7 @@ export class LoginView implements OnInit {
                 //this.router.navigate(['/games']);
                 this.done.emit(user);
                 this.isPosting = false;
-            })
-            .catch((reason) => {
-                console.log(reason.json());
+            }, (reason) => {
 
                 this.state = 'shake';
 
@@ -145,24 +143,20 @@ export class LoginView implements OnInit {
         this.isPosting = true;
         this.recoverPasswordError = '';
         this.userService.recoverPassword(this.email)
-        .catch(e => {
-            console.log(e);
-            this.recoverPasswordError = 'We had a problem looking up that address.';
-        })
-        .then((success) => {
-            this.isPosting = false;
+            .then((success) => {
+                this.isPosting = false;
 
-            if (success) {
-                this.show = false;
-                setTimeout(() => {
-                    this.showRecoverPassword = false;
-                    this.recoverPasswordDone = true;
-                    this.show = true;
-                }, 200)
-            } else {
-                this.recoverPasswordError = 'We had a problem looking up that address.';
-            }
-        });
+                if (success) {
+                    this.show = false;
+                    setTimeout(() => {
+                        this.showRecoverPassword = false;
+                        this.recoverPasswordDone = true;
+                        this.show = true;
+                    }, 200)
+                }
+            }, e => {
+                this.recoverPasswordError = 'There doesn\'t seem to be an account registered with that address.';
+            });
     }
 
 }

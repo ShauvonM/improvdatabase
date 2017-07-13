@@ -64,12 +64,10 @@ module.exports = {
     recoverPassword: (req, res) => {
         let email = req.body.email,
             noUser = function() {
-                res.json({ error: 'No user found'});
+                res.status(404).json({ error: 'No user found'});
             }
 
-        console.log('recover password??', email);
-
-        if (email === '') {
+        if (!email) {
             noUser();
             return;
         }
@@ -96,8 +94,6 @@ module.exports = {
                 }
 
                 let link = 'https://' + req.get('host') + '/resetMyPassword/' + token;
-
-                console.log('recover password?', name, link);
 
                 emailUtil.send({
                     to: user.email,
