@@ -84,9 +84,11 @@ module.exports = {
                 body: mail.toJSON()
             });
 
+            console.log('Trying to SEND EMAIL to', to_email);
+
             sendgrid.API(request, (error, response) => {
                 if (error) {
-                    console.error(error.response.body.errors, error);
+                    console.error('Sendgrid error!', error);
                 }
 
                 callback(error, response);
