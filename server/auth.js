@@ -90,19 +90,21 @@ module.exports = {
 
                 let name = user.firstName + ' ' + user.lastName;
                 if (!name.trim()) {
-                    name = 'ImprovPlus User';
+                    name = 'Improv Database User';
                 }
 
                 let link = 'https://' + req.get('host') + '/resetMyPassword/' + token;
 
+                console.log('recover password?', name, link);
+
                 emailUtil.send({
                     to: user.email,
                     toName: user.firstName + ' ' + user.lastName,
-                    subject: 'ImprovPlus Password Rescue',
+                    subject: 'Improv Database Password Rescue',
                     content: {
                         type: 'text',
                         baseUrl: 'https://' + req.get('host'),
-                        preheader: 'Did you forget your ImprovPlus password? We can help with that.',
+                        preheader: 'Did you forget your Improv Database password? We can help with that.',
                         greeting: `Dear ${name},`,
                         body: `
                             <p>So you lost your password. That's okay - it happens to the best of us. You can use the button below to change it to something else.</p>
@@ -117,7 +119,7 @@ module.exports = {
                             <p> </p>
                             <p>Sincerely,</p>
 
-                            <p>The Proprietors of ImprovPlus</p>
+                            <p>Shauvon McGill, creator</p>
                         `
                     }
                 }, (error, response) => {
