@@ -67,6 +67,8 @@ module.exports = {
                 res.json({ error: 'No user found'});
             }
 
+        console.log('recover password??', email);
+
         if (email === '') {
             noUser();
             return;
