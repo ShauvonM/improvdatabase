@@ -268,8 +268,9 @@ export class GameDetailsComponent implements OnInit, OnChanges {
         this.gameDatabaseService.saveGame(this.game)
             .then((game) => {
                 //this.setGame(game); not really necessary, because we already set it
-            })
-            .catch(() => {
+
+                this.setCurtain();
+            }, () => {
                 // TODO: revert?
             })
     }
@@ -476,10 +477,6 @@ export class GameDetailsComponent implements OnInit, OnChanges {
         if (!game) {
             this.gameNotFound = true;
         } else {
-            if (!this.dialog) {
-                this._app.setCurtainText(game.names.length ? game.names[0].name : 'New Game');
-            }
-
             this._gameId = game._id;
 
             this.game = game;
@@ -492,7 +489,17 @@ export class GameDetailsComponent implements OnInit, OnChanges {
             }
 
             this.renderDescription();
+
+            if (!this.dialog) {
+                this.setCurtain();
+            }
         }
+    }
+
+    setCurtain(): void {
+        this._app.setCurtain({
+            text: this.game && this.game.names.length ? this.game.names[0].name : 'New Game'
+        });
     }
 
     getPublicNotes(): Note[] {

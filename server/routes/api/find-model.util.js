@@ -39,7 +39,10 @@ module.exports = {
         'zip',
         'country',
         'url',
-        'description'
+        'description',
+        'primaryColor',
+        'secondaryColor',
+        'tertiaryColor'
     ],
 
     findUser: (key, select, populate) => {
@@ -125,11 +128,12 @@ module.exports = {
         return promise.exec();
     },
 
-    findNotes: (noteId, user, gameId, metadataIds, tagIds) => {
+    findNotes: (noteId, user, gameId, metadataIds, tagIds, teamId, populateGames) => {
 
-        let userOr = []
+        let userOr = [];
         
         // if (!user.superAdmin) {
+        if (user) {
             userOr.push({addedUser: user._id});
 
             if (user.actions.indexOf('note_public_view') > -1) {
@@ -140,6 +144,7 @@ module.exports = {
                 let teams = [].concat(user.memberOfTeams, user.adminOfTeams);
                 userOr.push({teams: { $in: teams }});
             }
+        }
         // }
 
         let query;
@@ -163,6 +168,9 @@ module.exports = {
         if (tagIds && tagIds.length) {
             whereOr.push({tag: { $in: tagIds }});
         }
+        if (teamId) {
+            whereOr.push({teams: teamId});
+        }
 
         if (userOr.length) {
             and.push({ $or: userOr });
@@ -176,7 +184,7 @@ module.exports = {
             query = query.and(and);
         }
 
-        return query
+        query = query
             .where('dateDeleted').equals(null)
             .populate({
                 path: 'teams',
@@ -197,7 +205,25 @@ module.exports = {
             .populate({
                 path: 'modifiedUser',
                 select: 'firstName lastName'
+            });
+
+        if (populateGames) {
+            query.populate({
+                path: 'game',
+                select: 'names',
+                populate: {
+                    path: 'names',
+                    select: 'name votes weight dateAdded',
+                    populate: {
+                        path: 'votes'
+                    },
+                    options: {
+                        sort: '-weight -dateAdded'
+                    }
+                }
             })
-            .exec();
+        }
+
+        return query.exec();
     }
 }

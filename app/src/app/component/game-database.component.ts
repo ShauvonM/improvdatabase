@@ -1,12 +1,13 @@
 import {
     Component,
     OnInit,
-    OnDestroy,
     trigger,
     state,
     style,
     transition,
-    animate
+    animate,
+    ViewChild,
+    QueryList
 } from '@angular/core';
 import { PathLocationStrategy } from '@angular/common';
 
@@ -23,6 +24,8 @@ import { UserService } from "../../service/user.service";
 import { Game } from '../../model/game';
 import { Name } from '../../model/name';
 import { Tag } from '../../model/tag';
+
+import { GameDetailsComponent } from './game-details.component';
 
 export class GameFilter {
     property: string;
@@ -48,7 +51,7 @@ export class GameFilter {
         ])
     ]
 })
-export class GameDatabaseComponent implements OnInit, OnDestroy {
+export class GameDatabaseComponent implements OnInit {
     games: Game[] = [];
     names: Name[] = [];
     selectedGame: Game;
@@ -66,6 +69,8 @@ export class GameDatabaseComponent implements OnInit, OnDestroy {
     searchTerm: string;
 
     isLoadingGames: boolean;
+
+    @ViewChild(GameDetailsComponent) gameDetailsComponent: GameDetailsComponent;
 
     constructor(
         private _app: AppComponent,
@@ -182,8 +187,8 @@ export class GameDatabaseComponent implements OnInit, OnDestroy {
 
     private _reset(): void {
         this.selectedGame = null;
-        this._app.setCurtainText('');
         this._app.showBackground(true);
+        this._app.setCurtain({});
     }
 
     onSelect(game: Game): void {
@@ -198,7 +203,12 @@ export class GameDatabaseComponent implements OnInit, OnDestroy {
             this._reset();
         } else {
             this.selectedGame = game;
-            this._app.setCurtainText(game.names.length ? game.names[0].name : 'New Game');
+
+            setTimeout(() => {
+                if (this.gameDetailsComponent) {
+                    this.gameDetailsComponent.setCurtain();
+                }
+            });
         }
     
         let newPath = "/app/game/" + this.selectedGame._id;
@@ -249,11 +259,7 @@ export class GameDatabaseComponent implements OnInit, OnDestroy {
         }
     }
 
-    ngOnDestroy(): void {
-    }
-
     onSearchResultClick(result: SearchResult): void {
-        console.log(result);
         switch(result.type) {
             case 'search':
                 if (result.text) {

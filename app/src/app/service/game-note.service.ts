@@ -58,6 +58,14 @@ export class GameNoteService {
             });
     }
 
+    getNotesForTeam(team: Team): Promise<Note[]> {
+        return this.http.get(API.teamNotes(team._id))
+            .toPromise()
+            .then(response => {
+                return response.json() as Note[];
+            });
+    }
+
     createNote(newNote: Note): Promise<Note> {
         if (!this.userService.can('note_create')) {
             return;

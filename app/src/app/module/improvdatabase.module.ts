@@ -9,6 +9,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../module/shared.module';
 import { ImprovDatabaseRoutingModule } from './improvdatabase-routing.module';
 
+import { ColorPickerModule } from 'angular2-color-picker';
+
 // services
 import { GameDatabaseService } from "../service/game-database.service";
 import { AuthGuard } from "../service/auth-guard.service";
@@ -44,6 +46,7 @@ import { UserCardView } from '../view/user-card.view';
 import { EditableMetadataView } from '../view/editable-metadata.view';
 import { DashboardMessageListView } from '../view/dashboard-message-list.view';
 import { GameNoteView } from '../view/game-note.view';
+import { TeamCardView } from '../view/team-card.view';
 
 // utils
 
@@ -55,7 +58,8 @@ import { GameNoteView } from '../view/game-note.view';
         // HttpModule,
         CommonModule,
         SharedModule,
-        ImprovDatabaseRoutingModule
+        ImprovDatabaseRoutingModule,
+        ColorPickerModule
      ],
     declarations: [
         UnauthorizedComponent,
@@ -82,7 +86,8 @@ import { GameNoteView } from '../view/game-note.view';
         UserCardView,
         EditableMetadataView,
         DashboardMessageListView,
-        GameNoteView
+        GameNoteView,
+        TeamCardView
     ],
     // bootstrap: [ AppComponent ],
     providers: [

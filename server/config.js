@@ -18,7 +18,7 @@ module.exports = function () {
                 key: process.env.SENDGRID_API_KEY
             },
             s3_buckets: {
-                backups: 'improvplus.backups'
+                backups: 'improvdatabase.backups'
             },
             pdftkPath: 'C:\\Program Files (x86)\\PDFtk Server\\bin\\pdftk.exe',
             port: 1919,

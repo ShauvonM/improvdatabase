@@ -9,6 +9,7 @@ import { LoginView } from '../view/login.view';
 import { UserFormView } from '../view/user-form.view';
 import { LandingHeroView } from '../view/landing-hero.view';
 import { LegalView } from '../view/legal.view';
+import { CurtainView } from '../view/curtain.view';
 
 // services
 import { UserService } from "../service/user.service";
@@ -35,6 +36,8 @@ import { ScrollShadowDirective } from '../directive/scroll-shadow.directive';
         UserFormView,
         LandingHeroView,
         LegalView,
+        CurtainView,
+        
         FormInputDirective,
         BracketCardDirective,
         DraggableDirective,
@@ -49,6 +52,8 @@ import { ScrollShadowDirective } from '../directive/scroll-shadow.directive';
         UserFormView,
         LandingHeroView,
         LegalView,
+        CurtainView,
+
         FormInputDirective,
         BracketCardDirective,
         DraggableDirective,

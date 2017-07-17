@@ -321,7 +321,7 @@ export class GameDatabaseService {
         });
     }
 
-    gameHasTag(game: Game, tagIDs: String[]): boolean {
+    gameHasTag(game: Game, tagIDs: string[]): boolean {
         let foundTagGame: boolean = false;
         (<Tag[]> game.tags).forEach((tag) => {
             if (Util.indexOfId(tagIDs, tag) > -1) {
@@ -509,7 +509,7 @@ export class GameDatabaseService {
                     .then((items) => {
                         
                         // search the tags
-                        let tagResults: String[] = [];
+                        let tagResults: string[] = [];
                         items[1].forEach((tag) => {
                             if (tag.name.toLowerCase().indexOf(term) > -1) {
                                 tagResults.push(tag._id);

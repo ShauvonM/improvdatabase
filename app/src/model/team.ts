@@ -2,6 +2,8 @@ import {Invite} from './invite';
 import {User} from './user';
 
 export class Team {
+    [index: string]: any;
+
     _id: string;
     name: string;
     description: string;
@@ -13,6 +15,10 @@ export class Team {
     zip: string;
     country: string;
     url: string;
+
+    primaryColor: string;
+    secondaryColor: string;
+    tertiaryColor: string;
 
     dateAdded: Date;
     addedUser: User;

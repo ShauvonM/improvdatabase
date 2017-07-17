@@ -42,8 +42,8 @@ $swift-linear: all $swift-linear-duration $swift-linear-timing-function !default
   }
 }
 
-@mixin background-linear-gradient-down($from, $start, $to, $end, $default:$from) {
-    $standard: $from $start, $to $end;
+@mixin background-linear-gradient-down($startColor, $fromHeight, $endColor, $toHeight, $default:$startColor) {
+    $standard: $startColor $fromHeight, $endColor $toHeight;
 
     background: $default;
     background: -moz-linear-gradient(top, $standard);

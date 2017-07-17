@@ -25,6 +25,17 @@
             </div>
         </div>
 
+        <div routerLink="/app/teams" class="card small green clickable" *ngIf="userService.can('game_page_view')">
+            <div class="top">
+                <div class="content">
+                    <h3>Your Teams</h3>
+                </div>
+            </div>
+            <div class="body">
+                <p>View and collaborate with your team(s), or register a new one.</p>
+            </div>
+        </div>
+
         <div routerLink="/app/glossary" class="card small clickable" *ngIf="userService.can('glossary_page_view')">
             <div class="top">
                 <div class="content">

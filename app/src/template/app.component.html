@@ -94,14 +94,7 @@
 
 <div (click)="closeOverlays()" class="backdrop nav-backdrop" [@fade] [class.show]="showBackdrop"></div>
 
-<div class="curtain"
-    *ngIf="inApp"
-    [style.top]="(scrollpos * 0.75) + 'px'">
-    <!--<img src="/app/images/header-bg-graphic.png" />-->
-
-    <h2 *ngIf="curtainText" [style.top]="(scrollpos * 0.1) + 'px'" [@bubble]>{{curtainText}}</h2>
-
-</div>
+<id-curtain *ngIf="inApp" [text]="curtainData.text" [color]="curtainData.color" [background]="curtainData.background" ></id-curtain>
 
 <div class="background" *ngIf="backgroundVisible" [@shrinkVertical]></div>
 

@@ -3,14 +3,23 @@
 
 @import "vars";
 
-$paper-bg: rgba(255,255,255,0.9);
-
 .curtain {
     @include abs(0, 0, null, 0, 1);
     height: $curtain-height;
     overflow: hidden;
 
-    @include background-linear-gradient-down($color-curtain-fade, 12px, $color-curtain, ($toolbar-height * 1.8), $color-curtain);
+    // @include background-linear-gradient-down($color-curtain-fade, 12px, $color-curtain, ($toolbar-height * 1.8), $color-curtain);
+    background-color: $color-curtain;
+    transition: background-color 300ms;
+
+    &:before {
+        content: "";
+        display: block;
+        @include abs(0, 0, null, 0, 1);
+        height: $toolbar-height * 1.8;
+
+        @include background-linear-gradient-down($color-curtain-fade, 12px, $color-transparent, ($toolbar-height * 1.8), $color-transparent);        
+    }
 
     img {
         width: 100%;
@@ -30,6 +39,7 @@ $paper-bg: rgba(255,255,255,0.9);
         text-indent: -$curtain-height;
         line-height: 0.8;
         text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);
+        width: 70vw;
 
         @media #{$media-mobile} {
             top: -5%;
@@ -133,7 +143,7 @@ $paper-bg: rgba(255,255,255,0.9);
     .paper {
         border-radius: $border-radius;
         @include md-elevation($card-elevation-default);
-        background: $paper-bg;
+        background: $color-paper-bg;
         padding: $std $large;
         position: relative;
         z-index:  2;
@@ -189,6 +199,10 @@ $paper-bg: rgba(255,255,255,0.9);
             @include md-elevation(1);
             padding-bottom: 0;
         }
+    }
+
+    .tabs+.paper {
+        background-color: $color-white;
     }
 
     &.fullbg {

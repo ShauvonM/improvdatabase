@@ -5,26 +5,35 @@ import {
     Input,
     Output,
     EventEmitter,
-    Renderer2
+    Renderer2,
+    OnChanges,
+    SimpleChanges
 } from '@angular/core';
+import { NgModel } from '@angular/forms';
 
 @Directive({
     selector: '[formSwitch]',
+    providers: [NgModel],
     host: {
+        '(ngModelChange)': 'onModelChange($event)'
     }
 })
-export class FormSwitchDirective implements OnInit {
+export class FormSwitchDirective implements OnInit, OnChanges {
 
     inputElement: HTMLInputElement;
 
     wrapper: HTMLSpanElement;
     control: HTMLSpanElement;
+    partial: HTMLElement;
 
-    private _on: boolean;
+    @Input('partial') partialActive: boolean;
+
+    // private _on: boolean;
 
     constructor(
         el: ElementRef,
-        private renderer: Renderer2
+        private renderer: Renderer2,
+        private model: NgModel
         ) {
         this.inputElement = el.nativeElement;
     }
@@ -58,23 +67,39 @@ export class FormSwitchDirective implements OnInit {
         this.renderer.listen(clickHandler, 'click', e => this.click(e));
 
         setTimeout(() => {
-            if (this.inputElement.checked) {
-                this._on = true;
+            if (this.model.model) {
                 this.wrapper.classList.add('on');
             }
         }, 50);
     }
 
-    click(event: MouseEvent): void {
-        if (!this._on) {
+    ngOnChanges(changes: any): void {
+        if (changes.partialActive && changes.partialActive.currentValue) {
+            this.partial = document.createElement('i');
+            this.partial.className = 'fa fa-asterisk';
+            this.control.appendChild(this.partial);
+        } else if (changes.partialActive && this.partial) {
+            this.partial.remove();
+            this.partial = null;
+        }
+    }
+
+    onModelChange(model: boolean): void {
+        if (model) {
             this.wrapper.classList.add('on');
-            this._on = true;
         } else {
             this.wrapper.classList.remove('on');
-            this._on = false;
         }
-        
-        this.inputElement.checked = this._on;
+    }
+
+    check(): void {
+        setTimeout(() => {
+            this.onModelChange(this.model.model);
+        });
+    }
+
+    click(event: MouseEvent): void {        
+        this.inputElement.checked = !this.model.model;
         this.inputElement.dispatchEvent(new Event('change'));
 
         event.preventDefault();

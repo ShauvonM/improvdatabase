@@ -15,10 +15,13 @@ import { Purchase } from '../../model/purchase';
 import { Invite } from '../../model/invite';
 import { Subscription } from '../../model/subscription';
 
+import { Util } from '../../util/util';
+
 @Injectable()
 export class TeamService {
 
     private teams: Team[] = [];
+    private users: User[] = [];
 
     constructor(
         private http: AppHttp,
@@ -42,6 +45,15 @@ export class TeamService {
         }
 
         this.teams.push(team);
+    }
+
+    addUser(user: User): void {
+        let index = Util.indexOfId(this.users, user);
+        if (index > -1) {
+            this.users.splice(index, 1, user);
+        } else {
+            this.users.push(user);
+        }
     }
 
     findTeamById(id: string): Team {
@@ -136,16 +148,24 @@ export class TeamService {
     fetchTeams(user?: User): Promise<User> {
         user = user || this.userService.getLoggedInUser();
 
-        return this.http.get('/api/user/' + user._id + '/teams')
-            .toPromise()
-            .then(response => {
-                let user = response.json() as User;
-                    
-                this.addTeams(<Team[]> user.adminOfTeams);
-                this.addTeams(<Team[]> user.memberOfTeams);
+        let index = Util.indexOfId(this.users, user);
 
-                return user;
-            });
+        if (index > -1) {
+            return Promise.resolve(this.users[index]);
+        } else {
+            return this.http.get('/api/user/' + user._id + '/teams')
+                .toPromise()
+                .then(response => {
+                    let user = response.json() as User;
+
+                    this.addUser(user);
+                        
+                    this.addTeams(<Team[]> user.adminOfTeams);
+                    this.addTeams(<Team[]> user.memberOfTeams);
+
+                    return user;
+                });
+        }
     }
 
 }

@@ -17,7 +17,8 @@ const   mongoose = require('mongoose'),
         Team = require('../../models/team.model'),
         Invite = require('../../models/invite.model'),
         Purchase = require('../../models/purchase.model'),
-        HistoryModel = require('../../models/history.model');
+        HistoryModel = require('../../models/history.model'),
+        Note = require('../../models/note.model');
 
 module.exports = {
 
@@ -392,6 +393,21 @@ module.exports = {
             auth.unauthorized(req, res);
         }
 
+    },
+
+    notes: (req, res) => {
+        let teamId = req.params.id;
+
+        if (util.indexOfObjectId([].concat(req.user.adminOfTeams, req.user.memberOfTeams), teamId) > -1) {
+
+            return findModelUtil.findNotes(null, null, null, null, null, teamId, true)
+                .then(notes => {
+                    res.json(notes)
+                });
+
+        } else {
+            util.unauthorized(req, res);
+        }
     }
 
 }

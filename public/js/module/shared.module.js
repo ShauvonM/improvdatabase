@@ -16,6 +16,7 @@ var login_view_1 = require("../view/login.view");
 var user_form_view_1 = require("../view/user-form.view");
 var landing_hero_view_1 = require("../view/landing-hero.view");
 var legal_view_1 = require("../view/legal.view");
+var curtain_view_1 = require("../view/curtain.view");
 // services
 var user_service_1 = require("../service/user.service");
 var app_service_1 = require("../service/app.service");
@@ -43,6 +44,7 @@ var SharedModule = (function () {
                 user_form_view_1.UserFormView,
                 landing_hero_view_1.LandingHeroView,
                 legal_view_1.LegalView,
+                curtain_view_1.CurtainView,
                 form_input_directive_1.FormInputDirective,
                 bracket_card_directive_1.BracketCardDirective,
                 draggable_directive_1.DraggableDirective,
@@ -57,6 +59,7 @@ var SharedModule = (function () {
                 user_form_view_1.UserFormView,
                 landing_hero_view_1.LandingHeroView,
                 legal_view_1.LegalView,
+                curtain_view_1.CurtainView,
                 form_input_directive_1.FormInputDirective,
                 bracket_card_directive_1.BracketCardDirective,
                 draggable_directive_1.DraggableDirective,

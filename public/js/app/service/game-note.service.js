@@ -51,6 +51,13 @@ var GameNoteService = (function () {
             return response.json();
         });
     };
+    GameNoteService.prototype.getNotesForTeam = function (team) {
+        return this.http.get(constants_1.API.teamNotes(team._id))
+            .toPromise()
+            .then(function (response) {
+            return response.json();
+        });
+    };
     GameNoteService.prototype.createNote = function (newNote) {
         if (!this.userService.can('note_create')) {
             return;

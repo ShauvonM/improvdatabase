@@ -1,0 +1,13 @@
+<div class="top" [style.background-color]="team.primaryColor">
+    <i *ngIf="admin" class="fa fa-black-tie" title="You are an admin of this team."></i>
+    <div class="content">
+        <h3>{{team.name}}</h3>
+        <h4>Registered {{getDate(team.dateAdded)}}</h4>
+    </div>
+</div>
+<div class="body">
+    <div class="columns fill data-row">
+        <span>Members</span>
+        <span>{{team.admins.length + team.members.length}}</span>
+    </div>
+</div>

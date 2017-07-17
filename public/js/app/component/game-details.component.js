@@ -177,13 +177,14 @@ var GameDetailsComponent = (function () {
         this.addNameShown = false;
     };
     GameDetailsComponent.prototype._saveGame = function () {
+        var _this = this;
         // this._closeAllEdits();
         this.setGame(this.game);
         this.gameDatabaseService.saveGame(this.game)
             .then(function (game) {
             //this.setGame(game); not really necessary, because we already set it
-        })
-            .catch(function () {
+            _this.setCurtain();
+        }, function () {
             // TODO: revert?
         });
     };
@@ -368,9 +369,6 @@ var GameDetailsComponent = (function () {
             this.gameNotFound = true;
         }
         else {
-            if (!this.dialog) {
-                this._app.setCurtainText(game.names.length ? game.names[0].name : 'New Game');
-            }
             this._gameId = game._id;
             this.game = game;
             if (this.game.names && this.game.names.length) {
@@ -380,7 +378,15 @@ var GameDetailsComponent = (function () {
                 });
             }
             this.renderDescription();
+            if (!this.dialog) {
+                this.setCurtain();
+            }
         }
+    };
+    GameDetailsComponent.prototype.setCurtain = function () {
+        this._app.setCurtain({
+            text: this.game && this.game.names.length ? this.game.names[0].name : 'New Game'
+        });
     };
     GameDetailsComponent.prototype.getPublicNotes = function () {
         var notes = this.notes.filter(function (note) {

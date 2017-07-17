@@ -17,6 +17,10 @@ const TeamSchema = new mongoose.Schema({
     country: String,
     url: String,
 
+    primaryColor: String,
+    secondaryColor: String,
+    tertiaryColor: String,
+
     addedUser: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     dateAdded: { type: Date, default: Date.now },
     

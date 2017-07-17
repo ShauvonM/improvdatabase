@@ -20,15 +20,17 @@ var app_service_1 = require("../../service/app.service");
 var time_util_1 = require("../../util/time.util");
 var text_util_1 = require("../../util/text.util");
 var util_1 = require("../../util/util");
+var game_note_service_1 = require("../service/game-note.service");
 var anim_util_1 = require("../../util/anim.util");
 var TeamDetailsComponent = (function () {
-    function TeamDetailsComponent(_app, router, route, _service, userService, teamService, pathLocationStrategy, _location) {
+    function TeamDetailsComponent(_app, router, route, _service, userService, teamService, noteService, pathLocationStrategy, _location) {
         this._app = _app;
         this.router = router;
         this.route = route;
         this._service = _service;
         this.userService = userService;
         this.teamService = teamService;
+        this.noteService = noteService;
         this.pathLocationStrategy = pathLocationStrategy;
         this._location = _location;
         this.tabs = [
@@ -38,9 +40,19 @@ var TeamDetailsComponent = (function () {
                 icon: 'users'
             },
             {
+                name: 'Team Notes',
+                id: 'notes',
+                icon: 'sticky-note'
+            },
+            {
                 name: 'Members',
                 id: 'members',
                 icon: 'user-plus'
+            },
+            {
+                name: 'Settings',
+                id: 'settings',
+                icon: 'sliders'
             }
         ];
         this.selectedTab = 'team';
@@ -107,7 +119,22 @@ var TeamDetailsComponent = (function () {
     };
     TeamDetailsComponent.prototype.setTeam = function (team) {
         this.team = team;
-        this.title = team.name;
+        this.primaryColor = team.primaryColor;
+        this.secondaryColor = team.secondaryColor;
+        this.tertiaryColor = team.tertiaryColor;
+        this.renderDescription();
+        this.noteService.getNotesForTeam(this.team).then(function (notes) {
+            console.log(notes);
+        });
+        this.setCurtain();
+    };
+    TeamDetailsComponent.prototype.setCurtain = function () {
+        this.title = this.team.name;
+        this._app.setCurtain({
+            text: this.title,
+            background: this.primaryColor,
+            color: this.secondaryColor
+        });
     };
     TeamDetailsComponent.prototype.renderDescription = function () {
         if (this.team.description) {
@@ -118,21 +145,25 @@ var TeamDetailsComponent = (function () {
             this.descriptionHtml = 'No Description';
         }
     };
+    TeamDetailsComponent.prototype._saveTeam = function () {
+        this.teamService.saveTeam(this.team);
+        this.setCurtain();
+    };
     TeamDetailsComponent.prototype.saveEditName = function (name) {
         this.team.name = name;
-        this.teamService.saveTeam(this.team);
+        this._saveTeam();
     };
     TeamDetailsComponent.prototype.saveEditPhone = function (phone) {
         this.team.phone = phone;
-        this.teamService.saveTeam(this.team);
+        this._saveTeam();
     };
     TeamDetailsComponent.prototype.saveEditEmail = function (email) {
         this.team.email = email;
-        this.teamService.saveTeam(this.team);
+        this._saveTeam();
     };
     TeamDetailsComponent.prototype.saveEditUrl = function (url) {
         this.team.url = url;
-        this.teamService.saveTeam(this.team);
+        this._saveTeam();
     };
     TeamDetailsComponent.prototype.saveEditAddress = function (address) {
         this.team.address = address.address;
@@ -140,7 +171,7 @@ var TeamDetailsComponent = (function () {
         this.team.state = address.state;
         this.team.zip = address.zip;
         this.team.country = address.country;
-        this.teamService.saveTeam(this.team);
+        this._saveTeam();
     };
     TeamDetailsComponent.prototype.showEditDescription = function () {
         if (this.can('team_edit')) {
@@ -153,8 +184,9 @@ var TeamDetailsComponent = (function () {
     };
     TeamDetailsComponent.prototype.saveDescription = function () {
         this.team.description = this.newDescriptionText;
-        this.teamService.saveTeam(this.team);
+        this._saveTeam();
         this.cancelDescription();
+        this.renderDescription();
     };
     TeamDetailsComponent.prototype.selectUser = function (user) {
         if (this.selectedUser !== user) {
@@ -270,6 +302,20 @@ var TeamDetailsComponent = (function () {
             });
         });
     };
+    // settings
+    TeamDetailsComponent.prototype.setColor = function (color, which) {
+        this[which + 'Color'] = color;
+        this.setCurtain();
+    };
+    TeamDetailsComponent.prototype.saveColor = function (open, which) {
+        var index = which + 'Color', whichColor = this[index];
+        // TODO: figure out a better way to ignore that default ( do we need to? )
+        if (!open && whichColor != this.team[index]) {
+            // the selector has been closed, and it was set to a color that isn't already the team's color
+            this.team[index] = whichColor;
+            this._saveTeam();
+        }
+    };
     __decorate([
         core_1.Input(),
         __metadata("design:type", team_1.Team)
@@ -287,6 +333,7 @@ var TeamDetailsComponent = (function () {
             app_service_1.AppService,
             user_service_1.UserService,
             team_service_1.TeamService,
+            game_note_service_1.GameNoteService,
             common_1.PathLocationStrategy,
             common_1.Location])
     ], TeamDetailsComponent);

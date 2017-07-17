@@ -35,7 +35,9 @@
 
     <div class="button-group" [@shrinkHeight] *ngIf="showControls">
 
-        <button class="button left" *ngIf="note" (click)="deleteNote()">Delete</button>
+        <div class="left">
+            <button class="button" *ngIf="note" (click)="deleteNote()">Delete</button>
+        </div>
 
         <label title="Make this note public?" class="left" *ngIf="superAdmin">
             <i class="fa std fa-globe"></i>
@@ -48,10 +50,30 @@
             [options]="noteContextOptions"
             (save)="setNoteContext($event)"></div>
 
-        <label title="Share this note with your team?" *ngIf="showTeamShare">
-            <i class="fa std fa-users"></i>
-            <input formSwitch name="noteTeam" type="checkbox" [(ngModel)]="noteTeam" />
-        </label>
+        <div class="button-group combined">
+            <label title="Share this note with all of your teams?" *ngIf="showTeamShare" (click)="teamShareToggle()">
+                <i class="fa std fa-users"></i>
+                <input formSwitch name="noteTeam" type="checkbox" [(ngModel)]="noteTeam" [partial]="noteTeamPartial" />
+            </label>
+
+            <div class="menu drop up open" *ngIf="teamSelectionMenuVisible" [@shrinkHeight]>
+                <label>Select which teams should see this note</label>
+                <div class="item" *ngFor="let teamSel of teamSelection; let i = index">
+                    <label (click)="toggleTeamSelection(i)">
+                        <span>{{teamSel.team.name}}</span>
+                        <input formSwitch name="noteTeam" type="checkbox" [(ngModel)]="teamSel.selected" />
+                    </label>
+                </div>
+            </div>
+            <button class="button small"
+                [class.active]="teamSelectionMenuVisible"
+                [class.raised]="noteTeamPartial"
+                *ngIf="teamSelection.length"
+                (click)="teamSelectionMenuVisible = !teamSelectionMenuVisible"
+                title="Share this note with specific teams?">
+                    <i class="fa std fa-cog"></i>
+            </button> 
+        </div>
 
         <button class="button" *ngIf="note" (click)="cancelEdit()">Cancel</button>
 

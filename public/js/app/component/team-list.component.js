@@ -28,6 +28,7 @@ var TeamListComponent = (function () {
             _this.memberOfTeams = u.memberOfTeams;
             _this.adminOfTeams = u.adminOfTeams;
         });
+        this._app.showBackground();
     };
     TeamListComponent.prototype.selectTeam = function (team) {
         this._router.navigate(['/app/team', team._id]);

@@ -3,6 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 exports.CONFIG_TOKEN = new core_1.OpaqueToken('config');
 exports.MOBILE_WIDTH = 500;
+exports.COLORS = {
+    primary: '#2B80AD',
+    secondary: '#2BAD82',
+    tertiary: '#606060'
+};
 exports.API = {
     login: '/login',
     passwordRecovery: '/recoverPassword',
@@ -86,6 +91,9 @@ exports.API = {
     team: '/api/team',
     getTeam: function (teamId) {
         return this.team + "/" + teamId;
+    },
+    teamNotes: function (teamId) {
+        return this.getTeam(teamId) + "/notes";
     }
 };
 exports.PREFERENCE_KEYS = {

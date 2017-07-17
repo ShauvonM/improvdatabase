@@ -202,6 +202,10 @@ logo {
 .fa.std {
     font-size: $std;
     margin-right: $small;
+
+    &:last-child {
+        margin-right: 0;
+    }
 }
 .fa.huge {
     font-size: 50px;
@@ -246,6 +250,10 @@ logo {
 
         &.fit {
             width: auto;
+        }
+
+        &:first-child {
+            margin-left: 0;
         }
 
         &:last-child {
@@ -371,13 +379,14 @@ logo {
     flex-wrap: wrap;
     align-items: center;
     justify-content: flex-end;
+    position: relative;
 
     .left {
         flex: 1;
 
-        &:first-child {
-            margin-left: (-$std);
-        }
+        // &:first-child {
+        //     margin-left: (-$std);
+        // }
     }
 
     label.left {
@@ -397,6 +406,7 @@ logo {
         height: 33px;
         line-height: 30px;
         margin-right: $std;
+        margin-top: 0;
 
         .fa {
             vertical-align: middle;
@@ -427,6 +437,19 @@ logo {
         @media #{$media-mobile} {
             margin: 0 0 0 $std;
             line-height: ($std * 2);
+        }
+    }
+
+    .button-group {
+        margin: 0;
+    }
+
+    &.combined {
+        & > *:first-child {
+            margin-right: 0px;
+        }
+        & > *:last-child {
+            margin-left: 0px;
         }
     }
 }
@@ -509,11 +532,16 @@ button,
     text-transform: uppercase;
     text-decoration: none;
 
-    @include md-elevation-transition("opacity #{$anim-duration}");
+    @include md-elevation-transition("opacity #{$anim-duration}, background-color #{$anim-duration}");
 
     .fa {
         font-size: $std;
         margin-right: $small;
+        line-height: $button-height;
+
+        &:last-child {
+            margin: 0;
+        }
     }
 
     $large-button-scale: 1.5;
@@ -522,6 +550,18 @@ button,
         line-height: ($button-height * $large-button-scale);
         height: ($button-height * $large-button-scale);
         padding: 0 ($std * $large-button-scale);
+    }
+
+    $smallheight: $button-height - ($std * .75);
+    &.small {
+        line-height: $smallheight;
+        height: $smallheight;
+        padding: 0 $small;
+        min-width: 0;
+
+        .fa {
+            line-height: $smallheight;
+        }
     }
 
     &.raised {
@@ -535,6 +575,10 @@ button,
         &:active {
             @include md-elevation($raised-button-pressed-elevation);
         }
+    }
+
+    &.active {
+        @include md-elevation($raised-button-pressed-elevation);
     }
 
     &.brackets {
@@ -636,6 +680,10 @@ button,
             justify-content: center;
         }
 
+        .fill {
+            flex-grow: 1;
+        }
+
         .badge {
             font-size: 24px;
             padding-right: 16px;
@@ -647,20 +695,21 @@ button,
             }
         }
 
+        .no-margin {
+            margin: (-$small) (-$std);
+        }
+
         .metadata {
             min-width: 100px; // makes sure any ellipsized content inside will be ellipsized
             flex-grow: 1;
 
-            label {
+            & > label {
                 margin: 0;
 
                 span {
                     margin: 0 $std 0 0;
+                    vertical-align: middle;
                 }
-            }
-
-            &.no-margin {
-                margin: (-$small) (-$std);
             }
 
             .row {
@@ -1091,6 +1140,7 @@ button,
         @include md-elevation($raised-button-elevation);
         @include abs(-2px, auto, null, -2px);
         transition: left 250ms, right 250ms;
+        line-height: $icon-size;
     }
 
     &.on {
@@ -1157,5 +1207,44 @@ label.icon-choice {
 
     .StripeElement--webkit-autofill {
         background-color: #fefde5 !important;
+    }
+}
+
+.menu {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    background-color: $color-white;
+    border-radius: $border-radius;
+
+    &.drop {
+        @include abs(100%, null, null, 0, 5);
+
+        @include md-elevation-transition();
+        @include md-elevation(0);
+
+        &.up {
+            top: auto;
+            bottom: 100%;
+        }
+
+        &.open {
+            @include md-elevation($card-elevation-active);
+        }
+    }
+
+    & > label {
+        line-height: initial;
+        margin: $std $std 0 $std;
+    }
+
+    .item {
+        border: 0px;
+        padding: $small $std;
+        white-space: nowrap;
+
+        &:last-child {
+            padding-bottom: $std;
+        }
     }
 }

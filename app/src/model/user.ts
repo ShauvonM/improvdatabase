@@ -12,7 +12,7 @@ export class Preference {
 }
 
 export class User {
-    _id?: string;
+    _id: string;
     email: string;
     password: string;
     firstName?: string;

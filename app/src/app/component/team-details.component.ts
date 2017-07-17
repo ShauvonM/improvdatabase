@@ -2,6 +2,10 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Location, PathLocationStrategy } from '@angular/common';
 
+import { ColorPickerService } from 'angular2-color-picker';
+
+import { COLORS } from '../../constants';
+
 import {AppComponent} from '../../component/app.component';
 import { Tool } from '../view/toolbar.view';
 
@@ -22,6 +26,9 @@ import { TimeUtil } from '../../util/time.util';
 import { TextUtil } from '../../util/text.util';
 import { Util } from '../../util/util';
 
+import { GameNoteService } from '../service/game-note.service';
+import { Note } from '../../model/note';
+
 import { DialogAnim, ToggleAnim } from '../../util/anim.util';
 
 @Component({
@@ -31,6 +38,7 @@ import { DialogAnim, ToggleAnim } from '../../util/anim.util';
     animations: [DialogAnim.dialog]
 })
 export class TeamDetailsComponent implements OnInit {
+    [index: string]: any;
 
     title: string;
 
@@ -44,9 +52,19 @@ export class TeamDetailsComponent implements OnInit {
             icon: 'users'
         },
         {
+            name: 'Team Notes',
+            id: 'notes',
+            icon: 'sticky-note'
+        },
+        {
             name: 'Members',
             id: 'members',
             icon: 'user-plus'
+        },
+        {
+            name: 'Settings',
+            id: 'settings',
+            icon: 'sliders'
         }
     ];
 
@@ -68,6 +86,10 @@ export class TeamDetailsComponent implements OnInit {
 
     descriptionHtml: string;
 
+    primaryColor: string;
+    secondaryColor: string;
+    tertiaryColor: string;
+
     constructor(
         public _app: AppComponent,
         private router: Router,
@@ -75,6 +97,7 @@ export class TeamDetailsComponent implements OnInit {
         private _service: AppService,
         private userService: UserService,
         private teamService: TeamService,
+        private noteService: GameNoteService,
         private pathLocationStrategy: PathLocationStrategy,
         private _location: Location
     ) { }
@@ -145,7 +168,26 @@ export class TeamDetailsComponent implements OnInit {
     setTeam(team: Team): void {
         this.team = team;
 
-        this.title = team.name;
+        this.primaryColor = team.primaryColor;
+        this.secondaryColor = team.secondaryColor;
+        this.tertiaryColor = team.tertiaryColor;
+
+        this.renderDescription();
+
+        this.noteService.getNotesForTeam(this.team).then(notes => {
+            console.log(notes);
+        });
+
+        this.setCurtain();
+    }
+
+    private setCurtain() {
+        this.title = this.team.name;
+        this._app.setCurtain({
+            text: this.title,
+            background: this.primaryColor,
+            color: this.secondaryColor
+        });
     }
 
     renderDescription(): void {
@@ -157,24 +199,29 @@ export class TeamDetailsComponent implements OnInit {
         }
     }
 
+    private _saveTeam(): void {
+        this.teamService.saveTeam(this.team);
+        this.setCurtain();
+    }
+
     saveEditName(name: string): void {
         this.team.name = name;
-        this.teamService.saveTeam(this.team);
+        this._saveTeam();
     }
 
     saveEditPhone(phone: string): void {
         this.team.phone = phone;
-        this.teamService.saveTeam(this.team);
+        this._saveTeam();
     }
 
     saveEditEmail(email: string): void {
         this.team.email = email;
-        this.teamService.saveTeam(this.team);
+        this._saveTeam();
     }
 
     saveEditUrl(url: string): void {
         this.team.url = url;
-        this.teamService.saveTeam(this.team);
+        this._saveTeam();
     }
 
     saveEditAddress(address: Address): void {
@@ -184,7 +231,7 @@ export class TeamDetailsComponent implements OnInit {
         this.team.zip = address.zip;
         this.team.country = address.country;
 
-        this.teamService.saveTeam(this.team);
+        this._saveTeam();
     }
 
     newDescriptionText: string;
@@ -202,8 +249,9 @@ export class TeamDetailsComponent implements OnInit {
 
     saveDescription(): void {
         this.team.description = this.newDescriptionText;
-        this.teamService.saveTeam(this.team);
+        this._saveTeam();
         this.cancelDescription();
+        this.renderDescription();
     }
 
     selectUser(user: User): void {
@@ -345,6 +393,25 @@ export class TeamDetailsComponent implements OnInit {
                     this.setTeam(team);
                 });
             });
+    }
+
+    // settings
+
+    setColor(color: string, which: string): void {
+        this[which + 'Color'] = color;
+
+        this.setCurtain();
+    }
+    saveColor(open: boolean, which: string): void {
+        let index = which + 'Color',
+            whichColor = this[index];
+
+        // TODO: figure out a better way to ignore that default ( do we need to? )
+        if (!open && whichColor != this.team[index]) {
+            // the selector has been closed, and it was set to a color that isn't already the team's color
+            this.team[index] = whichColor;
+            this._saveTeam();
+        }
     }
 
 }

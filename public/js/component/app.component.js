@@ -42,6 +42,7 @@ var AppComponent = (function () {
         this.showMenu = false;
         this.showFullscreen = false;
         // generic dialogs
+        // TODO: make this an interface!
         this.showDialog = false;
         this.dialogTitle = "";
         this.dialogMessage = "";
@@ -49,6 +50,7 @@ var AppComponent = (function () {
         this.dialogConfirm = "";
         this.dialogHideCancel = true;
         this.toastMessageQueue = [];
+        this.curtainData = {};
         this.config = config;
     }
     AppComponent.prototype.ngOnInit = function () {
@@ -69,7 +71,7 @@ var AppComponent = (function () {
             if (!_this.backgroundRequested) {
                 _this.backgroundVisible = false;
             }
-            _this.setCurtainText('');
+            _this.setCurtain({});
         });
         this.setUser(this.userService.getLoggedInUser());
         this.userSubscription = this.userService.loginState$.subscribe(function (user) {
@@ -275,9 +277,6 @@ var AppComponent = (function () {
             this.pathLocationStrategy.pushState({}, '', path, '');
         }
     };
-    AppComponent.prototype.setCurtainText = function (text) {
-        this.curtainText = text;
-    };
     AppComponent.prototype.scrollTo = function (to, duration) {
         var maxScroll = document.body.scrollHeight - window.innerHeight;
         if (maxScroll < to) {
@@ -321,6 +320,9 @@ var AppComponent = (function () {
             requestAnimationFrame(scrollFunc);
         };
         requestAnimationFrame(scrollFunc);
+    };
+    AppComponent.prototype.setCurtain = function (data) {
+        this.curtainData = data;
     };
     AppComponent = __decorate([
         core_1.Component({

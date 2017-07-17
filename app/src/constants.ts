@@ -2,6 +2,13 @@ import { OpaqueToken } from '@angular/core';
 
 export const CONFIG_TOKEN = new OpaqueToken('config');
 export const MOBILE_WIDTH = 500;
+
+export const COLORS = {
+    primary: '#2B80AD',
+    secondary: '#2BAD82',
+    tertiary: '#606060'
+}
+
 export const API = {
     login: '/login',
     passwordRecovery: '/recoverPassword',
@@ -95,6 +102,9 @@ export const API = {
     team: '/api/team',
     getTeam: function(teamId: string): string {
         return `${this.team}/${teamId}`;
+    },
+    teamNotes: function(teamId: string): string {
+        return `${this.getTeam(teamId)}/notes`;
     }
 
 }

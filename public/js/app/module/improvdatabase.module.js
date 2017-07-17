@@ -14,6 +14,7 @@ var forms_1 = require("@angular/forms");
 // import { PathLocationStrategy } from '@angular/common';
 var shared_module_1 = require("../../module/shared.module");
 var improvdatabase_routing_module_1 = require("./improvdatabase-routing.module");
+var angular2_color_picker_1 = require("angular2-color-picker");
 // services
 var game_database_service_1 = require("../service/game-database.service");
 var auth_guard_service_1 = require("../service/auth-guard.service");
@@ -46,6 +47,7 @@ var user_card_view_1 = require("../view/user-card.view");
 var editable_metadata_view_1 = require("../view/editable-metadata.view");
 var dashboard_message_list_view_1 = require("../view/dashboard-message-list.view");
 var game_note_view_1 = require("../view/game-note.view");
+var team_card_view_1 = require("../view/team-card.view");
 // utils
 var ImprovDatabaseModule = (function () {
     function ImprovDatabaseModule() {
@@ -59,7 +61,8 @@ var ImprovDatabaseModule = (function () {
                 // HttpModule,
                 common_1.CommonModule,
                 shared_module_1.SharedModule,
-                improvdatabase_routing_module_1.ImprovDatabaseRoutingModule
+                improvdatabase_routing_module_1.ImprovDatabaseRoutingModule,
+                angular2_color_picker_1.ColorPickerModule
             ],
             declarations: [
                 unauthorized_component_1.UnauthorizedComponent,
@@ -84,7 +87,8 @@ var ImprovDatabaseModule = (function () {
                 user_card_view_1.UserCardView,
                 editable_metadata_view_1.EditableMetadataView,
                 dashboard_message_list_view_1.DashboardMessageListView,
-                game_note_view_1.GameNoteView
+                game_note_view_1.GameNoteView,
+                team_card_view_1.TeamCardView
             ],
             // bootstrap: [ AppComponent ],
             providers: [

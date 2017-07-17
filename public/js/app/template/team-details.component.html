@@ -72,7 +72,8 @@
 
         <textarea name="description"
             class="description"
-            [(ngModel)]="newDescriptionText" 
+            [(ngModel)]="newDescriptionText"
+            rows="10"
             *ngIf="editDescriptionShown"></textarea>
 
         <div class="button-group" *ngIf="can('team_edit')">
@@ -83,6 +84,11 @@
             <div class="button raised" *ngIf="editDescriptionShown" (click)="saveDescription()">SAVE</div>
         </div>
 
+    </div>
+
+    <!-- notes -->
+    <div class="paper" *ngIf="selectedTab == 'notes'">
+        
     </div>
 
     <!-- member list -->
@@ -141,9 +147,62 @@
 
     </div>
 
+    <div class="paper" *ngIf="selectedTab == 'settings'">
+
+        <div class="block">
+
+            <label class="center">Colors</label>
+            <div class="center">
+                <button class="button raised"
+                    [style.background-color]="primaryColor"
+                    [(colorPicker)]="primaryColor"
+                    (colorPickerChange)="setColor($event, 'primary')"
+                    (cpToggleChange)="saveColor($event, 'primary')"
+                    [cpCancelButton]="true"
+                    [cpCancelButtonClass]="'button small raised'"
+                    [cpOKButton]="true"
+                    [cpOKButtonClass]="'button small raised'"
+                    [cpAlphaChannel]="'disabled'"
+                    [cpPosition]="'bottom'"
+                    [cpFallbackColor]="'#666'"
+                    >Primary Color</button>
+
+                <button class="button raised"
+                    [style.background-color]="secondaryColor"
+                    [(colorPicker)]="secondaryColor"
+                    (colorPickerChange)="setColor($event, 'secondary')"
+                    (cpToggleChange)="saveColor($event, 'secondary')"
+                    [cpCancelButton]="true"
+                    [cpCancelButtonClass]="'button small raised'"
+                    [cpOKButton]="true"
+                    [cpOKButtonClass]="'button small raised'"
+                    [cpAlphaChannel]="'disabled'"
+                    [cpPosition]="'bottom'"
+                    [cpFallbackColor]="'#666'"
+                    >Secondary Color</button>
+
+                <button class="button raised"
+                    [style.background-color]="tertiaryColor"
+                    [(colorPicker)]="tertiaryColor"
+                    (colorPickerChange)="setColor($event, 'tertiary')"
+                    (cpToggleChange)="saveColor($event, 'tertiary')"
+                    [cpCancelButton]="true"
+                    [cpCancelButtonClass]="'button small raised'"
+                    [cpOKButton]="true"
+                    [cpOKButtonClass]="'button small raised'"
+                    [cpAlphaChannel]="'disabled'"
+                    [cpPosition]="'bottom'"
+                    [cpFallbackColor]="'#666'"
+                    >Text Color</button>
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
 
-<div class="dialog-container" [class.show]="showInviteDialog || showBuySubscriptionDialog">
+<div class="dialog-container" [class.show]="showInviteDialog">
     <div class="dialog-dismiss" (click)="cancelInviteDialog()"></div>
 
     <div class="dialog invite-form" *ngIf="showInviteDialog && !inviteStatus" [@dialog]="'default'">

@@ -16,6 +16,7 @@ require("rxjs/Subscription");
 var app_component_1 = require("../../component/app.component");
 var game_database_service_1 = require("../service/game-database.service");
 var user_service_1 = require("../../service/user.service");
+var game_details_component_1 = require("./game-details.component");
 var GameFilter = (function () {
     function GameFilter() {
     }
@@ -138,10 +139,11 @@ var GameDatabaseComponent = (function () {
     };
     GameDatabaseComponent.prototype._reset = function () {
         this.selectedGame = null;
-        this._app.setCurtainText('');
         this._app.showBackground(true);
+        this._app.setCurtain({});
     };
     GameDatabaseComponent.prototype.onSelect = function (game) {
+        var _this = this;
         // remember the scroll position so we can return there when the user comes back
         if (!this.selectedGame) {
             this.previousScrollPosition = window.scrollY;
@@ -152,7 +154,11 @@ var GameDatabaseComponent = (function () {
         }
         else {
             this.selectedGame = game;
-            this._app.setCurtainText(game.names.length ? game.names[0].name : 'New Game');
+            setTimeout(function () {
+                if (_this.gameDetailsComponent) {
+                    _this.gameDetailsComponent.setCurtain();
+                }
+            });
         }
         var newPath = "/app/game/" + this.selectedGame._id;
         this._app.setPath(newPath);
@@ -197,11 +203,8 @@ var GameDatabaseComponent = (function () {
                 break;
         }
     };
-    GameDatabaseComponent.prototype.ngOnDestroy = function () {
-    };
     GameDatabaseComponent.prototype.onSearchResultClick = function (result) {
         var _this = this;
-        console.log(result);
         switch (result.type) {
             case 'search':
                 if (result.text) {
@@ -267,6 +270,10 @@ var GameDatabaseComponent = (function () {
             });
         }
     };
+    __decorate([
+        core_1.ViewChild(game_details_component_1.GameDetailsComponent),
+        __metadata("design:type", game_details_component_1.GameDetailsComponent)
+    ], GameDatabaseComponent.prototype, "gameDetailsComponent", void 0);
     GameDatabaseComponent = __decorate([
         core_1.Component({
             moduleId: module.id,

@@ -35,6 +35,8 @@ export class TeamListComponent implements OnInit {
             this.memberOfTeams = <Team[]> u.memberOfTeams;
             this.adminOfTeams = <Team[]> u.adminOfTeams;
         });
+
+        this._app.showBackground();
     }
 
     selectTeam(team: Team): void {

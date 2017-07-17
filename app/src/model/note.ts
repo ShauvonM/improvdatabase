@@ -4,7 +4,7 @@ import { User } from './user';
 import { Team } from './team';
 
 export class Note {
-    _id?: string;
+    _id: string;
     game?: string;
     tag?: Tag|string;
     metadata?: GameMetadata|string;

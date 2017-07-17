@@ -14,11 +14,13 @@ require("rxjs/add/operator/toPromise");
 var app_http_1 = require("../../data/app-http");
 var constants_1 = require("../../constants");
 var user_service_1 = require("../../service/user.service");
+var util_1 = require("../../util/util");
 var TeamService = (function () {
     function TeamService(http, userService) {
         this.http = http;
         this.userService = userService;
         this.teams = [];
+        this.users = [];
     }
     TeamService.prototype.addTeams = function (teams) {
         var _this = this;
@@ -34,6 +36,15 @@ var TeamService = (function () {
             this.teams.splice(index, 1);
         }
         this.teams.push(team);
+    };
+    TeamService.prototype.addUser = function (user) {
+        var index = util_1.Util.indexOfId(this.users, user);
+        if (index > -1) {
+            this.users.splice(index, 1, user);
+        }
+        else {
+            this.users.push(user);
+        }
     };
     TeamService.prototype.findTeamById = function (id) {
         var selectedTeam = null;
@@ -125,14 +136,21 @@ var TeamService = (function () {
     TeamService.prototype.fetchTeams = function (user) {
         var _this = this;
         user = user || this.userService.getLoggedInUser();
-        return this.http.get('/api/user/' + user._id + '/teams')
-            .toPromise()
-            .then(function (response) {
-            var user = response.json();
-            _this.addTeams(user.adminOfTeams);
-            _this.addTeams(user.memberOfTeams);
-            return user;
-        });
+        var index = util_1.Util.indexOfId(this.users, user);
+        if (index > -1) {
+            return Promise.resolve(this.users[index]);
+        }
+        else {
+            return this.http.get('/api/user/' + user._id + '/teams')
+                .toPromise()
+                .then(function (response) {
+                var user = response.json();
+                _this.addUser(user);
+                _this.addTeams(user.adminOfTeams);
+                _this.addTeams(user.memberOfTeams);
+                return user;
+            });
+        }
     };
     TeamService = __decorate([
         core_1.Injectable(),

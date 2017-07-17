@@ -11,6 +11,8 @@ $color-bg: #f5f5f5; // the main window background
 $color-white: #FFFFFF;
 $color-black: #000000;
 
+$color-paper-bg: rgba(255,255,255,0.9);
+
 $color-shade: rgba(0,0,0,0.2); // the color for fullscreen 'shade' elements
 
 $color-text: #606060; // primary text color
@@ -21,15 +23,15 @@ $color-home-bg-black: rgba(0,0,0,0.3);
 $color-home-bg-white: rgba(255,255,255,0.3);
 
 $color-curtain: #CCCCCC; // the color for the app background (or curtain for paper-style pages)
-$color-curtain-fade: #e5e5e5; // the color that fades in at the top of the screen
+$color-curtain-fade: rgba(255,255,255,0.6); // the color that fades in at the top of the screen
 
 $color-transparent: rgba(0,0,0,0); //utility!
 
 $color-red: #d32f2f;
 $color-orange: #ffa70f; // Speaker's Studio Orange!
 $color-yellow: #F9D423; // yellow!
-$color-blue: #3d80af;
-$color-green: #26AA30;
+$color-blue: #2B80AD; //#3d80af;
+$color-green: #2BAD82;//#26AA30;
 
 // FONT
 $font-family: 'Lato', sans-serif !default;

@@ -6,44 +6,19 @@
 
 <div class="page">
 
-
         <div class="card-list">
 
-            <div class="card clickable"
+            <div class="clickable id-team-card"
                 (click)="selectTeam(team)"
+                [team]="team"
+                [admin]="true"
                 *ngFor="let team of adminOfTeams">
-
-                <div class="top">
-                    <i class="fa fa-unlock" title="You are an admin of this team."></i>
-                    <div class="content">
-                        <h3>{{team.name}}</h3>
-                        <h4>Registered {{getDate(team.dateAdded)}}</h4>
-                    </div>
-                </div>
-                <div class="body">
-                    <div class="columns fill data-row">
-                        <span>Members</span>
-                        <span>{{team.admins.length + team.members.length}}</span>
-                    </div>
-                </div>
             </div>
 
-            <div class="card clickable"
+            <div class="clickable id-team-card"
                 (click)="selectTeam(team)"
+                [team]="team"
                 *ngFor="let team of memberOfTeams">
-
-                <div class="top">
-                    <div class="content">
-                        <h3>{{team.name}}</h3>
-                        <h4>Registered {{getDate(team.dateAdded)}}</h4>
-                    </div>
-                </div>
-                <div class="body">
-                    <div class="columns fill data-row">
-                        <span>Members</span>
-                        <span>{{team.admins.length + team.members.length}}</span>
-                    </div>
-                </div>
             </div>
 
         </div>

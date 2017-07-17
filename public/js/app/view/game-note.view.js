@@ -19,14 +19,24 @@ var game_note_service_1 = require("../service/game-note.service");
 var anim_util_1 = require("../../util/anim.util");
 var util_1 = require("../../util/util");
 var text_util_1 = require("../../util/text.util");
+var team_service_1 = require("../service/team.service");
+var form_switch_directive_1 = require("../../directive/form-switch.directive");
+var TeamOption = (function () {
+    function TeamOption() {
+    }
+    return TeamOption;
+}());
 var GameNoteView = (function () {
-    function GameNoteView(userService, noteService) {
+    function GameNoteView(userService, noteService, teamService, changeDetector) {
         this.userService = userService;
         this.noteService = noteService;
+        this.teamService = teamService;
+        this.changeDetector = changeDetector;
         this.create = new core_1.EventEmitter();
         this.remove = new core_1.EventEmitter();
         this.showUserName = true;
         this.showControls = true;
+        this.teamSelection = [];
     }
     GameNoteView.prototype.ngOnInit = function () {
         var _this = this;
@@ -121,10 +131,7 @@ var GameNoteView = (function () {
             _this.noteContext = '';
             if (_this.note) {
                 _this.noteInput = _this.note.description;
-                if (_this.note.teams && _this.note.teams.length) {
-                    _this.noteTeam = true;
-                }
-                else {
+                if (!_this.note.teams || !_this.note.teams.length) {
                     _this.noteTeam = false;
                 }
                 if (_this.note.game) {
@@ -141,6 +148,17 @@ var GameNoteView = (function () {
             else {
                 _this.noteTeam = _this.userService.getPreference(constants_1.PREFERENCE_KEYS.shareNotesWithTeam, 'false') == 'true';
             }
+            _this.teamSelection = [];
+            _this.teamService.fetchTeams().then(function (user) {
+                var teams = [].concat(user.adminOfTeams, user.memberOfTeams), noteTeams = _this.note ? _this.note.teams : [];
+                teams.forEach(function (team) {
+                    _this.teamSelection.push({
+                        team: team,
+                        selected: util_1.Util.indexOfId(noteTeams, team) > -1
+                    });
+                });
+                _this.toggleTeamSelection();
+            });
         }, delay);
     };
     GameNoteView.prototype.cancelEdit = function () {
@@ -172,11 +190,18 @@ var GameNoteView = (function () {
             note.metadata = this.noteContext.replace('metadata_', '');
         }
         note.public = this.notePublic;
-        if (this.noteTeam) {
-            note.teams = [].concat(this.userService.getTeams(), this.userService.getAdminTeams());
-        }
-        else {
-            note.teams = [];
+        // if (this.noteTeam) {
+        //     note.teams = [].concat(this.userService.getTeams(), this.userService.getAdminTeams());
+        // } else {
+        //     note.teams = [];
+        // }
+        note.teams = [];
+        if (this.teamSelection.length) {
+            this.teamSelection.forEach(function (team) {
+                if (team.selected) {
+                    note.teams.push(team.team);
+                }
+            });
         }
         this.userService.setPreference(constants_1.PREFERENCE_KEYS.shareNotesWithTeam, this.noteTeam);
         this.isPosting = true;
@@ -214,6 +239,38 @@ var GameNoteView = (function () {
             _this.remove.emit(_this.note);
         });
     };
+    GameNoteView.prototype.teamShareToggle = function () {
+        var _this = this;
+        setTimeout(function () {
+            _this.teamSelection.forEach(function (team) {
+                team.selected = _this.noteTeam;
+            });
+            _this.noteTeamPartial = false;
+            _this.checkAllSwitches();
+        });
+    };
+    GameNoteView.prototype.toggleTeamSelection = function (index) {
+        var _this = this;
+        setTimeout(function () {
+            var pass = true, partial = false;
+            _this.teamSelection.forEach(function (team) {
+                if (!team.selected) {
+                    pass = false;
+                }
+                else {
+                    partial = true;
+                }
+            });
+            _this.noteTeam = pass;
+            _this.noteTeamPartial = partial && !pass;
+            _this.checkAllSwitches();
+        });
+    };
+    GameNoteView.prototype.checkAllSwitches = function () {
+        this.teamShareDirectives.forEach(function (item) {
+            item.check();
+        });
+    };
     __decorate([
         core_1.Input(),
         __metadata("design:type", note_1.Note)
@@ -238,6 +295,10 @@ var GameNoteView = (function () {
         core_1.ViewChild('noteinput'),
         __metadata("design:type", core_1.ElementRef)
     ], GameNoteView.prototype, "inputElement", void 0);
+    __decorate([
+        core_1.ViewChildren(form_switch_directive_1.FormSwitchDirective),
+        __metadata("design:type", core_1.QueryList)
+    ], GameNoteView.prototype, "teamShareDirectives", void 0);
     GameNoteView = __decorate([
         core_1.Component({
             moduleId: module.id,
@@ -246,7 +307,9 @@ var GameNoteView = (function () {
             animations: [anim_util_1.ShrinkAnim.height]
         }),
         __metadata("design:paramtypes", [user_service_1.UserService,
-            game_note_service_1.GameNoteService])
+            game_note_service_1.GameNoteService,
+            team_service_1.TeamService,
+            core_1.ChangeDetectorRef])
     ], GameNoteView);
     return GameNoteView;
 }());

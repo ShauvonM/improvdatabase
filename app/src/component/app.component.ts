@@ -23,6 +23,8 @@ import { UserService } from '../service/user.service';
 
 import { DialogAnim, ToggleAnim, ShrinkAnim } from '../util/anim.util';
 
+import { CurtainInterface } from '../view/curtain.view';
+
 @Component({
     moduleId: module.id,
     selector: 'improvdatabase',
@@ -68,6 +70,7 @@ export class AppComponent implements OnInit {
     showBackdrop: boolean;
 
     // generic dialogs
+    // TODO: make this an interface!
     showDialog: boolean = false;
     dialogTitle: string = "";
     dialogMessage: string = "";
@@ -81,7 +84,7 @@ export class AppComponent implements OnInit {
     toastMessage: string;
     private toastMessageQueue: string[] = [];
 
-    curtainText: string;
+    curtainData: CurtainInterface = {};
 
     constructor(
         @Inject(CONFIG_TOKEN) config: Config,
@@ -116,7 +119,7 @@ export class AppComponent implements OnInit {
             if (!this.backgroundRequested) {
                 this.backgroundVisible = false;
             }
-            this.setCurtainText('');
+            this.setCurtain({});
         });
 
         this.setUser(this.userService.getLoggedInUser());
@@ -348,10 +351,6 @@ export class AppComponent implements OnInit {
         }
     }
 
-    setCurtainText(text: string): void {
-        this.curtainText = text;
-    }
-
     scrollTo(to: number, duration?: number) {
         let maxScroll = document.body.scrollHeight - window.innerHeight;
         if (maxScroll < to) {
@@ -405,6 +404,10 @@ export class AppComponent implements OnInit {
         };
 
         requestAnimationFrame(scrollFunc);
+    }
+
+    setCurtain(data: CurtainInterface): void {
+        this.curtainData = data;
     }
     
 }

@@ -6,7 +6,10 @@ import {
     Output,
     EventEmitter,
     ViewChild,
-    ElementRef
+    ViewChildren,
+    ElementRef,
+    ChangeDetectorRef,
+    QueryList
 } from '@angular/core';
 
 import { TimeUtil } from '../../util/time.util';
@@ -28,6 +31,16 @@ import { ShrinkAnim } from '../../util/anim.util';
 import { Util } from '../../util/util';
 import { TextUtil } from '../../util/text.util';
 
+import { TeamService } from '../service/team.service';
+import { Team } from '../../model/team';
+
+import { FormSwitchDirective } from '../../directive/form-switch.directive';
+
+class TeamOption {
+    team: Team;
+    selected: boolean;
+}
+
 @Component({
     moduleId: module.id,
     selector: '.id-game-note',
@@ -44,6 +57,9 @@ export class GameNoteView implements OnInit, OnChanges {
 
     @ViewChild('description') descriptionElement: ElementRef;
     @ViewChild('noteinput') inputElement: ElementRef;
+
+    // @ViewChild('noteTeamDirective', {read: FormSwitchDirective}) noteTeamDirective: FormSwitchDirective;
+    @ViewChildren(FormSwitchDirective) teamShareDirectives: QueryList<FormSwitchDirective>;
 
     descriptionHtml: string;
 
@@ -62,17 +78,23 @@ export class GameNoteView implements OnInit, OnChanges {
     noteInput: string;
     noteContext: string;
     noteContextOptions: DropdownOption[];
+
     notePublic: boolean;
     noteTeam: boolean;
+    noteTeamPartial: boolean;
 
     showControls: boolean = true;
     showDeleteConfirm: boolean;
 
     simpleDate: string;
 
+    teamSelection: TeamOption[] = [];
+
     constructor(
         private userService: UserService,
-        private noteService: GameNoteService
+        private noteService: GameNoteService,
+        private teamService: TeamService,
+        private changeDetector: ChangeDetectorRef
     ) { }
     
     ngOnInit() {
@@ -182,9 +204,7 @@ export class GameNoteView implements OnInit, OnChanges {
 
             if (this.note) {
                 this.noteInput = this.note.description;
-                if (this.note.teams && this.note.teams.length) {
-                    this.noteTeam = true;
-                } else {
+                if (!this.note.teams || !this.note.teams.length) {
                     this.noteTeam = false;
                 }
                 if (this.note.game) {
@@ -199,6 +219,20 @@ export class GameNoteView implements OnInit, OnChanges {
             } else {
                 this.noteTeam = this.userService.getPreference(PREFERENCE_KEYS.shareNotesWithTeam, 'false') == 'true';
             }
+
+            this.teamSelection = [];
+            this.teamService.fetchTeams().then(user => {
+                let teams = [].concat(user.adminOfTeams, user.memberOfTeams),
+                    noteTeams = this.note ? this.note.teams : [];
+                teams.forEach(team => {
+                    this.teamSelection.push({
+                        team: team,
+                        selected: Util.indexOfId(noteTeams, team) > -1
+                    });
+                })
+                this.toggleTeamSelection();
+            });
+
         }, delay);
 
     }
@@ -235,10 +269,18 @@ export class GameNoteView implements OnInit, OnChanges {
 
         note.public = this.notePublic;
 
-        if (this.noteTeam) {
-            note.teams = [].concat(this.userService.getTeams(), this.userService.getAdminTeams());
-        } else {
-            note.teams = [];
+        // if (this.noteTeam) {
+        //     note.teams = [].concat(this.userService.getTeams(), this.userService.getAdminTeams());
+        // } else {
+        //     note.teams = [];
+        // }
+        note.teams = [];
+        if (this.teamSelection.length) {
+            this.teamSelection.forEach(team => {
+                if (team.selected) {
+                    note.teams.push(team.team);
+                }
+            })
         }
         this.userService.setPreference(PREFERENCE_KEYS.shareNotesWithTeam, this.noteTeam);
 
@@ -280,6 +322,39 @@ export class GameNoteView implements OnInit, OnChanges {
     doDeleteNote(): void {
         this.noteService.deleteNote(this.note).then(() => {
             this.remove.emit(this.note);
+        });
+    }
+
+    teamShareToggle(): void {
+        setTimeout(() => {
+            this.teamSelection.forEach(team => {
+                team.selected = this.noteTeam;
+            });
+            this.noteTeamPartial = false;
+            this.checkAllSwitches();
+        });
+    }
+
+    toggleTeamSelection(index?: number): void {
+        setTimeout(() => {
+            let pass = true,
+                partial = false;
+            this.teamSelection.forEach(team => {
+                if (!team.selected) {
+                    pass = false;
+                } else {
+                    partial = true;
+                }
+            });
+            this.noteTeam = pass;
+            this.noteTeamPartial = partial && !pass;
+            this.checkAllSwitches();
+        })
+    }
+
+    checkAllSwitches(): void {
+        this.teamShareDirectives.forEach(item => {
+            item.check();
         });
     }
 
