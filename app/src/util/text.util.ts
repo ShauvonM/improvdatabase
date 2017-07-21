@@ -23,4 +23,13 @@ export class TextUtil {
         return c;
     }
 
+    static renderDescription(str?: string): string {
+        if (str) {
+            let converter = this.getMarkdownConverter();
+            return converter.makeHtml(str);
+        } else {
+            return 'No Description';
+        }
+    }
+
 }

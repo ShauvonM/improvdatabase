@@ -39,6 +39,7 @@ var AdminComponent = (function () {
         ];
         this.selectedTab = 'history';
         this.historyDisplayCount = 0;
+        this.rawHistories = [];
         this.historyShowStuff = true;
         this._tools = [
             {

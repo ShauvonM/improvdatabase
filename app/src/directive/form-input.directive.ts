@@ -93,7 +93,7 @@ export class FormInputDirective implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        // this.divElement.remove();
+        this.divElement.remove();
     }
 
     focus(): void {

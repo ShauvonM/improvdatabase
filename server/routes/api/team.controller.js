@@ -400,7 +400,7 @@ module.exports = {
 
         if (util.indexOfObjectId([].concat(req.user.adminOfTeams, req.user.memberOfTeams), teamId) > -1) {
 
-            return findModelUtil.findNotes(null, null, null, null, null, teamId, true)
+            return findModelUtil.findNotes(null, req.user, null, null, null, teamId, true)
                 .then(notes => {
                     res.json(notes)
                 });

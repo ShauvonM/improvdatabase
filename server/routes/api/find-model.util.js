@@ -128,12 +128,13 @@ module.exports = {
         return promise.exec();
     },
 
+    // TODO: make all the ids here properties on an object
     findNotes: (noteId, user, gameId, metadataIds, tagIds, teamId, populateGames) => {
 
         let userOr = [];
         
         // if (!user.superAdmin) {
-        if (user) {
+        if (user && !teamId) {
             userOr.push({addedUser: user._id});
 
             if (user.actions.indexOf('note_public_view') > -1) {
@@ -153,7 +154,7 @@ module.exports = {
             query = Note.findOne({});
             query.where('_id').equals(noteId);
         } else {
-            query = Note.find({});
+            query = Note.find({}).sort('-dateModified');
         }
 
         let whereOr = [],
@@ -208,12 +209,24 @@ module.exports = {
             });
 
         if (populateGames) {
+
+            let select = 'addedUser dateAdded dateModified description modifiedUser names',
+                path = 'names addedUser modifiedUser'
+            if (user.actions.indexOf('metadata_view') > -1) {
+                select += ' playerCount duration';
+                path += ' playerCount duration';
+            }
+            if (user.actions.indexOf('tag_view') > -1) {
+                select += ' tags';
+                path += ' tags';
+            }
+
             query.populate({
                 path: 'game',
-                select: 'names',
+                select: select,
                 populate: {
-                    path: 'names',
-                    select: 'name votes weight dateAdded',
+                    path: path,
+                    select: 'name description votes weight dateAdded dateModified',
                     populate: {
                         path: 'votes'
                     },
@@ -222,6 +235,7 @@ module.exports = {
                     }
                 }
             })
+
         }
 
         return query.exec();

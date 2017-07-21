@@ -20,6 +20,7 @@ var curtain_view_1 = require("../view/curtain.view");
 // services
 var user_service_1 = require("../service/user.service");
 var app_service_1 = require("../service/app.service");
+var stripe_service_1 = require("../service/stripe.service");
 var form_input_directive_1 = require("../directive/form-input.directive");
 var bracket_card_directive_1 = require("../directive/bracket-card.directive");
 var draggable_directive_1 = require("../directive/draggable.directive");
@@ -70,7 +71,8 @@ var SharedModule = (function () {
             ],
             providers: [
                 app_service_1.AppService,
-                user_service_1.UserService
+                user_service_1.UserService,
+                stripe_service_1.StripeService
             ]
         })
     ], SharedModule);

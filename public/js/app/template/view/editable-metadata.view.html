@@ -1,64 +1,105 @@
-<i class="fa fa-{{icon}}" *ngIf="icon"></i> 
+<i class="fa fa-{{icon}} fit" *ngIf="icon"></i> 
                     
 <span *ngIf="!editShown"
     [class.clickable]="canEdit"
     (click)="showEdit()"
-    [innerHTML]="text"></span>
+    [innerHTML]="text || blankText"></span>
 
-<input name="editMetadata" #metadataInput
+<input name="editMetadata"
+    #metadataInput
     *ngIf="editShown && type=='text'"
-    [(ngModel)]="editModel"
+    [(ngModel)]="useModel"
     (keydown.enter)="pressEnter()"
     (keydown.escape)="closeEdit()"
     (blur)="saveEdit()" />
 
 <div *ngIf="editShown && type=='address'">
 
-    <input name="address" #metadataInput
-        [(ngModel)]="address"
-        placeholder="Address"
-        (keydown.enter)="saveEdit()"
-        (keydown.escape)="closeEdit()" />
+    <div class="columns">
+        <input name="address" #metadataInput
+            [(ngModel)]="useAddress.address"
+            placeholder="Address"
+            (keydown.enter)="saveEdit()"
+            (keydown.escape)="closeEdit()" />
+    </div>
 
     <div class="columns">
         <input name="city"
-            [(ngModel)]="city"
+            [(ngModel)]="useAddress.city"
             placeholder="City"
             (keydown.enter)="saveEdit()"
             (keydown.escape)="closeEdit()" />
         <input name="state"
-            [(ngModel)]="state"
+            [(ngModel)]="useAddress.state"
             placeholder="State"
             (keydown.enter)="saveEdit()"
             (keydown.escape)="closeEdit()" />
         <input name="zip"
-            [(ngModel)]="zip"
+            [(ngModel)]="useAddress.zip"
             placeholder="Zip"
             (keydown.enter)="saveEdit()"
             (keydown.escape)="closeEdit()" />
     </div>
 
-    <input name="country"
-        [(ngModel)]="country"
-        placeholder="Country"
-        (keydown.enter)="saveEdit()"
-        (keydown.escape)="closeEdit()" />
+    <div class="columns">
+        <input name="country"
+            [(ngModel)]="useAddress.country"
+            placeholder="Country"
+            (keydown.enter)="saveEdit()"
+            (keydown.escape)="closeEdit()" />
+    </div>
 
 </div>
 
 <select *ngIf="editShown && type=='dropdown'"
     name="editMetadata"
     #metadataInput
-    [(ngModel)]="editModel"
+    [(ngModel)]="useModel"
     (ngModelChange)="saveEdit()">
 
-    <option *ngFor="let option of options"
-            [selected]="(optionId && option[optionId] == editModel) || (option == editModel)"
-            [ngValue]="optionId ? option[optionId] : option"
-            [title]="optionDescription ? option[optionDescription] : ''">
+    <option *ngFor="let option of useOptions"
+            [selected]="option._id == useModel"
+            [ngValue]="option._id"
+            [title]="option.description">
                 <i *ngIf="option.icon" class="fa fa-{{option.icon}}"></i>
-                {{optionText ? option[optionText] : option}}
+                {{option.name}}
             </option>
 
     <option *ngIf="optionCreate" [ngValue]="-1">Other...</option>
 </select>
+
+<div *ngIf="editShown && type == 'date'" class="columns centered">
+
+    <select name="month"
+        #metadataInput
+        [(ngModel)]="useDate.month">
+        <option value='0'>Janaury</option>
+        <option value='1'>February</option>
+        <option value='2'>March</option>
+        <option value='3'>April</option>
+        <option value='4'>May</option>
+        <option value='5'>June</option>
+        <option value='6'>July</option>
+        <option value='7'>August</option>
+        <option value='8'>September</option>
+        <option value='9'>October</option>
+        <option value='10'>November</option>
+        <option value='11'>December</option>
+    </select>
+    <input type="text"
+        formInput
+        name="day"
+        [(ngModel)]="useDate.day"
+        placeholder="Day" />
+    <input type="text"
+        formInput
+        name="year"
+        [(ngModel)]="useDate.year"
+        placeholder="Year" />
+    
+    <div class="button-group">
+        <button class="button small" (click)="closeEdit()"><i class="fa fa-times"></i></button>
+        <button class="button small" (click)="saveEdit()"><i class="fa fa-check"></i></button>
+    </div>
+    
+</div>

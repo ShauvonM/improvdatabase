@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Location, PathLocationStrategy } from '@angular/common';
 
-import { ColorPickerService } from 'angular2-color-picker';
+import { ColorPickerService } from 'ngx-color-picker';
 
 import { COLORS } from '../../constants';
 
@@ -13,10 +13,11 @@ import { TabData } from '../../model/tab-data';
 
 import { User } from '../../model/user';
 import { Team } from '../../model/team';
-import { Address } from '../../model/address';
 import { Purchase } from '../../model/purchase';
 import { Invite } from '../../model/invite';
 import { Subscription } from '../../model/subscription';
+
+import { Address } from '../view/editable-metadata.view';
 
 import { UserService } from '../../service/user.service';
 import { TeamService } from '../service/team.service';
@@ -89,6 +90,8 @@ export class TeamDetailsComponent implements OnInit {
     primaryColor: string;
     secondaryColor: string;
     tertiaryColor: string;
+
+    notes: Note[] = [];
 
     constructor(
         public _app: AppComponent,
@@ -175,7 +178,7 @@ export class TeamDetailsComponent implements OnInit {
         this.renderDescription();
 
         this.noteService.getNotesForTeam(this.team).then(notes => {
-            console.log(notes);
+            this.notes = notes;
         });
 
         this.setCurtain();
@@ -191,12 +194,7 @@ export class TeamDetailsComponent implements OnInit {
     }
 
     renderDescription(): void {
-        if (this.team.description) {
-            let converter = TextUtil.getMarkdownConverter();
-            this.descriptionHtml = converter.makeHtml(this.team.description);
-        } else {
-            this.descriptionHtml = 'No Description';
-        }
+        this.descriptionHtml = TextUtil.renderDescription(this.team.description);
     }
 
     private _saveTeam(): void {

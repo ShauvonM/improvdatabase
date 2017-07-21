@@ -11,6 +11,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { AppComponent } from './app.component';
 import { AppService } from '../service/app.service';
 import { UserService } from '../service/user.service';
+import { StripeService } from '../service/stripe.service';
 
 import { User } from '../model/user';
 import { Team } from '../model/team';
@@ -65,7 +66,8 @@ export class SignupComponent implements OnInit {
         private _service: AppService,
         private router: Router,
         private route: ActivatedRoute,
-        private userService: UserService
+        private userService: UserService,
+        private stripeService: StripeService
     ) { }
 
     ngOnInit(): void {
@@ -86,7 +88,7 @@ export class SignupComponent implements OnInit {
 
         this._app.showBackground(true);
 
-        this.creditCard = Util.setupStripe(this._app.config.stripe, e => {
+        this.creditCard = this.stripeService.setupStripe(e => {
             this.cardComplete = e.complete;
 
             if (e.error) {
@@ -148,7 +150,7 @@ export class SignupComponent implements OnInit {
         this.isPosting = true;
 
         if (this.pledge && this.cardComplete) {
-            Util.getStripeToken(this._app.config.stripe, this.creditCard).then((result: any) => {
+            this.stripeService.getStripeToken(this.creditCard).then((result: any) => {
                 if (result.error) {
                     this.cardError = result.error.message;
                 } else {

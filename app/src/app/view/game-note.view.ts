@@ -8,8 +8,12 @@ import {
     ViewChild,
     ViewChildren,
     ElementRef,
-    ChangeDetectorRef,
-    QueryList
+    QueryList,
+    DoCheck,
+    KeyValueDiffers,
+    KeyValueDiffer,
+    IterableDiffers,
+    IterableDiffer
 } from '@angular/core';
 
 import { TimeUtil } from '../../util/time.util';
@@ -22,7 +26,7 @@ import { Note } from '../../model/note';
 import { Tag } from '../../model/tag';
 import { GameMetadata } from '../../model/game-metadata';
 
-import { DropdownOption } from '../view/editable-metadata.view';
+import { Option } from '../view/editable-metadata.view';
 
 import { GameNoteService } from '../service/game-note.service';
 
@@ -36,6 +40,11 @@ import { Team } from '../../model/team';
 
 import { FormSwitchDirective } from '../../directive/form-switch.directive';
 
+interface DBObject {
+    _id: string;
+    name: string;
+}
+
 class TeamOption {
     team: Team;
     selected: boolean;
@@ -47,10 +56,12 @@ class TeamOption {
     templateUrl: '../template/view/game-note.view.html',
     animations: [ShrinkAnim.height]
 })
-export class GameNoteView implements OnInit, OnChanges {
+export class GameNoteView implements OnInit, OnChanges, DoCheck {
 
     @Input() note: Note;
     @Input() game: Game;
+
+    @Input() showLinks: boolean;
 
     @Output() create: EventEmitter<Note> = new EventEmitter();
     @Output() remove: EventEmitter<Note> = new EventEmitter();
@@ -77,7 +88,7 @@ export class GameNoteView implements OnInit, OnChanges {
 
     noteInput: string;
     noteContext: string;
-    noteContextOptions: DropdownOption[];
+    noteContextOptions: Option[] = [];
 
     notePublic: boolean;
     noteTeam: boolean;
@@ -90,12 +101,18 @@ export class GameNoteView implements OnInit, OnChanges {
 
     teamSelection: TeamOption[] = [];
 
+    gameDiffer: KeyValueDiffer<string, any>;
+    tagDiffer: IterableDiffer<DBObject>;
+    nameDiffer: KeyValueDiffer<string, any>;
+
     constructor(
         private userService: UserService,
         private noteService: GameNoteService,
         private teamService: TeamService,
-        private changeDetector: ChangeDetectorRef
-    ) { }
+        private keyValueDiffers: KeyValueDiffers,
+        private iterableDiffers: IterableDiffers
+    ) {
+    }
     
     ngOnInit() {
 
@@ -137,14 +154,50 @@ export class GameNoteView implements OnInit, OnChanges {
         }
     }
 
-    ngOnChanges(changes: any): void {
-        if (changes.game) {
-            this.setupContextOptions();
+    ngDoCheck() {
+        if (this.game) {
+            // this checks the game object to see if the values have changed
+            let gameChanges = this.gameDiffer.diff(this.game),
+                tagChanges = this.tagDiffer.diff(<DBObject[]> this.game.tags),
+                nameChanges;
+
+            if (this.game.names.length) {
+                nameChanges = this.nameDiffer.diff(this.game.names[0]);
+            }
+
+            if (gameChanges || tagChanges || nameChanges) {
+                this.setupContextOptions();
+            }
         }
     }
 
+    ngOnChanges(changes: any): void {
+        // console.log('note changes?', changes);
+        if (changes.game) {
+            if (this.game) {
+                this.gameDiffer = this.keyValueDiffers.find(this.game).create();
+                this.tagDiffer = this.iterableDiffers.find(this.game.tags).create();
+                if (this.game.names.length) {
+                    this.nameDiffer = this.keyValueDiffers.find(this.game.names[0]).create();
+                }
+            }
+        }
+    }
+
+    setupDebounce: any;
     setupContextOptions(): void {
+        clearTimeout(this.setupDebounce);
+        this.setupDebounce = setTimeout(() => {
+            this._setupContextOptions();
+        }, 100)
+    }
+
+    private _setupContextOptions(): void {
         this.noteContextOptions = [];
+
+        if (!this.game) {
+            return;
+        }
 
         if (this.game.names.length) {
             this.noteContextOptions.push({
@@ -171,14 +224,16 @@ export class GameNoteView implements OnInit, OnChanges {
             });
         }
 
-        (<Tag[]> this.game.tags).forEach(tag => {
-            this.noteContextOptions.push({
-                name: tag.name,
-                _id: 'tag_' + tag._id,
-                icon: 'hashtag',
-                description: 'This note will apply to any game tagged \'' + tag.name + '\'.'
-            })
-        });
+        if (this.game.tags) {
+            (<Tag[]> this.game.tags).forEach(tag => {
+                this.noteContextOptions.push({
+                    name: tag.name,
+                    _id: 'tag_' + tag._id,
+                    icon: 'hashtag',
+                    description: 'This note will apply to any game tagged \'' + tag.name + '\'.'
+                })
+            });
+        }
     }
 
     renderDescription(): void {
@@ -245,7 +300,7 @@ export class GameNoteView implements OnInit, OnChanges {
         }, 200);
     }
 
-    setNoteContext(context: DropdownOption): void {
+    setNoteContext(context: Option): void {
         this.noteContext = context._id;
     }
 

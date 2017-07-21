@@ -135,8 +135,11 @@ module.exports = {
             let game = games[0];
             return game.addTag(null, tagId, req.user._id);
         }).then(game => {
-            res.json(game);
-        }, error => {
+                game.tags.sort((a, b) => {
+                    return a.name.localeCompare(b.name);
+                });
+                res.json(game);
+            }, error => {
                 util.handleError(req, res, error);
             });
     },
@@ -163,8 +166,11 @@ module.exports = {
             let game = games[0];
             return game.addTag(tag, null, req.user._id);
         }).then(game => {
-            res.json(game);
-        }, error => {
+                game.tags.sort((a, b) => {
+                    return a.name.localeCompare(b.name);
+                });
+                res.json(game);
+            }, error => {
                 util.handleError(req, res, error);
             });
         
@@ -286,7 +292,10 @@ function getGames(user, id) {
         query.select('tags')
         .populate({
             path: 'tags',
-            select: 'name description'
+            select: 'name description',
+            options: {
+                sort: 'name'
+            }
         })
     }
 

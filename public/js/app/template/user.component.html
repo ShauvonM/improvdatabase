@@ -19,71 +19,159 @@
     <div class="paper" *ngIf="user && selectedTab == 'user'">
 
         <div class="content">
-            <user-form
-                [user]="user"
-                [isPosting]="isPosting"
-                [backText]="'Log Out'"
-                (back)="_app.logout()"
-                (valid)="submitEditUser($event)"></user-form>
+            
+            <h4 class="right id-editable-metadata"
+                [text]="userName"
+                [blankText]="'Person Person'"
+                [canEdit]="canEdit()"
+                (save)="saveEditName($event)"></h4>
+
+            <div class="metadata horizontal">
+
+                <span class="bullet id-editable-metadata"
+                    [text]="user.phone"
+                    [blankText]="'No Phone Number'"
+                    [icon]="'phone'"
+                    [canEdit]="canEdit()"
+                    (save)="saveEditPhone($event)"></span>
+
+                <span class="bullet id-editable-metadata"
+                    [text]="user.email"
+                    [blankText]="'No Email (how did you even do that?)'"
+                    [icon]="'envelope'"
+                    [canEdit]="canEdit()"
+                    (save)="saveEditEmail($event)"></span>
+
+                <span class="bullet id-editable-metadata"
+                    [text]="user.url"
+                    [blankText]="'No URL'"
+                    [icon]="'link'"
+                    [canEdit]="canEdit()"
+                    (save)="saveEditURL($event)"></span>
+
+                <span class="id-editable-metadata"
+                    [type]="'address'"
+                    [blankText]="'No Address'"
+                    [canEdit]="canEdit()"
+                    (saveAddress)="saveEditAddress($event)"></span>
+
+            </div>
+
+            <hr />
+
+            <div class="description" 
+                [innerHTML]="descriptionHtml"
+                *ngIf="!editDescriptionShown"></div>
+
+            <textarea name="description"
+                class="description"
+                [(ngModel)]="newDescriptionText"
+                rows="10"
+                *ngIf="editDescriptionShown"></textarea>
+
+            <div class="button-group" *ngIf="canEdit()">
+                <div class="button" *ngIf="!editDescriptionShown" (click)="showEditDescription()">Edit Description</div>
+                
+                <label class="left" *ngIf="editDescriptionShown">Hey! We support <a href="http://www.markdowntutorial.com/" target="_blank">Markdown</a>!</label>
+                <div class="button" *ngIf="editDescriptionShown" (click)="cancelDescription()">cancel</div>
+                <div class="button raised" *ngIf="editDescriptionShown" (click)="saveDescription()">SAVE</div>
+            </div>
+
         </div>
 
     </div>
 
     <div class="paper" *ngIf="subscription && selectedTab == 'subscription'">
 
-        <div class="card-list">
+        <div class="block">
+            <p>Your account was activated {{getDate(subscription.start)}}</p>
 
-            <div class="card" *ngIf="subscription">
-                <div class="top">
-                    <i class="fa fa-id-card-o"></i>
-                    <div class="content">
-                        <h4 class="light">Your <strong>{{subscription.roleName}}</strong> Subscription</h4>
-                        <h4 class="light">Expires</h4>
-                        <h4 class="light" *ngIf="userService.isExpired()">Expired</h4>
-                        <h3>{{getDate(subscription.expiration)}}</h3>
+            <p *ngIf="!changePledgeShown">${{subscription.pledge.toFixed(2)}} / Month (<a (click)="showChangePledge()">change</a>)</p>
+            
+            <div *ngIf="changePledgeShown" class="payment-info" [@shrinkHeight]>
+                <form id="payment-form" #paymentForm="ngForm">
+                    <div class="form-row">
+                        <input name="pledge" 
+                            [(ngModel)]="pledge"
+                            placeholder="Monthly Pledge"
+                            formInput
+                            autocomplete="off"
+                            type="text" />
+
+                        <label for="card-element">
+                            Credit or debit card number (leave it blank if you're setting your pledge to 0)
+                        </label>
+                        <div id="card-element">
+                        <!-- a Stripe Element will be inserted here. -->
+                        </div>
+
+                        <!-- Used to display form errors -->
+                        <div class="StripeCardErrors" *ngIf="cardError">{{cardError}}</div>
+
+                        <label><em>Payment processing is all handled securely by Stripe, so your information is safe.</em></label>
+                        
                     </div>
-                </div>
-                <div class="body">
-                    <p>Activated {{getDate(subscription.start)}}</p>
-
-                    <p *ngIf="!changePledgeShown">${{subscription.pledge.toFixed(2)}} / Month (<a (click)="showChangePledge()">change</a>)</p>
-                    
-                    <div *ngIf="changePledgeShown" class="payment-info" [@shrinkHeight]>
-                        <form id="payment-form" #paymentForm="ngForm">
-                            <div class="form-row">
-                                <input name="pledge" 
-                                    [(ngModel)]="pledge"
-                                    placeholder="Monthly Pledge"
-                                    formInput
-                                    autocomplete="off"
-                                    type="text" />
-
-                                <label for="card-element">
-                                    Credit or debit card number (leave it blank if you're setting your pledge to 0)
-                                </label>
-                                <div id="card-element">
-                                <!-- a Stripe Element will be inserted here. -->
-                                </div>
-
-                                <!-- Used to display form errors -->
-                                <div class="StripeCardErrors" *ngIf="cardError">{{cardError}}</div>
-
-                                <label><em>Payment processing is all handled securely by Stripe, so your information is safe.</em></label>
-                                
-                            </div>
-                            <div class="button-group">
-                                <button *ngIf="!isPosting" class="button raised" [class.disabled]="!pledgeFormValid()" (click)="savePledge()">Save</button>
-                                <div *ngIf="isPosting" class="button"><i class="loading"></i></div>
-                            </div>
-                        </form>
+                    <div class="button-group">
+                        <button *ngIf="!isPosting" class="button raised" [class.disabled]="!pledgeFormValid()" (click)="savePledge()">Save</button>
+                        <div *ngIf="isPosting" class="button"><i class="loading"></i></div>
                     </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="block">
+
+            <div class="columns">
+                <div>
+                    <label>Birthday</label>
+                    <div class="id-editable-metadata columns centered"
+                        [blankText]="'Not set'"
+                        [icon]="'birthday-cake'"
+                        [canEdit]="canEdit()"
+                        [type]="'date'"
+                        (save)="saveBirthday($event)"></div>
                 </div>
-                <div class="action">
-                    <a (click)="cancelSubscription()" class="button">Delete Your Account</a>
+
+                <div>
+                    <label>Improv Experience (1 is 'none', 5 is 'ton')</label>
+                    <div class="id-editable-metadata columns centered"
+                        [model]="user.improvExp"
+                        [blankText]="'None set'"
+                        [icon]="'magic'"
+                        [canEdit]="canEdit()"
+                        [options]="['1', '2', '3', '4', '5']"
+                        [optionCreate]="false"
+                        (save)="saveExperience($event)"></div>
                 </div>
+
             </div>
 
         </div>
+
+        <div class="block">
+            <div class="columns responsive">
+                <input name="change-password"
+                    [(ngModel)]="password"
+                    type="password"
+                    placeholder="Password"
+                    formInput />
+                <input name="change-password-confirm"
+                    [(ngModel)]="passwordConfirm"
+                    type="password"
+                    placeholder="Confirm Password"
+                    formInput />
+            </div>
+            <label class="error" *ngIf="passwordMatchError">The two passwords you entered do not match.</label>
+        </div>
+        
+        <div class="button-group" *ngIf="!isPosting">
+            <button class="button raised" (click)="savePassword()" [disabled]="(!password && !passwordConfirm) || password != passwordConfirm">Save Password</button>
+        </div>
+
+        <div class="button-group" *ngIf="isPosting || isValidating">
+            <div class="button"><i class="loading"></i></div>
+        </div>
+        
 
     </div>
 

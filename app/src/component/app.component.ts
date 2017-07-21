@@ -20,6 +20,7 @@ import { Config } from '../model/config';
 
 import { AppService } from '../service/app.service';
 import { UserService } from '../service/user.service';
+import { StripeService } from '../service/stripe.service';
 
 import { DialogAnim, ToggleAnim, ShrinkAnim } from '../util/anim.util';
 
@@ -95,7 +96,8 @@ export class AppComponent implements OnInit {
         private _service: AppService,
         private userService: UserService,
         private pathLocationStrategy: PathLocationStrategy,
-        private http: AppHttp
+        private http: AppHttp,
+        private stripeService: StripeService
     ) {
         this.config = config;
      }
@@ -160,6 +162,8 @@ export class AppComponent implements OnInit {
                 this.toast('There was a problem refreshing your login.');
             });
         }
+
+        this.stripeService.init(this.config.stripe);
 
         setTimeout(() => {
             let siteLoader = document.getElementById("siteLoader");

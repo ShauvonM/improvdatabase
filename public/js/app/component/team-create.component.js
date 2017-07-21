@@ -23,6 +23,7 @@ var TeamCreateComponent = (function () {
         this._service = _service;
         this.teamService = teamService;
         this.userService = userService;
+        this.userEmail = true;
         this.isPosting = false;
         this._tools = [];
     }
@@ -34,6 +35,9 @@ var TeamCreateComponent = (function () {
         this.isPosting = true;
         var team = new team_1.Team();
         team.name = this.teamName;
+        if (!this.userEmail && this.teamEmail) {
+            team.email = this.teamEmail;
+        }
         // TODO: a toggle to set whether the team has its own email address, or just use the current users?
         this.teamService.createTeam(team)
             .then(function (team) {

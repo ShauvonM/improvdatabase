@@ -266,12 +266,12 @@ logo {
         margin-bottom: 0px;
     }
 
-    & > .form-input-state {
+    & > [name='state'] {
         width: 3em;
         text-align: center;
     }
 
-    & > .form-input-zip {
+    & > [name='zip'] {
         width: 5em;
     }
 
@@ -391,6 +391,10 @@ logo {
 
     label.left {
         margin-top: $small;
+    }
+
+    .button {
+        margin-right: 0;
     }
 
     .button:last-child {
@@ -513,6 +517,12 @@ logo {
     }
 }
 
+.id-editable-metadata {
+    label + & {
+        margin-top: $small;
+    }
+}
+
 button,
 .button {
     border-radius: $border-radius;
@@ -558,9 +568,19 @@ button,
         height: $smallheight;
         padding: 0 $small;
         min-width: 0;
+        vertical-align: middle;
 
         .fa {
             line-height: $smallheight;
+        }
+    }
+
+    &.subdued {
+        color: $color-hr;
+
+        &.raised {
+            color: $color-primary;
+            background: $color-transparent;
         }
     }
 
@@ -731,11 +751,15 @@ button,
                     flex: 1;
                 }
 
-                & > span {
+                & > span, & > ul {
                     margin: 0 0 0 $std;
 
                     &:first-child {
                         margin: 0;
+                    }
+
+                    i {
+                        margin-right: $small;
                     }
                 }
             }
@@ -808,7 +832,7 @@ button,
 
         &.bullet:after {
             content: "\2022";
-            margin: 0 ($small / 2);
+            margin: 0 0 0 $small;
         }
         
         select {
@@ -816,6 +840,7 @@ button,
             margin: 0;
             display: inline-block;
             width: auto;
+            height: auto;
         }
 
         input {
@@ -828,6 +853,11 @@ button,
 
         .fa {
             margin: 0 $small;
+        }
+
+        .columns > input[name="address"],
+        .columns > input[name="country"] {
+            width: 100%;
         }
     }
 

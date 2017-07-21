@@ -17,6 +17,9 @@ import { Team } from '../../model/team';
 export class TeamCreateComponent implements OnInit {
 
     teamName: string;
+    teamEmail: string;
+
+    userEmail: boolean = true;
 
     isPosting: boolean = false;
 
@@ -44,6 +47,9 @@ export class TeamCreateComponent implements OnInit {
 
         let team = new Team();
         team.name = this.teamName;
+        if (!this.userEmail && this.teamEmail) {
+            team.email = this.teamEmail;
+        }
 
         // TODO: a toggle to set whether the team has its own email address, or just use the current users?
 

@@ -15,7 +15,10 @@
             [class.fa-group]="note.metadata && note.metadata.type == 'playerCount'"
             [class.fa-clock-o]="note.metadata && note.metadata.type == 'duration'"
             ></i>
-        <em *ngIf="note.game" title="In regards to this game specifically.">{{game.names[0].name}}</em>
+        
+        <em *ngIf="note.game && !showLinks" title="In regards to this game specifically.">{{game.names[0].name}}</em>
+        <a *ngIf="note.game && showLinks" title="In regards to this game specifically." [routerLink]="'/app/game/' + game._id">{{game.names[0].name}}</a>
+
         <em *ngIf="note.tag" title="In regards to any game with this tag.">{{note.tag.name}}</em>
         <em *ngIf="note.metadata && note.metadata.type == 'playerCount'"
             title="In regards to any game with this number of players.">{{note.metadata.name}}</em>
@@ -37,12 +40,12 @@
 
         <div class="left">
             <button class="button" *ngIf="note" (click)="deleteNote()">Delete</button>
-        </div>
 
-        <label title="Make this note public?" class="left" *ngIf="superAdmin">
-            <i class="fa std fa-globe"></i>
-            <input formSwitch name="noteTeam" type="checkbox" [(ngModel)]="notePublic" />
-        </label>
+            <label title="Make this note public?" *ngIf="superAdmin">
+                <i class="fa std fa-globe"></i>
+                <input formSwitch name="noteTeam" type="checkbox" [(ngModel)]="notePublic" />
+            </label>
+        </div>
 
         <div class="id-editable-metadata"
             [canEdit]="true"
@@ -65,10 +68,10 @@
                     </label>
                 </div>
             </div>
-            <button class="button small"
+            <button class="button small subdued"
                 [class.active]="teamSelectionMenuVisible"
                 [class.raised]="noteTeamPartial"
-                *ngIf="teamSelection.length"
+                *ngIf="teamSelection.length > 1"
                 (click)="teamSelectionMenuVisible = !teamSelectionMenuVisible"
                 title="Share this note with specific teams?">
                     <i class="fa std fa-cog"></i>

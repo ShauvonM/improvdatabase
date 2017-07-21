@@ -14,16 +14,17 @@ var router_1 = require("@angular/router");
 var app_component_1 = require("./app.component");
 var app_service_1 = require("../service/app.service");
 var user_service_1 = require("../service/user.service");
+var stripe_service_1 = require("../service/stripe.service");
 var user_1 = require("../model/user");
 var anim_util_1 = require("../util/anim.util");
-var util_1 = require("../util/util");
 var SignupComponent = (function () {
-    function SignupComponent(_app, _service, router, route, userService) {
+    function SignupComponent(_app, _service, router, route, userService, stripeService) {
         this._app = _app;
         this._service = _service;
         this.router = router;
         this.route = route;
         this.userService = userService;
+        this.stripeService = stripeService;
         this.isPosting = false;
         this.cardComplete = false;
     }
@@ -40,7 +41,7 @@ var SignupComponent = (function () {
     SignupComponent.prototype.setup = function () {
         var _this = this;
         this._app.showBackground(true);
-        this.creditCard = util_1.Util.setupStripe(this._app.config.stripe, function (e) {
+        this.creditCard = this.stripeService.setupStripe(function (e) {
             _this.cardComplete = e.complete;
             if (e.error) {
                 _this.cardError = e.error.message;
@@ -94,7 +95,7 @@ var SignupComponent = (function () {
         }
         this.isPosting = true;
         if (this.pledge && this.cardComplete) {
-            util_1.Util.getStripeToken(this._app.config.stripe, this.creditCard).then(function (result) {
+            this.stripeService.getStripeToken(this.creditCard).then(function (result) {
                 if (result.error) {
                     _this.cardError = result.error.message;
                 }
@@ -175,7 +176,8 @@ var SignupComponent = (function () {
             app_service_1.AppService,
             router_1.Router,
             router_1.ActivatedRoute,
-            user_service_1.UserService])
+            user_service_1.UserService,
+            stripe_service_1.StripeService])
     ], SignupComponent);
     return SignupComponent;
 }());

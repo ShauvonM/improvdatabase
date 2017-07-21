@@ -23,9 +23,10 @@ var app_http_1 = require("../data/app-http");
 var config_1 = require("../model/config");
 var app_service_1 = require("../service/app.service");
 var user_service_1 = require("../service/user.service");
+var stripe_service_1 = require("../service/stripe.service");
 var anim_util_1 = require("../util/anim.util");
 var AppComponent = (function () {
-    function AppComponent(config, _renderer, router, _route, _service, userService, pathLocationStrategy, http) {
+    function AppComponent(config, _renderer, router, _route, _service, userService, pathLocationStrategy, http, stripeService) {
         this._renderer = _renderer;
         this.router = router;
         this._route = _route;
@@ -33,6 +34,7 @@ var AppComponent = (function () {
         this.userService = userService;
         this.pathLocationStrategy = pathLocationStrategy;
         this.http = http;
+        this.stripeService = stripeService;
         this.scrollpos = 0;
         this.showToolbarScrollPosition = 20;
         this.scrollSource = new Subject_1.Subject();
@@ -108,6 +110,7 @@ var AppComponent = (function () {
                 _this.toast('There was a problem refreshing your login.');
             });
         }
+        this.stripeService.init(this.config.stripe);
         setTimeout(function () {
             var siteLoader = document.getElementById("siteLoader");
             siteLoader.style.opacity = "0";
@@ -344,7 +347,8 @@ var AppComponent = (function () {
             app_service_1.AppService,
             user_service_1.UserService,
             common_1.PathLocationStrategy,
-            app_http_1.AppHttp])
+            app_http_1.AppHttp,
+            stripe_service_1.StripeService])
     ], AppComponent);
     return AppComponent;
 }());

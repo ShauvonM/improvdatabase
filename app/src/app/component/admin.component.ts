@@ -50,7 +50,7 @@ export class AdminComponent implements OnInit {
 
     histories: HistoryModel[];
     historyDisplayCount: number = 0;
-    rawHistories: HistoryModel[];
+    rawHistories: HistoryModel[] = [];
     historyShowRefresh: boolean;
     historyShowLogin: boolean;
     historyShowStuff: boolean = true;

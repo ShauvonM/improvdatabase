@@ -20,10 +20,10 @@ export class Team {
     secondaryColor: string;
     tertiaryColor: string;
 
-    dateAdded: Date;
+    dateAdded: string;
     addedUser: User;
 
-    dateModified: Date;
+    dateModified: string;
     modifiedUser: User;
 
     lookingForMembers: Boolean;

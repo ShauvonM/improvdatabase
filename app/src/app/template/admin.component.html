@@ -51,8 +51,9 @@
                     </div>
                     <div class="metadata">    
                         <div class="row columns fill">
-                            <span>{{history.user.firstName}} {{history.user.lastName}}</span>
-                            <span *ngIf="!history.user.firstName && !history.user.lastName">{{history.user.email}}</span>
+                            <span *ngIf="history.user">{{history.user.firstName}} {{history.user.lastName}}</span>
+                            <span *ngIf="history.user && !history.user.firstName && !history.user.lastName">{{history.user.email}}</span>
+                            <span *ngIf="!history.user">Unknown user</span>
                             
                             <span>{{simpleDateTime(history.date)}}</span>
                         </div>

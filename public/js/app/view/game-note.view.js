@@ -27,14 +27,16 @@ var TeamOption = (function () {
     return TeamOption;
 }());
 var GameNoteView = (function () {
-    function GameNoteView(userService, noteService, teamService, changeDetector) {
+    function GameNoteView(userService, noteService, teamService, keyValueDiffers, iterableDiffers) {
         this.userService = userService;
         this.noteService = noteService;
         this.teamService = teamService;
-        this.changeDetector = changeDetector;
+        this.keyValueDiffers = keyValueDiffers;
+        this.iterableDiffers = iterableDiffers;
         this.create = new core_1.EventEmitter();
         this.remove = new core_1.EventEmitter();
         this.showUserName = true;
+        this.noteContextOptions = [];
         this.showControls = true;
         this.teamSelection = [];
     }
@@ -70,14 +72,43 @@ var GameNoteView = (function () {
             this.simpleDate = time_util_1.TimeUtil.postTime(this.note.dateModified);
         }
     };
+    GameNoteView.prototype.ngDoCheck = function () {
+        if (this.game) {
+            // this checks the game object to see if the values have changed
+            var gameChanges = this.gameDiffer.diff(this.game), tagChanges = this.tagDiffer.diff(this.game.tags), nameChanges = void 0;
+            if (this.game.names.length) {
+                nameChanges = this.nameDiffer.diff(this.game.names[0]);
+            }
+            if (gameChanges || tagChanges || nameChanges) {
+                this.setupContextOptions();
+            }
+        }
+    };
     GameNoteView.prototype.ngOnChanges = function (changes) {
+        // console.log('note changes?', changes);
         if (changes.game) {
-            this.setupContextOptions();
+            if (this.game) {
+                this.gameDiffer = this.keyValueDiffers.find(this.game).create();
+                this.tagDiffer = this.iterableDiffers.find(this.game.tags).create();
+                if (this.game.names.length) {
+                    this.nameDiffer = this.keyValueDiffers.find(this.game.names[0]).create();
+                }
+            }
         }
     };
     GameNoteView.prototype.setupContextOptions = function () {
         var _this = this;
+        clearTimeout(this.setupDebounce);
+        this.setupDebounce = setTimeout(function () {
+            _this._setupContextOptions();
+        }, 100);
+    };
+    GameNoteView.prototype._setupContextOptions = function () {
+        var _this = this;
         this.noteContextOptions = [];
+        if (!this.game) {
+            return;
+        }
         if (this.game.names.length) {
             this.noteContextOptions.push({
                 name: 'This game: ' + this.game.names[0].name,
@@ -102,14 +133,16 @@ var GameNoteView = (function () {
                 description: 'This note will apply to any game involving \'' + this.game.duration.name + '\' duration.'
             });
         }
-        this.game.tags.forEach(function (tag) {
-            _this.noteContextOptions.push({
-                name: tag.name,
-                _id: 'tag_' + tag._id,
-                icon: 'hashtag',
-                description: 'This note will apply to any game tagged \'' + tag.name + '\'.'
+        if (this.game.tags) {
+            this.game.tags.forEach(function (tag) {
+                _this.noteContextOptions.push({
+                    name: tag.name,
+                    _id: 'tag_' + tag._id,
+                    icon: 'hashtag',
+                    description: 'This note will apply to any game tagged \'' + tag.name + '\'.'
+                });
             });
-        });
+        }
     };
     GameNoteView.prototype.renderDescription = function () {
         if (this.note && this.note.description) {
@@ -280,6 +313,10 @@ var GameNoteView = (function () {
         __metadata("design:type", game_1.Game)
     ], GameNoteView.prototype, "game", void 0);
     __decorate([
+        core_1.Input(),
+        __metadata("design:type", Boolean)
+    ], GameNoteView.prototype, "showLinks", void 0);
+    __decorate([
         core_1.Output(),
         __metadata("design:type", core_1.EventEmitter)
     ], GameNoteView.prototype, "create", void 0);
@@ -309,7 +346,8 @@ var GameNoteView = (function () {
         __metadata("design:paramtypes", [user_service_1.UserService,
             game_note_service_1.GameNoteService,
             team_service_1.TeamService,
-            core_1.ChangeDetectorRef])
+            core_1.KeyValueDiffers,
+            core_1.IterableDiffers])
     ], GameNoteView);
     return GameNoteView;
 }());

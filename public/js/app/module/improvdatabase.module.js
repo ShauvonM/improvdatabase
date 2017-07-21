@@ -14,7 +14,7 @@ var forms_1 = require("@angular/forms");
 // import { PathLocationStrategy } from '@angular/common';
 var shared_module_1 = require("../../module/shared.module");
 var improvdatabase_routing_module_1 = require("./improvdatabase-routing.module");
-var angular2_color_picker_1 = require("angular2-color-picker");
+var ngx_color_picker_1 = require("ngx-color-picker");
 // services
 var game_database_service_1 = require("../service/game-database.service");
 var auth_guard_service_1 = require("../service/auth-guard.service");
@@ -62,7 +62,7 @@ var ImprovDatabaseModule = (function () {
                 common_1.CommonModule,
                 shared_module_1.SharedModule,
                 improvdatabase_routing_module_1.ImprovDatabaseRoutingModule,
-                angular2_color_picker_1.ColorPickerModule
+                ngx_color_picker_1.ColorPickerModule
             ],
             declarations: [
                 unauthorized_component_1.UnauthorizedComponent,

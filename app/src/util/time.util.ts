@@ -1,6 +1,6 @@
 export class TimeUtil {
 
-    static simpleDate(dateString: any): string {
+    static simpleDate(dateString: Date|string): string {
         let date;
         if (typeof(dateString) == 'string') {
             date = new Date(dateString);

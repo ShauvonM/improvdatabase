@@ -52,14 +52,16 @@
                 (save)="saveEditURL($event)"></span>
 
             <span class="id-editable-metadata"
-                [address]="team.address"
-                [city]="team.city"
-                [state]="team.state"
-                [zip]="team.zip"
-                [country]="team.country"
                 [type]="'address'"
                 [blankText]="'No Address'"
                 [canEdit]="can('team_edit')"
+                [address]="{
+                    address: team.address,
+                    city: team.city,
+                    state: team.state,
+                    zip: team.zip,
+                    country: team.country
+                }"
                 (saveAddress)="saveEditAddress($event)"></span>
 
         </div>
@@ -88,7 +90,17 @@
 
     <!-- notes -->
     <div class="paper" *ngIf="selectedTab == 'notes'">
-        
+
+        <div class="content list">
+
+            <p *ngIf="notes.length">Here are notes shared by your team on the <a [routerLink]="'/app/games'">Game Database</a>.</p>
+
+            <div *ngFor="let note of notes" class="item large id-game-note" [note]="note" [game]="note.game" [showLinks]="true" (remove)="removeNote($event)"></div>
+
+            <p *ngIf="!notes.length">Nobody on your team has shared any notes in the Game Database.</p>
+
+        </div>
+
     </div>
 
     <!-- member list -->

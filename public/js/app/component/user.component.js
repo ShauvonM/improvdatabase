@@ -15,17 +15,19 @@ var common_1 = require("@angular/common");
 var forms_1 = require("@angular/forms");
 var app_component_1 = require("../../component/app.component");
 var user_service_1 = require("../../service/user.service");
-var util_1 = require("../../util/util");
+var stripe_service_1 = require("../../service/stripe.service");
 var time_util_1 = require("../../util/time.util");
+var text_util_1 = require("../../util/text.util");
 var anim_util_1 = require("../../util/anim.util");
 var MAX_ATTEMPTS = 5;
 var UserComponent = (function () {
-    function UserComponent(userService, router, location, _app, fb) {
+    function UserComponent(userService, router, location, _app, fb, stripeService) {
         this.userService = userService;
         this.router = router;
         this.location = location;
         this._app = _app;
         this.fb = fb;
+        this.stripeService = stripeService;
         this.title = "Account";
         this.tabs = [
             {
@@ -34,12 +36,12 @@ var UserComponent = (function () {
                 icon: 'user'
             },
             {
-                name: 'Your Account',
+                name: 'Behind the Scenes',
                 id: 'subscription',
                 icon: 'id-card-o'
             }
         ];
-        this.selectedTab = 'user';
+        this.selectedTab = 'subscription';
         this._tools = [
             {
                 icon: "fa-sign-out",
@@ -54,6 +56,17 @@ var UserComponent = (function () {
         this.errorCount = 0;
         this.weGood = true;
         this.user = this._app.user;
+        this.userName = this.user.firstName + ' ' + this.user.lastName;
+        this.renderDescription();
+        if (this.user.birthday) {
+            var birthday = new Date(this.user.birthday);
+            if (isNaN(birthday.getDate())) {
+                birthday = new Date(parseInt(this.user.birthday));
+            }
+            this.birthdayDay = birthday.getDate();
+            this.birthdayMonth = birthday.getMonth();
+            this.birthdayYear = birthday.getFullYear();
+        }
         this.userService.fetchPurchases().then(function (p) {
             _this.purchases = p;
         });
@@ -62,7 +75,9 @@ var UserComponent = (function () {
             _this.subscription.pledge = _this.subscription.pledge || 0;
         });
     };
-    UserComponent.prototype.ngOnDestroy = function () {
+    // TODO: this
+    UserComponent.prototype.canEdit = function () {
+        return true;
     };
     UserComponent.prototype.selectTab = function (tab) {
         this.selectedTab = tab.id;
@@ -71,18 +86,62 @@ var UserComponent = (function () {
     UserComponent.prototype.logout = function () {
         this._app.logout();
     };
-    UserComponent.prototype.submitEditUser = function (user) {
+    UserComponent.prototype.renderDescription = function () {
+        this.descriptionHtml = text_util_1.TextUtil.renderDescription(this.user.description);
+    };
+    UserComponent.prototype.showEditDescription = function () {
+        if (this.canEdit()) {
+            this.newDescriptionText = this.user.description;
+            this.editDescriptionShown = true;
+        }
+    };
+    UserComponent.prototype.cancelDescription = function () {
+        this.editDescriptionShown = false;
+    };
+    UserComponent.prototype.saveDescription = function () {
+        this.user.description = this.newDescriptionText;
+        this._saveUser();
+        this.cancelDescription();
+        this.renderDescription();
+    };
+    UserComponent.prototype._saveUser = function () {
         var _this = this;
-        if (user && user._id) {
-            this.userService.updateUser(user)
+        if (this.user && this.user._id) {
+            this.userService.updateUser(this.user)
                 .then(function () {
                 _this.isPosting = false;
+                _this.password = '';
+                _this.passwordConfirm = '';
                 _this._app.toast("Your information has been saved!");
-            })
-                .catch(function () {
+            }, function () {
                 _this.isPosting = false;
             });
         }
+    };
+    UserComponent.prototype.saveEditName = function (name) {
+        this.user.firstName = name.split(' ')[0];
+        this.user.lastName = name.replace(this.user.firstName + ' ', '');
+        this._saveUser();
+    };
+    UserComponent.prototype.saveEditPhone = function (phone) {
+        this.user.phone = phone;
+        this._saveUser();
+    };
+    UserComponent.prototype.saveEditEmail = function (email) {
+        this.user.email = email;
+        this._saveUser();
+    };
+    UserComponent.prototype.saveEditUrl = function (url) {
+        this.user.url = url;
+        this._saveUser();
+    };
+    UserComponent.prototype.saveEditAddress = function (address) {
+        this.user.address = address.address;
+        this.user.city = address.city;
+        this.user.state = address.state;
+        this.user.zip = address.zip;
+        this.user.country = address.country;
+        this._saveUser();
     };
     UserComponent.prototype.onToolClicked = function (tool) {
         this._app.showLoader();
@@ -105,7 +164,7 @@ var UserComponent = (function () {
         var _this = this;
         this.pledge = this.subscription.pledge.toFixed(2);
         this.changePledgeShown = true;
-        this.creditCard = util_1.Util.setupStripe(this._app.config.stripe, function (e) {
+        this.creditCard = this.stripeService.setupStripe(function (e) {
             _this.cardComplete = e.complete;
             if (e.error) {
                 _this.cardError = e.error.message;
@@ -127,7 +186,7 @@ var UserComponent = (function () {
         if (parseFloat(this.pledge) != this.subscription.pledge) {
             this.isPosting = true;
             if (this.pledge && this.cardComplete) {
-                util_1.Util.getStripeToken(this._app.config.stripe, this.creditCard).then(function (result) {
+                this.stripeService.getStripeToken(this.creditCard).then(function (result) {
                     if (result.error) {
                         _this.cardError = result.error.message;
                     }
@@ -152,6 +211,27 @@ var UserComponent = (function () {
             _this.isPosting = false;
         });
     };
+    UserComponent.prototype.saveBirthday = function (d) {
+        this.user.birthday = d.getTime().toString();
+        this._saveUser();
+    };
+    UserComponent.prototype.saveExperience = function (l) {
+        var level;
+        level = parseInt(l);
+        this.user.improvExp = level;
+        console.log(level, l, this.user);
+        this._saveUser();
+    };
+    UserComponent.prototype.savePassword = function () {
+        this.passwordMatchError = false;
+        if (this.password && this.password === this.passwordConfirm) {
+            this.user.password = this.password;
+            this._saveUser();
+        }
+        else {
+            this.passwordMatchError = true;
+        }
+    };
     UserComponent = __decorate([
         core_1.Component({
             moduleId: module.id,
@@ -165,7 +245,8 @@ var UserComponent = (function () {
             router_1.Router,
             common_1.Location,
             app_component_1.AppComponent,
-            forms_1.FormBuilder])
+            forms_1.FormBuilder,
+            stripe_service_1.StripeService])
     ], UserComponent);
     return UserComponent;
 }());

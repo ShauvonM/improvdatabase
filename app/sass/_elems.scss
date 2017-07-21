@@ -88,6 +88,10 @@ input, textarea, select {
     }
 }
 
+select {
+    height: 51px;
+}
+
 input[type="radio"] {
     display: inline-block;
     width: auto;

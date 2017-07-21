@@ -16,9 +16,10 @@ export default {
     plugins: [
         nodeResolve({jsnext: true, module: true}),
         commonjs({
-            include: ['node_modules/rxjs/**', 'node_modules/showdown/dist/showdown.js'],
+            include: ['node_modules/rxjs/**', 'node_modules/showdown/dist/showdown.js', 'node_modules/ngx-color-picker/dist/**'],
             namedExports: {
-                'node_modules/showdown/dist/showdown.js': [ 'Converter' ]
+                'node_modules/showdown/dist/showdown.js': [ 'Converter' ],
+                'node_modules/ngx-color-picker/dist/index.js': [ 'ColorPickerModule' ]
             }
         }),
         uglify()

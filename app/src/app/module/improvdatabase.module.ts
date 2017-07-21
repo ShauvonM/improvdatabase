@@ -9,7 +9,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../module/shared.module';
 import { ImprovDatabaseRoutingModule } from './improvdatabase-routing.module';
 
-import { ColorPickerModule } from 'angular2-color-picker';
+import { ColorPickerModule } from 'ngx-color-picker';
 
 // services
 import { GameDatabaseService } from "../service/game-database.service";

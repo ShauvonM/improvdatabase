@@ -226,6 +226,9 @@ input, textarea, select {
     display: inline-block;
     width: auto; }
 
+select {
+  height: 51px; }
+
 input[type="radio"] {
   display: inline-block;
   width: auto;
@@ -513,10 +516,10 @@ logo {
   .columns > input, .columns > select {
     margin-top: 0px;
     margin-bottom: 0px; }
-  .columns > .form-input-state {
+  .columns > [name='state'] {
     width: 3em;
     text-align: center; }
-  .columns > .form-input-zip {
+  .columns > [name='zip'] {
     width: 5em; }
   .columns.double {
     flex-wrap: wrap; }
@@ -599,6 +602,8 @@ logo {
     flex: 1; }
   .button-group label.left {
     margin-top: 8px; }
+  .button-group .button {
+    margin-right: 0; }
   .button-group .button:last-child {
     margin-right: 0; }
     @media only screen and (max-width: 500px) {
@@ -687,6 +692,9 @@ logo {
   .form-input + .button-group {
     margin-top: 8px; }
 
+label + .id-editable-metadata {
+  margin-top: 8px; }
+
 button,
 .button {
   border-radius: 2px;
@@ -726,10 +734,18 @@ button,
     line-height: 24px;
     height: 24px;
     padding: 0 8px;
-    min-width: 0; }
+    min-width: 0;
+    vertical-align: middle; }
     button.small .fa,
     .button.small .fa {
       line-height: 24px; }
+  button.subdued,
+  .button.subdued {
+    color: rgba(96, 96, 96, 0.5); }
+    button.subdued.raised,
+    .button.subdued.raised {
+      color: #2B80AD;
+      background: transparent; }
   button.raised,
   .button.raised {
     background-color: #2B80AD;
@@ -859,10 +875,12 @@ button,
           margin-bottom: 8px; }
         .list .item .metadata .row .fill {
           flex: 1; }
-        .list .item .metadata .row > span {
+        .list .item .metadata .row > span, .list .item .metadata .row > ul {
           margin: 0 0 0 16px; }
-          .list .item .metadata .row > span:first-child {
+          .list .item .metadata .row > span:first-child, .list .item .metadata .row > ul:first-child {
             margin: 0; }
+          .list .item .metadata .row > span i, .list .item .metadata .row > ul i {
+            margin-right: 8px; }
       .list .item .metadata h5 {
         margin: 0 48px 0 0;
         white-space: nowrap;
@@ -906,12 +924,13 @@ button,
     padding-right: 0px; }
   .metadata > span.bullet:after {
     content: "\2022";
-    margin: 0 4px; }
+    margin: 0 0 0 8px; }
   .metadata > span select {
     padding: 0;
     margin: 0;
     display: inline-block;
-    width: auto; }
+    width: auto;
+    height: auto; }
   .metadata > span input {
     padding: 0 4px 0;
     margin: 0 4px 4px 0;
@@ -920,6 +939,9 @@ button,
     text-align: left; }
   .metadata > span .fa {
     margin: 0 8px; }
+  .metadata > span .columns > input[name="address"],
+  .metadata > span .columns > input[name="country"] {
+    width: 100%; }
 
 .metadata i {
   width: 16px;

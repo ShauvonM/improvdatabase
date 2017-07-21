@@ -30,7 +30,7 @@
       'showdown': 'npm:showdown/dist/showdown.js',
       'es6-promise': 'npm:es6-promise/dist/es6-promise.js',
       'whatwg-fetch': 'npm:whatwg-fetch/fetch.js',
-      'angular2-color-picker': 'npm:/angular2-color-picker'
+      'ngx-color-picker': 'npm:ngx-color-picker/dist'
     },
     // packages tells the System loader how to load when no filename and/or no extension
     packages: {
@@ -41,7 +41,7 @@
         rxjs: {
             defaultExtension: 'js'
         },
-        'angular2-color-picker': {
+        'ngx-color-picker': {
           main: 'index.js',
           defaultExtension: 'js'
         }

@@ -402,7 +402,9 @@ export class GameDetailsComponent implements OnInit, OnChanges {
         if (index > -1) {
             this.game.tags.splice(index, 1);
         }
-        this.gameDatabaseService.deleteTagFromGame(this.game, this.tagToRemove)
+        this.gameDatabaseService.deleteTagFromGame(this.game, this.tagToRemove).then(() => {
+            this.setGame(this.game);
+        });
     }
 
     cancelRemoveTag(event: MouseEvent): void {
@@ -445,10 +447,16 @@ export class GameDetailsComponent implements OnInit, OnChanges {
     addTag(tag: Tag): void {
         if (this.can('game_tag_add')) {
             this.tagSaving = true;
+
+            (<Tag[]> this.game.tags).push(tag);
+            (<Tag[]> this.game.tags).sort((a, b) => {
+                return a.name.localeCompare(b.name);
+            });
+
             this.gameDatabaseService.saveTagToGame(this.game, tag)
                 .then(game => {
                     this.tagSaving = false;
-                    this.game = game
+                    this.setGame(game);
                 });
             
             this.newTagText = "";

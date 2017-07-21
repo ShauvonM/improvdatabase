@@ -20,6 +20,15 @@ var TextUtil = (function () {
         c.setOption('excludeTrailingPunctuationFromURLs ', 'true');
         return c;
     };
+    TextUtil.renderDescription = function (str) {
+        if (str) {
+            var converter = this.getMarkdownConverter();
+            return converter.makeHtml(str);
+        }
+        else {
+            return 'No Description';
+        }
+    };
     return TextUtil;
 }());
 exports.TextUtil = TextUtil;

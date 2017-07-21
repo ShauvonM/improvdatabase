@@ -1,7 +1,6 @@
 import { 
     Component,
-    OnInit,
-    OnDestroy
+    OnInit
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
@@ -14,14 +13,18 @@ import { Tool } from '../view/toolbar.view';
 import { TabData } from '../../model/tab-data';
 
 import { UserService } from "../../service/user.service";
+import { StripeService } from '../../service/stripe.service';
 
 import { User } from "../../model/user";
 import { Subscription } from '../../model/subscription';
 import { Purchase } from '../../model/purchase';
 import { Team } from '../../model/team';
 
+import { Option, Address } from '../view/editable-metadata.view';
+
 import { Util } from '../../util/util';
 import { TimeUtil } from '../../util/time.util';
+import { TextUtil } from '../../util/text.util';
 
 import { ShrinkAnim } from '../../util/anim.util';
 
@@ -35,7 +38,7 @@ const MAX_ATTEMPTS = 5;
         ShrinkAnim.height
     ]
 })
-export class UserComponent implements OnInit, OnDestroy {
+export class UserComponent implements OnInit {
 
     title: string = "Account";
 
@@ -46,12 +49,12 @@ export class UserComponent implements OnInit, OnDestroy {
             icon: 'user'
         },
         {
-            name: 'Your Account',
+            name: 'Behind the Scenes',
             id: 'subscription',
             icon: 'id-card-o'
         }
     ];
-    selectedTab: string = 'user';
+    selectedTab: string = 'subscription';
 
     email: string;
     password: string;
@@ -67,6 +70,9 @@ export class UserComponent implements OnInit, OnDestroy {
 
     user: User;
 
+    userName: string;
+    descriptionHtml: string;
+
     isPosting: boolean;
 
     subscription: Subscription;
@@ -79,12 +85,17 @@ export class UserComponent implements OnInit, OnDestroy {
     cardComplete: boolean;
     cardError: string;
 
+    birthdayDay: number;
+    birthdayMonth: number;
+    birthdayYear: number;
+
     constructor(
         private userService: UserService,
         private router: Router,
         private location: Location,
         public _app: AppComponent,
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        private stripeService: StripeService
     ) { }
 
     _tools: Tool[] = [
@@ -102,6 +113,20 @@ export class UserComponent implements OnInit, OnDestroy {
 
         this.user = this._app.user;
 
+        this.userName = this.user.firstName + ' ' + this.user.lastName;
+
+        this.renderDescription();
+
+        if (this.user.birthday) {
+            let birthday = new Date(this.user.birthday);
+            if (isNaN(birthday.getDate())) {
+                birthday = new Date(parseInt(this.user.birthday));
+            }
+            this.birthdayDay = birthday.getDate();
+            this.birthdayMonth = birthday.getMonth();
+            this.birthdayYear = birthday.getFullYear();
+        }
+
         this.userService.fetchPurchases().then(p => {
             this.purchases = p;
         });
@@ -113,8 +138,9 @@ export class UserComponent implements OnInit, OnDestroy {
         });
     }
 
-    ngOnDestroy(): void {
-
+    // TODO: this
+    canEdit(): boolean {
+        return true;
     }
 
     selectTab(tab: TabData): void {
@@ -126,17 +152,73 @@ export class UserComponent implements OnInit, OnDestroy {
         this._app.logout();
     }
 
-    submitEditUser(user: User): void {
-        if (user && user._id) {
-            this.userService.updateUser(user)
+    renderDescription(): void {
+        this.descriptionHtml = TextUtil.renderDescription(this.user.description);
+    }
+
+    newDescriptionText: string;
+    editDescriptionShown: boolean;
+    showEditDescription(): void {
+        if (this.canEdit()) {
+            this.newDescriptionText = this.user.description;
+            this.editDescriptionShown = true;
+        }
+    }
+
+    cancelDescription(): void {
+        this.editDescriptionShown = false;
+    }
+
+    saveDescription(): void {
+        this.user.description = this.newDescriptionText;
+        this._saveUser();
+        this.cancelDescription();
+        this.renderDescription();
+    }
+
+    private _saveUser(): void {
+        if (this.user && this.user._id) {
+            this.userService.updateUser(this.user)
                 .then(() => {
                     this.isPosting = false;
+                    this.password = '';
+                    this.passwordConfirm = '';
                     this._app.toast("Your information has been saved!");
-                })
-                .catch(() => {
+                }, () => {
                     this.isPosting = false;
                 });
         }
+    }
+    
+    saveEditName(name: string): void {
+        this.user.firstName = name.split(' ')[0];
+        this.user.lastName = name.replace(this.user.firstName + ' ', '');
+        this._saveUser();
+    }
+
+    saveEditPhone(phone: string): void {
+        this.user.phone = phone;
+        this._saveUser();
+    }
+
+    saveEditEmail(email: string): void {
+        this.user.email = email;
+        this._saveUser();
+    }
+
+    saveEditUrl(url: string): void {
+        this.user.url = url;
+        this._saveUser();
+    }
+
+    saveEditAddress(address: Address): void {
+        this.user.address = address.address;
+        this.user.city = address.city;
+        this.user.state = address.state;
+        this.user.zip = address.zip;
+        this.user.country = address.country;
+
+        this._saveUser();
     }
 
     onToolClicked(tool: Tool): void {
@@ -165,7 +247,7 @@ export class UserComponent implements OnInit, OnDestroy {
         this.pledge = this.subscription.pledge.toFixed(2);
         this.changePledgeShown = true;
 
-        this.creditCard = Util.setupStripe(this._app.config.stripe, e => {
+        this.creditCard = this.stripeService.setupStripe(e => {
             this.cardComplete = e.complete;
 
             if (e.error) {
@@ -192,7 +274,7 @@ export class UserComponent implements OnInit, OnDestroy {
             this.isPosting = true;
 
             if (this.pledge && this.cardComplete) {
-                Util.getStripeToken(this._app.config.stripe, this.creditCard).then(result => {
+                this.stripeService.getStripeToken(this.creditCard).then(result => {
                     if (result.error) {
                         this.cardError = result.error.message;
                     } else {
@@ -215,5 +297,28 @@ export class UserComponent implements OnInit, OnDestroy {
             this.changePledgeShown = false;
             this.isPosting = false;
         });
+    }
+
+    saveBirthday(d: Date): void {
+        this.user.birthday = d.getTime().toString();
+        this._saveUser();
+    }
+
+    saveExperience(l: string): void {
+        let level: number;
+        level = parseInt(l);
+        this.user.improvExp = level;
+        console.log(level, l, this.user);
+        this._saveUser();
+    }
+
+    savePassword(): void {
+        this.passwordMatchError = false;
+        if (this.password && this.password === this.passwordConfirm) {
+            this.user.password = this.password;
+            this._saveUser();
+        } else {
+            this.passwordMatchError = true;
+        }
     }
 }

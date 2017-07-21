@@ -14,6 +14,7 @@ import { CurtainView } from '../view/curtain.view';
 // services
 import { UserService } from "../service/user.service";
 import { AppService } from '../service/app.service';
+import { StripeService } from '../service/stripe.service';
 
 import { FormInputDirective } from '../directive/form-input.directive';
 import { BracketCardDirective } from '../directive/bracket-card.directive';
@@ -64,7 +65,8 @@ import { ScrollShadowDirective } from '../directive/scroll-shadow.directive';
     ],
     providers: [
         AppService,
-        UserService
+        UserService,
+        StripeService
     ]
 })
 

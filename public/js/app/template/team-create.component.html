@@ -21,12 +21,27 @@
                 type="text" />
             <span class="error" *ngIf="nameError">{{nameError}}</span>
 
+            <label>
+                <input formSwitch type="checkbox" [(ngModel)]="userEmail" />
+                Team shares your email address
+            </label>
+            
+            <input
+                *ngIf="!userEmail"
+                autocomplete="off"
+                formInput
+                required
+                name="teamEmail"
+                placeholder="Team Email Address"
+                [(ngModel)]="teamEmail"
+                type="text" />
+
             <div class="button-group">
                 <button
                     *ngIf="!isPosting"
                     class="button raised"
                     (click)="createTeam()"
-                    [class.disabled]="!teamName || nameError">Register</button>
+                    [class.disabled]="!teamName || nameError || (!userEmail && !teamEmail)">Register</button>
 
                 <button class="button" *ngIf="isPosting"><i class="loading"></i></button>
             </div>

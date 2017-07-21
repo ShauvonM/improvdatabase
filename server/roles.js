@@ -145,7 +145,8 @@ module.exports = {
                 'tag_delete',
 
                 'backup_view',
-                'restore_edit'
+                'restore_edit',
+                'history_view'
             ]
         }
     ],

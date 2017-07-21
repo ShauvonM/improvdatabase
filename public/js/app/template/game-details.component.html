@@ -12,6 +12,13 @@
         <div class="content">
 
             <h4 class="right">
+                <button class="button small"
+                        (click)="showAddName()" 
+                        *ngIf="can('name_create') && !addNameShown && !editNameShown && game.names[0]"
+                        title="Add an alternate name.">
+                    <i class="fa fa-plus-circle clickable"></i>
+                </button>
+
                 <span *ngIf="!addNameShown && !editNameShown"
                     [class.clickable]="can('name_edit')"
                     (click)="showEditName()">{{game.names[0] ? game.names[0].name : 'New Game'}}</span>
@@ -21,9 +28,6 @@
                     [(ngModel)]="editName"
                     (keydown.enter)="saveEditName()"
                     (blur)="saveEditName()" />
-
-                <i *ngIf="can('name_create') && !addNameShown && !editNameShown && game.names[0]" (click)="showAddName()" 
-                    class="fa fa-plus-circle clickable" title="Add an alternate name."></i>
             </h4>
 
             <div class="metadata right">

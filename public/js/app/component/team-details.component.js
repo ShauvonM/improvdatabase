@@ -63,6 +63,7 @@ var TeamDetailsComponent = (function () {
             'team_user_promote',
             'team_purchases_view'
         ];
+        this.notes = [];
         this._tools = [
             {
                 icon: "fa-sign-out",
@@ -118,13 +119,14 @@ var TeamDetailsComponent = (function () {
         return this.userService.isAdminOfTeam(this.team);
     };
     TeamDetailsComponent.prototype.setTeam = function (team) {
+        var _this = this;
         this.team = team;
         this.primaryColor = team.primaryColor;
         this.secondaryColor = team.secondaryColor;
         this.tertiaryColor = team.tertiaryColor;
         this.renderDescription();
         this.noteService.getNotesForTeam(this.team).then(function (notes) {
-            console.log(notes);
+            _this.notes = notes;
         });
         this.setCurtain();
     };
@@ -137,13 +139,7 @@ var TeamDetailsComponent = (function () {
         });
     };
     TeamDetailsComponent.prototype.renderDescription = function () {
-        if (this.team.description) {
-            var converter = text_util_1.TextUtil.getMarkdownConverter();
-            this.descriptionHtml = converter.makeHtml(this.team.description);
-        }
-        else {
-            this.descriptionHtml = 'No Description';
-        }
+        this.descriptionHtml = text_util_1.TextUtil.renderDescription(this.team.description);
     };
     TeamDetailsComponent.prototype._saveTeam = function () {
         this.teamService.saveTeam(this.team);
